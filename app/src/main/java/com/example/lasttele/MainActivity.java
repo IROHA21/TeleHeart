@@ -1,7 +1,9 @@
 package com.example.lasttele;
 
 import android.os.Bundle;
-import android.widget.Toast;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -9,23 +11,22 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
-import com.chaquo.python.Python;
 import com.chaquo.python.PyObject;
+import com.chaquo.python.Python;
 import com.chaquo.python.android.AndroidPlatform;
 
 public class MainActivity extends AppCompatActivity {
+
+    EditText editTextPhone2;
+    String phone;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        // Enable Edge-to-Edge UI
         EdgeToEdge.enable(this);
-
-        // Set the layout for the activity
         setContentView(R.layout.activity_main);
 
-        // Apply insets to adjust UI for system bars (status bar, navigation bar)
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
@@ -34,16 +35,30 @@ public class MainActivity extends AppCompatActivity {
 
         // Initialize Python environment
         if (!Python.isStarted()) {
-            Python.start(new AndroidPlatform(this));  // Start Python environment
+            Python.start(new AndroidPlatform(this));
         }
 
-        // Access Python module and run the code
-        Python py = Python.getInstance();
-        PyObject pyObj = py.getModule("helloworld");  // Replace "helloworld" with your Python file name
-        PyObject result = pyObj.callAttr("main");  // Call the "main" function in your Python file
+        editTextPhone2 = findViewById(R.id.editTextPhone2);
+        Button button123 = findViewById(R.id.button123);
 
-        // Show result in Toast (Android pop-up)
-        String message = result.toString();
-        Toast.makeText(this, message, Toast.LENGTH_LONG).show();
+        button123.setOnClickListener(v -> onBtnClick());
+    }
+
+    public void onBtnClick() {
+        phone = editTextPhone2.getText().toString().trim();
+
+        if (phone.isEmpty()) {
+            return; // Don't proceed if phone number is empty
+        }
+
+        Python py = Python.getInstance();
+        PyObject pyObj = py.getModule("helloworld");  // Ensure "helloworld.py" is in "src/main/python"
+
+        // Call Python function
+        PyObject result = pyObj.callAttr("phoneNumber", phone);
+
+        // Find the TextView to display result
+        TextView txtResult = findViewById(R.id.txtmessage);
+        txtResult.setText("Result: " + result.toString());
     }
 }

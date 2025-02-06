@@ -35,9 +35,13 @@ android {
         targetCompatibility = JavaVersion.VERSION_11
     }
 }
+
 chaquopy {
     defaultConfig {
         buildPython("C:/Users/USER/AppData/Local/Programs/Python/Python38-32/python.exe")
+        pip {
+            install("telethon")  // Add Telethon dependency
+        }
     }
 }
 
