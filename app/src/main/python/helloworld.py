@@ -1,26 +1,26 @@
 from telethon import TelegramClient
-from telethon.errors import PhoneCodeInvalidError, PhoneCodeExpiredError, SessionPasswordNeededError
 import asyncio
-import os
 
-
+# Replace with your own API credentials
 API_ID = 25016078
 API_HASH = "6e818b2e5b0e074c403e3bb120f64736"
 
+async def send_otp_async(phone):
+    try:
+        # Use RAM-based session (No file)
+        client = TelegramClient(None, API_ID, API_HASH)
 
+        await client.connect()
 
-async def main_async(phone):
-    await asyncio.sleep(1)
-    session_file = f"session_{phone}.session"
-    if os.path.exists(session_file):
-        os.remove(session_file)
+        # Check if user is already authorized (logged in)
+        if not await client.is_user_authorized():
+            await client.send_code_request(phone)  # Send OTP to the phone number
+            return "OTP has been sent to your Telegram app. Please check."
 
+        return "Already authorized. No need for OTP."
 
-
-
-
-     # Simulate async delay
-    return f"Received phone: {phone}"
+    except Exception as e:
+        return f"Error: {str(e)}"
 
 def phoneNumber(phone):
-    return asyncio.run(main_async(phone))
+    return asyncio.run(send_otp_async(phone))

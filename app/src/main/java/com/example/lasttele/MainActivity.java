@@ -1,15 +1,12 @@
 package com.example.lasttele;
 
 import android.os.Bundle;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 
 import com.chaquo.python.PyObject;
 import com.chaquo.python.Python;
@@ -18,20 +15,12 @@ import com.chaquo.python.android.AndroidPlatform;
 public class MainActivity extends AppCompatActivity {
 
     EditText editTextPhone2;
-    String phone;
+    TextView txtResult;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        EdgeToEdge.enable(this);
         setContentView(R.layout.activity_main);
-
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
-            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
-            return insets;
-        });
 
         // Initialize Python environment
         if (!Python.isStarted()) {
@@ -39,26 +28,27 @@ public class MainActivity extends AppCompatActivity {
         }
 
         editTextPhone2 = findViewById(R.id.editTextPhone2);
-        Button button123 = findViewById(R.id.button123);
+        txtResult = findViewById(R.id.txtmessage);
 
-        button123.setOnClickListener(v -> onBtnClick());
+        Button button123 = findViewById(R.id.button123);
+        button123.setOnClickListener(this::onBtnClick); // Using View view
     }
 
-    public void onBtnClick() {
-        phone = editTextPhone2.getText().toString().trim();
+    public void onBtnClick(View view) {
+        String phone = editTextPhone2.getText().toString().trim();
 
         if (phone.isEmpty()) {
-            return; // Don't proceed if phone number is empty
+            txtResult.setText("Please enter a phone number!");
+            return;
         }
 
         Python py = Python.getInstance();
         PyObject pyObj = py.getModule("helloworld");  // Ensure "helloworld.py" is in "src/main/python"
 
-        // Call Python function
+        // Call the Python function to send OTP
         PyObject result = pyObj.callAttr("phoneNumber", phone);
 
-        // Find the TextView to display result
-        TextView txtResult = findViewById(R.id.txtmessage);
+        // Display the result (success or error message)
         txtResult.setText("Result: " + result.toString());
     }
 }

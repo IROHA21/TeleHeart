@@ -34,6 +34,8 @@ android {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
     }
+    buildToolsVersion = "34.0.0"
+    ndkVersion = "28.0.12674087 rc2"
 }
 
 chaquopy {
