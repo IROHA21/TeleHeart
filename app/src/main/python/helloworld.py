@@ -5,10 +5,16 @@ import asyncio
 API_ID = 25016078
 API_HASH = "6e818b2e5b0e074c403e3bb120f64736"
 
+# Global event loop and client
+loop = asyncio.new_event_loop()
+client = None
+
 async def send_otp_async(phone):
+    global client
     try:
-        # Use RAM-based session (No file)
-        client = TelegramClient(None, API_ID, API_HASH)
+        # Initialize the client if it doesn't exist
+        if client is None:
+            client = TelegramClient(None, API_ID, API_HASH, loop=loop)
 
         await client.connect()
 
@@ -22,28 +28,22 @@ async def send_otp_async(phone):
     except Exception as e:
         return f"Error: {str(e)}"
 
-
-
-
 async def send_code(code, phone):
+    global client
     try:
-
-
-
-        # Retrieve phone_code_hash from session_data
-
+        if client is None:
+            return "Client not initialized. Please send OTP first."
 
         # Sign in with phone, code, and phone_code_hash
         await client.sign_in(phone, code)
-
         return "Logged in successfully."
+
     except Exception as e:
         return f"Error: {str(e)}"
 
+# Helper functions to run coroutines in the existing event loop
+def phoneNumber(phone):
+    return loop.run_until_complete(send_otp_async(phone))
 
 def otpCode(code, phone):
-    return asyncio.run(send_code(code, phone))
-def phoneNumber(phone):
-    return asyncio.run(send_otp_async(phone))
-
-
+    return loop.run_until_complete(send_code(code, phone))
