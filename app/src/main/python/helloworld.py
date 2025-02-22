@@ -22,5 +22,28 @@ async def send_otp_async(phone):
     except Exception as e:
         return f"Error: {str(e)}"
 
+
+
+
+async def send_code(code, phone):
+    try:
+
+
+
+        # Retrieve phone_code_hash from session_data
+
+
+        # Sign in with phone, code, and phone_code_hash
+        await client.sign_in(phone, code)
+
+        return "Logged in successfully."
+    except Exception as e:
+        return f"Error: {str(e)}"
+
+
+def otpCode(code, phone):
+    return asyncio.run(send_code(code, phone))
 def phoneNumber(phone):
     return asyncio.run(send_otp_async(phone))
+
+

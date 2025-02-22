@@ -14,7 +14,8 @@ import com.chaquo.python.android.AndroidPlatform;
 
 public class MainActivity extends AppCompatActivity {
 
-    EditText editTextPhone2;
+    EditText editTextPhone2,editTextCode;
+
     TextView txtResult;
 
     @Override
@@ -29,9 +30,14 @@ public class MainActivity extends AppCompatActivity {
 
         editTextPhone2 = findViewById(R.id.editTextPhone2);
         txtResult = findViewById(R.id.txtmessage);
+        editTextCode = findViewById(R.id.codeid);
+
 
         Button button123 = findViewById(R.id.button123);
         button123.setOnClickListener(this::onBtnClick); // Using View view
+
+        Button verifyid = findViewById(R.id.verifyid);
+        verifyid.setOnClickListener(this::onCodeClick);
     }
 
     public void onBtnClick(View view) {
@@ -51,4 +57,27 @@ public class MainActivity extends AppCompatActivity {
         // Display the result (success or error message)
         txtResult.setText("Result: " + result.toString());
     }
+
+    public void onCodeClick(View view){
+        String phone = editTextPhone2.getText().toString().trim();
+        String code = editTextCode.getText().toString().trim();
+        if (code.isEmpty()){
+            txtResult.setText("please enter the code you recieved");
+            return;
+        }
+        Python py = Python.getInstance();
+        PyObject pyObj = py.getModule("helloworld");
+
+        PyObject result = pyObj.callAttr("otpCode", code, phone);
+
+
+
+        txtResult.setText("Result: " + result.toString());
+
+
+
+
+    }
+
+
 }
