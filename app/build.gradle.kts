@@ -1,6 +1,8 @@
 plugins {
     alias(libs.plugins.android.application)
-    id("com.chaquo.python") // Add Chaquopy plugin
+    id("com.chaquo.python")
+    alias(libs.plugins.kotlin.android)
+    alias(libs.plugins.kotlin.compose) // Add Chaquopy plugin
 }
 
 android {
@@ -36,6 +38,12 @@ android {
     }
     buildToolsVersion = "34.0.0"
     ndkVersion = "28.0.12674087 rc2"
+    kotlinOptions {
+        jvmTarget = "11"
+    }
+    buildFeatures {
+        compose = true
+    }
 }
 
 chaquopy {
@@ -54,7 +62,18 @@ dependencies {
     implementation(libs.material)
     implementation(libs.activity)
     implementation(libs.constraintlayout)
+    implementation(libs.lifecycle.runtime.ktx)
+    implementation(libs.activity.compose)
+    implementation(platform(libs.compose.bom))
+    implementation(libs.ui)
+    implementation(libs.ui.graphics)
+    implementation(libs.ui.tooling.preview)
+    implementation(libs.material3)
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)
+    androidTestImplementation(platform(libs.compose.bom))
+    androidTestImplementation(libs.ui.test.junit4)
+    debugImplementation(libs.ui.tooling)
+    debugImplementation(libs.ui.test.manifest)
 }

@@ -1,0 +1,8 @@
+<!-- res/drawable/dark_overlay.xml -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Semi-transparent dark color -->
+    <solid android:color="#80000000" /> <!-- 50% transparent black -->
+
+    <!-- Match the rounded corners of your EditText -->
+    <corners android:radius="16dp" /> <!-- Adjust radius to match your EditText -->
+</shape>
