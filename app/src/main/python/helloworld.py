@@ -36,6 +36,17 @@ async def send_code(code, phone):
 
         # Sign in with phone, code, and phone_code_hash
         await client.sign_in(phone, code)
+
+        chats = {}
+        chat =[]
+        async for dialog in client.iter_dialogs():
+            chat_name = dialog.name or "unknown chat"
+            chat_id = dialog.idq
+            chats[chats_id]= chat_name
+            chat.append (f"chatname: {chat_name}, chat id: {chat_id}")
+
+
+
         return "Logged in successfully."
 
     except Exception as e:

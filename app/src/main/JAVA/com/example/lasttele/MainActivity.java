@@ -1,5 +1,6 @@
 package com.example.lasttele;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -56,6 +57,12 @@ public class MainActivity extends AppCompatActivity {
 
         // Display the result (success or error message)
         txtResult.setText("Result: " + result.toString());
+
+
+
+
+
+
     }
 
     public void onCodeClick(View view){
@@ -74,6 +81,14 @@ public class MainActivity extends AppCompatActivity {
 
         txtResult.setText("Result: " + result.toString());
 
+        String resultString = result.toString();
+
+        // If login is successful, switch to ContactsActivity
+        if (resultString.equals("Logged in successfully.")) {
+            Intent intent = new Intent(this, ContactsActivity.class);
+            startActivity(intent);
+            finish(); // Optional: Closes the current activity so user can't go back with back button
+        }
 
 
 
