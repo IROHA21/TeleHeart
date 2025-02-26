@@ -32,17 +32,17 @@ async def send_code(code, phone):
     global client
     try:
         if client is None:
+
             return "Client not initialized. Please send OTP first."
 
         # Sign in with phone, code, and phone_code_hash
         await client.sign_in(phone, code)
 
-        chats = {}
+
         chat =[]
         async for dialog in client.iter_dialogs():
             chat_name = dialog.name or "unknown chat"
-            chat_id = dialog.idq
-            chats[chats_id]= chat_name
+            chat_id = dialog.id
             chat.append (f"chatname: {chat_name}, chat id: {chat_id}")
 
 

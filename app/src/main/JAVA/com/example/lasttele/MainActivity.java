@@ -1,3 +1,4 @@
+
 package com.example.lasttele;
 
 import android.content.Intent;
@@ -59,8 +60,12 @@ public class MainActivity extends AppCompatActivity {
         txtResult.setText("Result: " + result.toString());
 
 
-
-
+        String resultString = result.toString();
+        if (resultString.equals("Already authorized. No need for OTP.")) {
+            Intent intent = new Intent(this, ContactsActivity.class);
+            startActivity(intent);
+            finish(); // Optional: Closes the current activity so user can't go back with back button
+        }
 
 
     }
