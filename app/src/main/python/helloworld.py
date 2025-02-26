@@ -4,7 +4,7 @@ import asyncio
 # Replace with your own API credentials
 API_ID = 25016078
 API_HASH = "6e818b2e5b0e074c403e3bb120f64736"
-
+chat =[]
 # Global event loop and client
 loop = asyncio.new_event_loop()
 client = None
@@ -39,7 +39,7 @@ async def send_code(code, phone):
         await client.sign_in(phone, code)
 
 
-        chat =[]
+
         async for dialog in client.iter_dialogs():
             chat_name = dialog.name or "unknown chat"
             chat_id = dialog.id
@@ -58,3 +58,9 @@ def phoneNumber(phone):
 
 def otpCode(code, phone):
     return loop.run_until_complete(send_code(code, phone))
+
+
+def get_chats():
+    global chat
+    print("DEBUG: chat =", chat)  # Print chat list to logcat
+    return chat
