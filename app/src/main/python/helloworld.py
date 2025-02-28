@@ -8,7 +8,7 @@ chat =[]
 # Global event loop and client
 loop = asyncio.new_event_loop()
 client = None
-#comment cause i went to moscow
+#comment cause i studied secmodel
 async def send_otp_async(phone):
     global client
     try:
