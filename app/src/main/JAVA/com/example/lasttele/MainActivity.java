@@ -13,7 +13,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.chaquo.python.PyObject;
 import com.chaquo.python.Python;
 import com.chaquo.python.android.AndroidPlatform;
-
+//TODO learn to write and read from files
 public class MainActivity extends AppCompatActivity {
 
     EditText editTextPhone2,editTextCode;
