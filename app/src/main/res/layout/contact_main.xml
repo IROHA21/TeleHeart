@@ -10,46 +10,15 @@
 
 >
 
-    <LinearLayout
-        android:id="@+id/buttonContainer"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:orientation="horizontal"
-        android:padding="10dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent">
-
-        <Button
-            android:id="@+id/btnPrevious"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:enabled="false"
-            android:text="Previous" />
-
-        <TextView
-            android:id="@+id/txtPageNumber"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:padding="16dp"
-            android:text="Page 1" />
-
-        <Button
-            android:id="@+id/btnNext"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Next" />
-    </LinearLayout>
 
     <TextView
         android:id="@+id/textView2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="TextView"
-        app:layout_constraintBottom_toTopOf="@+id/buttonContainer"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintHorizontal_bias="0.699"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -58,8 +27,12 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Button"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.243"
         app:layout_constraintStart_toStartOf="parent"
-        tools:layout_editor_absoluteY="199dp" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.317" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
