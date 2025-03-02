@@ -52,12 +52,8 @@ public class MainActivity extends AppCompatActivity {
         // Display the result (session restored or not)
         txtResult.setText("Result: " + result.toString());
 
-        // If session is restored, switch to ContactsActivity
-        if (result.toString().equals("Session restored. Already authorized.")) {
-            Intent intent = new Intent(this, ContactsActivity.class);
-            startActivity(intent);
-            finish(); // Optional: Closes the current activity so user can't go back with back button
-        }
+
+
     }
 
     public void onBtnClick(View view) {
