@@ -43,7 +43,7 @@ async def send_code(code, phone):
         await client.sign_in(phone=phone, code=code)
 
         # Save the session after successful login
-        await client.session.save()
+
 
         async for dialog in client.iter_dialogs():
             chat_name = dialog.name or "unknown chat"
