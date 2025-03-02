@@ -1,4 +1,3 @@
-
 package com.example.lasttele;
 
 import android.content.Intent;
@@ -13,11 +12,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.chaquo.python.PyObject;
 import com.chaquo.python.Python;
 import com.chaquo.python.android.AndroidPlatform;
-//TODO learn to write and read from files
+
 public class MainActivity extends AppCompatActivity {
 
-    EditText editTextPhone2,editTextCode;
-
+    EditText editTextPhone2, editTextCode;
     TextView txtResult;
 
     @Override
@@ -34,12 +32,32 @@ public class MainActivity extends AppCompatActivity {
         txtResult = findViewById(R.id.txtmessage);
         editTextCode = findViewById(R.id.codeid);
 
-
         Button button123 = findViewById(R.id.button123);
-        button123.setOnClickListener(this::onBtnClick); // Using View view
+        button123.setOnClickListener(this::onBtnClick);
 
         Button verifyid = findViewById(R.id.verifyid);
         verifyid.setOnClickListener(this::onCodeClick);
+
+        // Get the internal storage path
+        String internalStoragePath = getFilesDir().getAbsolutePath();
+        Python py = Python.getInstance();
+        PyObject pyObj = py.getModule("helloworld");
+
+        // Pass the internal storage path to Python
+        pyObj.callAttr("set_session_path", internalStoragePath + "/session_name");
+
+        // Restore session on startup
+        PyObject result = pyObj.callAttr("restoreSession");
+
+        // Display the result (session restored or not)
+        txtResult.setText("Result: " + result.toString());
+
+        // If session is restored, switch to ContactsActivity
+        if (result.toString().equals("Session restored. Already authorized.")) {
+            Intent intent = new Intent(this, ContactsActivity.class);
+            startActivity(intent);
+            finish(); // Optional: Closes the current activity so user can't go back with back button
+        }
     }
 
     public void onBtnClick(View view) {
@@ -59,30 +77,26 @@ public class MainActivity extends AppCompatActivity {
         // Display the result (success or error message)
         txtResult.setText("Result: " + result.toString());
 
-
         String resultString = result.toString();
         if (resultString.equals("Already authorized. No need for OTP.")) {
             Intent intent = new Intent(this, ContactsActivity.class);
             startActivity(intent);
             finish(); // Optional: Closes the current activity so user can't go back with back button
         }
-
-
     }
 
-    public void onCodeClick(View view){
+    public void onCodeClick(View view) {
         String phone = editTextPhone2.getText().toString().trim();
         String code = editTextCode.getText().toString().trim();
-        if (code.isEmpty()){
-            txtResult.setText("please enter the code you recieved");
+        if (code.isEmpty()) {
+            txtResult.setText("Please enter the code you received.");
             return;
         }
+
         Python py = Python.getInstance();
         PyObject pyObj = py.getModule("helloworld");
 
         PyObject result = pyObj.callAttr("otpCode", code, phone);
-
-
 
         txtResult.setText("Result: " + result.toString());
 
@@ -94,10 +108,5 @@ public class MainActivity extends AppCompatActivity {
             startActivity(intent);
             finish(); // Optional: Closes the current activity so user can't go back with back button
         }
-
-
-
     }
-
-
 }
