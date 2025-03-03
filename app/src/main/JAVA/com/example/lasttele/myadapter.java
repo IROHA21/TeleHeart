@@ -25,12 +25,12 @@ public class myadapter extends RecyclerView.Adapter<myviewholder> {
     @Override
     public void onBindViewHolder(@NonNull myviewholder holder, int position) {
         holder.contactname.setText(items.get(position).getName());
-        holder.id.setText(items.get(position).getId());
+        holder.id.setText(String.valueOf(items.get(position).getId()));  // FIXED
         holder.typecontact.setImageResource(items.get(position).getTypeOfContact());
     }
 
     @Override
     public int getItemCount() {
-        return 0;
+        return items.size();
     }
 }
