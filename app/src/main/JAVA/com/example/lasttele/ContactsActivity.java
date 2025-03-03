@@ -1,8 +1,6 @@
 package com.example.lasttele;
 
 import android.os.Bundle;
-import android.view.View;
-import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -27,15 +25,10 @@ public class ContactsActivity extends AppCompatActivity {
 
         // Find the TextView and Button
         TextView textView2 = findViewById(R.id.textView2);
-        Button button = findViewById(R.id.button);
+
 
         // Set up button click listener
-        button.setOnClickListener(this::onBtnClick);
-    }
 
-    // Method to handle button click
-
-    public void onBtnClick(View view) {
         // Get Python instance and module
         Python py = Python.getInstance();
         PyObject pyObj = py.getModule("helloworld");
@@ -50,7 +43,7 @@ public class ContactsActivity extends AppCompatActivity {
         }
 
         // Find the TextView
-        TextView textView2 = findViewById(R.id.textView2);
+
 
         // Display chats
         if (!chats.isEmpty()) {
@@ -64,3 +57,4 @@ public class ContactsActivity extends AppCompatActivity {
         }
     }
 }
+    // Method to handle button click
