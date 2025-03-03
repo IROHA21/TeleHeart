@@ -4,6 +4,8 @@ import android.os.Bundle;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.chaquo.python.PyObject;
 import com.chaquo.python.Python;
@@ -25,9 +27,25 @@ public class ContactsActivity extends AppCompatActivity {
 
         // Find the TextView and Button
         TextView textView2 = findViewById(R.id.textView2);
+        RecyclerView recyclerView = findViewById(R.id.recyclerView);
+
+
+
+        List<contactList> items = new ArrayList<contactList>();
+        items.add (new contactList("jhon wick",R.drawable.group, 123456 ));
+        items.add (new contactList("jhon wick",R.drawable.group, 123456 ));
+        items.add (new contactList("jhon wick",R.drawable.group, 123456 ));
+        items.add (new contactList("jhon wick",R.drawable.group, 123456 ));
+        items.add (new contactList("jhon wick",R.drawable.group, 123456 ));
+        items.add (new contactList("jhon wick",R.drawable.group, 123456 ));
+        items.add (new contactList("jhon wick",R.drawable.group, 123456 ));
+        items.add (new contactList("jhon wick",R.drawable.group, 123456 ));
 
 
         // Set up button click listener
+
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        recyclerView.setAdapter(new myadapter(getApplicationContext(),items ));
 
         // Get Python instance and module
         Python py = Python.getInstance();
@@ -56,5 +74,6 @@ public class ContactsActivity extends AppCompatActivity {
             textView2.setText("No chats found.");
         }
     }
+
 }
-    // Method to handle button click
+

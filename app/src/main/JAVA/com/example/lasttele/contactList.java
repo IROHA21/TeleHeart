@@ -1,0 +1,39 @@
+package com.example.lasttele;
+
+public class contactList {
+    String name;
+    int typeOfContact;
+    int id;
+
+    public contactList(String name, int typeOfContact, int id) {
+        this.name = name;
+        this.typeOfContact = typeOfContact;
+        this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public int getTypeOfContact() {
+        return typeOfContact;
+    }
+
+    public void setTypeOfContact(int typeOfContact) {
+        this.typeOfContact = typeOfContact;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+}
+
+
