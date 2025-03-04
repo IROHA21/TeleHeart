@@ -23,7 +23,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_toEndOf="@id/typecontact"
-        android:textColor="@color/black"
+        android:textColor="#757575"
         android:textSize="18sp"
         android:textStyle="bold"
         tools:text="Contact Name" />
@@ -48,6 +48,6 @@
         android:layout_alignParentEnd="true"
         android:layout_centerVertical="true"
         android:background="@drawable/circle_bg"
-        tools:src="@drawable/ic_action" />
+         />
 
 </RelativeLayout>

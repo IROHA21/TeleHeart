@@ -1,7 +1,7 @@
 package com.example.lasttele;
 
 import android.os.Bundle;
-import android.widget.TextView;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -27,18 +27,18 @@ public class ContactsActivity extends AppCompatActivity {
 
 
 
+        // Initialize Python environment
+        if (!Python.isStarted()) {
+            Python.start(new AndroidPlatform(this));
+        }
 
-        TextView textView2 = findViewById(R.id.textView2);
 
 
         // Get Python instance and module
 
 
 
-        // Initialize Python environment
-        if (!Python.isStarted()) {
-            Python.start(new AndroidPlatform(this));
-        }
+
 
         Python py = Python.getInstance();
         PyObject pyObj = py.getModule("helloworld");
@@ -52,15 +52,6 @@ public class ContactsActivity extends AppCompatActivity {
         }
 
 
-        if (!chats.isEmpty()) {
-            StringBuilder chatText = new StringBuilder();
-            for (String chat : chats) {
-                chatText.append(chat).append("\n\n");
-            }
-            textView2.setText(chatText.toString());
-        } else {
-            textView2.setText("No chats found.");
-        }
 
 
 
@@ -71,7 +62,8 @@ public class ContactsActivity extends AppCompatActivity {
 
 
         RecyclerView recyclerView = findViewById(R.id.recyclerView);
-        // Input string array
+        String[] chatData = chats.toArray(new String[0]);
+     /*   // Input string array
         String[] chatData = {
                 "chatname: Olga, chat id: 1072804297",
                 "chatname: Каждый день, chat id: -1002300320383",
@@ -90,7 +82,7 @@ public class ContactsActivity extends AppCompatActivity {
                 "chatname: 2025 ТВ- и Онлайн-журналистика Школа RT, chat id: -1002272002518",
                 "chatname: Ваш Слон, chat id: -1001371006753",
                 "chatname: Визы в Шенген (gofortravel.ru) - Chat, chat id: -1001994547612"
-        };
+        }; */
 
         // List to store ContactList objects
         List<contactList> items = new ArrayList<>();
