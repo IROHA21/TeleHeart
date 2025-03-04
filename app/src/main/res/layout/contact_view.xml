@@ -1,40 +1,53 @@
-<?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    xmlns:tools="http://schemas.android.com/tools">
+    android:background="@drawable/rounded_bg"
+    android:padding="16dp"
+    android:layout_margin="8dp">
 
+    <!-- Contact Type (Rounded Image) -->
     <ImageView
         android:id="@+id/typecontact"
         android:layout_width="48dp"
         android:layout_height="48dp"
-        android:layout_marginRight="10dp"
-        android:layout_centerVertical="true" />
+        android:layout_centerVertical="true"
+        android:layout_marginEnd="10dp"
+        android:background="@drawable/circle_bg"
+        android:scaleType="centerCrop" />
 
+    <!-- Contact Name -->
     <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
         android:id="@+id/contactname"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_toEndOf="@id/typecontact"
         android:textColor="@color/black"
-        android:textSize="20dp"
-        tools:text="contactname"/>
+        android:textSize="18sp"
+        android:textStyle="bold"
+        tools:text="Contact Name" />
 
+    <!-- ID -->
     <TextView
         android:id="@+id/id"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/contactname"
-        android:layout_marginStart="6dp"
-        android:layout_marginTop="6dp"
+        android:layout_marginTop="4dp"
         android:layout_toEndOf="@id/typecontact"
-        android:textColor="@color/black"
+        android:textColor="#757575"
+        android:textSize="14sp"
         tools:text="123456" />
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="2dp"
-        android:layout_below="@id/typecontact"
-        android:layout_marginTop="10dp"
-        android:background="#DAD8D8"/>
+    <!-- Small rounded button -->
+    <ImageView
+        android:id="@+id/action_button"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:layout_alignParentEnd="true"
+        android:layout_centerVertical="true"
+        android:background="@drawable/circle_bg"
+        tools:src="@drawable/ic_action" />
+
 </RelativeLayout>

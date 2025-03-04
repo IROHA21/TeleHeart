@@ -3,9 +3,9 @@ package com.example.lasttele;
 public class contactList {
     String name;
     int typeOfContact;
-    int id;
+    long id;
 
-    public contactList(String name, int typeOfContact, int id) {
+    public contactList(String name, int typeOfContact, long id) {
         this.name = name;
         this.typeOfContact = typeOfContact;
         this.id = id;
@@ -27,13 +27,16 @@ public class contactList {
         this.typeOfContact = typeOfContact;
     }
 
-    public int getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(long id) {
         this.id = id;
     }
 }
+
+
+
 
 
