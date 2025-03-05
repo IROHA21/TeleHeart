@@ -1,6 +1,8 @@
 package com.example.lasttele;
 
 import android.os.Bundle;
+import android.widget.Button;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -14,6 +16,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ContactsActivity extends AppCompatActivity {
+    private myadapter adapter;
+    private String selectedContactId;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -61,7 +65,7 @@ public class ContactsActivity extends AppCompatActivity {
         names.add("contact1,");
 
 
-        RecyclerView recyclerView = findViewById(R.id.recyclerView);
+
         String[] chatData = chats.toArray(new String[0]);
      /*   // Input string array
         String[] chatData = {
@@ -107,11 +111,23 @@ public class ContactsActivity extends AppCompatActivity {
         }
         // Set up button click listener
 
+        // Set up RecyclerView
+        RecyclerView recyclerView = findViewById(R.id.recyclerView);
+        adapter = new myadapter(this, items);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        recyclerView.setAdapter(new myadapter(getApplicationContext(), items));
+        recyclerView.setAdapter(adapter);
 
-        // Get Python instance and module
+        // Set up button click listener
+        Button buttonSelect = findViewById(R.id.buttonselect);
+        buttonSelect.setOnClickListener(v -> {
+            long selectedId = adapter.getSelectedContactId(); // Get the selected contact ID
+            if (selectedId != -1) {
+                // Store the selected contact ID as a string
+                selectedContactId = String.valueOf(selectedId);
+                Toast.makeText(this, "Selected Contact ID: " + selectedContactId, Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(this, "No contact selected", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
-
 }
-

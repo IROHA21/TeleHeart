@@ -41,13 +41,26 @@
         tools:text="123456" />
 
     <!-- Small rounded button -->
-    <ImageView
-        android:id="@+id/action_button"
-        android:layout_width="32dp"
-        android:layout_height="32dp"
+    <FrameLayout
+        android:id="@+id/container"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
         android:layout_centerVertical="true"
-        android:background="@drawable/circle_bg"
-         />
+        android:layout_marginEnd="16dp">
 
+        <!-- ImageView -->
+        <ImageView
+            android:id="@+id/action_button"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:background="@drawable/circle_bg" />
+
+        <!-- RadioButton centered inside ImageView -->
+        <RadioButton
+            android:id="@+id/radioButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center" /> <!-- Center the RadioButton -->
+    </FrameLayout>
 </RelativeLayout>
