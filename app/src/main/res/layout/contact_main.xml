@@ -8,7 +8,7 @@
     android:background="@drawable/background_1"
     tools:context=".ContactsActivity"
 
->
+    >
 
 
     <androidx.recyclerview.widget.RecyclerView
@@ -27,27 +27,56 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-
-
     <TextView
-        android:id="@+id/textView3"
-        android:layout_width="wrap_content"
+        android:id="@+id/textView"
+        android:layout_width="147dp"
         android:layout_height="wrap_content"
-        android:text="TextView" />
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginStart="132dp"
+        android:layout_marginTop="44dp"
+        android:layout_marginEnd="132dp"
+        android:fontFamily="@font/inter_bold"
+        android:text="select contact"
+        android:textColor="#FAFFFFFF"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <Button
         android:id="@+id/buttonselect"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
         android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true"
-        android:layout_marginStart="156dp"
-        android:layout_marginTop="825dp"
-        android:layout_marginEnd="164dp"
-        android:layout_marginBottom="18dp"
-        android:text="Button" />
+        android:layout_marginStart="162dp"
+        android:layout_marginEnd="158dp"
+        android:layout_marginBottom="20dp"
+        android:backgroundTint="#1C3B9B"
+        android:color="#1C3B9B"
+        android:text="next"
+        android:textSize="15sp"
+        android:textStyle="bold" />
+
+    <Button
+        android:id="@+id/return_button"
+        android:onClick="onbuttonclick"
+        android:layout_width="70dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="9dp"
+        android:layout_marginTop="34dp"
+        android:backgroundTint="#001C3B9B"
+        android:color="#1C3B9B"
+        android:fontFamily="sans-serif-black"
+        android:textSize="10sp"
+        app:icon="@drawable/return_icon" />
 
 
 </RelativeLayout>

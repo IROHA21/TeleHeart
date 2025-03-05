@@ -59,8 +59,9 @@
         <!-- RadioButton centered inside ImageView -->
         <RadioButton
             android:id="@+id/radioButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center" /> <!-- Center the RadioButton -->
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:layout_gravity="center"
+            android:textColorLink="#321568" /> <!-- Center the RadioButton -->
     </FrameLayout>
 </RelativeLayout>
