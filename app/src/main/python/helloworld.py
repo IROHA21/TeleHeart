@@ -107,6 +107,9 @@ async def get_convo(selectedContactId):
             chatcontent = message.text or '<Media/Non-text message>'  # Message content
             messagess.append(f"chatdate: {message_date}, chat id: {message_sender_id}, content: {chatcontent} end")
 
+        # Debug: Print the messages
+        print("DEBUG: Messages fetched =", messagess)
+
         # Return the messages
         return {"messages": messagess}
 
@@ -130,8 +133,11 @@ def get_chats():
 
 
 def getconvo(selectedContactId):
+    global messagess
+    print("DEBUG: Before calling get_convo, messages =", messagess)
     result = loop.run_until_complete(get_convo(selectedContactId))
+    print("DEBUG: After calling get_convo, messages =", messagess)
     if "error" in result:
         return result["error"]  # Return the error message
     else:
-        return result["messages"]  # Return the list of messages
+        return result["messages"]  # Return the list of messagest of messages
