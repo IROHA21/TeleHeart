@@ -5,7 +5,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
-
+import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -19,7 +19,10 @@ import java.util.List;
 
 public class ContactsActivity extends AppCompatActivity {
     private myadapter adapter;
+
+
     private String selectedContactId;
+    private TextView textViewMessages;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -119,6 +122,8 @@ public class ContactsActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(adapter);
 
+
+        textViewMessages = findViewById(R.id.textViewMessages);
         // Set up button click listener
         Button buttonSelect = findViewById(R.id.buttonselect);
         buttonSelect.setOnClickListener(v -> {
@@ -126,15 +131,41 @@ public class ContactsActivity extends AppCompatActivity {
             if (selectedId != -1) {
                 // Store the selected contact ID as a string
                 selectedContactId = String.valueOf(selectedId);
-                Toast.makeText(this, "Selected Contact ID: " + selectedContactId, Toast.LENGTH_SHORT).show();
-            } else {
+
+
+
+                PyObject pyObj2 = py.getModule("helloworld");
+                PyObject con = pyObj2.callAttr("getconvo", selectedContactId);
+                List<String> cont = new ArrayList<>();
+                for (PyObject item : con.asList()) {
+                    cont.add(item.toString());
+                }
+
+
+                textViewMessages.setText(cont.toString());
+
+
+
+
+
+
+            }  else {
                 Toast.makeText(this, "No contact selected", Toast.LENGTH_SHORT).show();
             }
+
         });
+    }
+
+    public void onbut(View view){
+        System.out.println(selectedContactId);
+
+
+
     }
     public void onbuttonclick(View view) {
         Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
+
 
 
 

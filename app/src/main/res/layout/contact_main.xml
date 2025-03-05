@@ -49,6 +49,7 @@
 
     <Button
         android:id="@+id/buttonselect"
+        android:onClick="onbut"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
@@ -77,6 +78,16 @@
         android:fontFamily="sans-serif-black"
         android:textSize="10sp"
         app:icon="@drawable/return_icon" />
+
+    <TextView
+        android:id="@+id/textViewMessages"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="60dp"
+        android:layout_marginTop="13dp"
+        android:text="TextView" />
 
 
 </RelativeLayout>

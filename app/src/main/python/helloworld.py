@@ -7,6 +7,7 @@ API_HASH = "6e818b2e5b0e074c403e3bb120f64736"
 SESSION_FILE = None  # Will be set dynamically
 
 chat = []
+messagess = []
 loop = asyncio.new_event_loop()
 client = None
 
@@ -75,6 +76,43 @@ async def restore_session():
     except Exception as e:
         return f"Error: {str(e)}"
 
+
+async def get_convo(selectedContactId):
+    global client, messagess
+    try:
+        # Initialize the client if not already initialized
+        if client is None:
+            client = TelegramClient(SESSION_FILE, API_ID, API_HASH, loop=loop)
+
+        # Connect to the client
+        await client.connect()
+
+        # Ensure the client is authorized
+        if not await client.is_user_authorized():
+            return {"error": "Client not authorized. Please log in first."}
+
+        # Fetch the entity (chat) using the selectedContactId
+        target = await client.get_entity(int(selectedContactId))
+
+        # Fetch the last 100 messages from the chat
+        messages = await client.get_messages(target, limit=100)
+
+        # Clear the previous messages
+        messagess.clear()
+
+        # Process and store the messages
+        for message in messages:
+            message_date = message.date  # Message date
+            message_sender_id = message.sender_id  # Sender ID
+            chatcontent = message.text or '<Media/Non-text message>'  # Message content
+            messagess.append(f"chatdate: {message_date}, chat id: {message_sender_id}, content: {chatcontent} end")
+
+        # Return the messages
+        return {"messages": messagess}
+
+    except Exception as e:
+        return {"error": f"Error: {str(e)}"}
+
 # Helper functions to run coroutines in the existing event loop
 def phoneNumber(phone):
     return loop.run_until_complete(send_otp_async(phone))
@@ -87,5 +125,13 @@ def restoreSession():
 
 def get_chats():
     global chat
-    print("DEBUG: chat =", chat)  # Print chat list to logcat
+
     return chat
+
+
+def getconvo(selectedContactId):
+    result = loop.run_until_complete(get_convo(selectedContactId))
+    if "error" in result:
+        return result["error"]  # Return the error message
+    else:
+        return result["messages"]  # Return the list of messages
