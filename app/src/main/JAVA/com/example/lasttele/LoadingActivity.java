@@ -30,7 +30,7 @@ public class LoadingActivity extends AppCompatActivity {
 
         // Show initial progress
         progressBar.setProgress(1);
-        progressTextView.setText("0/100000");
+        progressTextView.setText("0/2500");
 
         // Get the selected contact ID from the intent
         String selectedContactId = getIntent().getStringExtra("selectedContactId");
@@ -72,7 +72,8 @@ public class LoadingActivity extends AppCompatActivity {
 
             // Switch to ResultsActivity when done
             Intent intent = new Intent(LoadingActivity.this, ResultsActivity.class);
-            intent.putExtra("totalCharacters", totalCharacters);
+            intent.putExtra("totalCharacters", totalCharacters); // Pass totalCharacters
+            intent.putStringArrayListExtra("messages", new ArrayList<>(cont)); // Pass the list of messages
             startActivity(intent);
             finish(); // Close the LoadingActivity
         }).start();
