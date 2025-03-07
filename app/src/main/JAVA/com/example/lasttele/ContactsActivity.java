@@ -2,10 +2,15 @@ package com.example.lasttele;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.HandlerThread;
+import android.os.Looper;
 import android.view.View;
 import android.widget.Button;
-import android.widget.Toast;
+import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -19,102 +24,56 @@ import java.util.List;
 
 public class ContactsActivity extends AppCompatActivity {
     private myadapter adapter;
-
-
     private String selectedContactId;
     private TextView textViewMessages;
+    private ProgressBar progressBar;
+    private Handler backgroundHandler;
+    private Handler mainHandler = new Handler(Looper.getMainLooper());
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.contact_main);
-
-
-
-
-
-
-
-
 
         // Initialize Python environment
         if (!Python.isStarted()) {
             Python.start(new AndroidPlatform(this));
         }
 
+        // Find the ProgressBar
 
+        progressBar = findViewById(R.id.progressBar);
+
+        // Initialize HandlerThread for background tasks
+        HandlerThread handlerThread = new HandlerThread("BackgroundThread");
+        handlerThread.start();
+        backgroundHandler = new Handler(handlerThread.getLooper());
 
         // Get Python instance and module
-
-
-
-
-
         Python py = Python.getInstance();
         PyObject pyObj = py.getModule("helloworld");
 
         PyObject result = pyObj.callAttr("get_chats");
-
 
         List<String> chats = new ArrayList<>();
         for (PyObject item : result.asList()) {
             chats.add(item.toString());
         }
 
-
-
-
-
-        // Find the TextView and Button
-
-        List<String> names = new ArrayList<>();
-        names.add("contact1,");
-
-
-
-        String[] chatData = chats.toArray(new String[0]);
-     /*   // Input string array
-        String[] chatData = {
-                "chatname: Olga, chat id: 1072804297",
-                "chatname: Каждый день, chat id: -1002300320383",
-                "chatname: moon, chat id: 1541937998",
-                "chatname: Fighterbomber, chat id: -1001251217154",
-                "chatname: The Right People Z, chat id: -1001597987792",
-                "chatname: Давлат Журакулов, chat id: 948526732",
-                "chatname: КБ, chat id: -1001135818819",
-                "chatname: random content, chat id: -1001746961434",
-                "chatname: damn pictures🥀, chat id: -1001529305487",
-                "chatname: Золотая молодёжь фестиваля, chat id: -1002113865053",
-                "chatname: ВАНТУЗ, chat id: -1001872761682",
-                "chatname: STRATPOL, chat id: -1001424357819",
-                "chatname: Adventures of foreigners in Russia chat/ Чат Приключения иностранцев в России, chat id: -1002104524790",
-                "chatname: Художка | Рисование и референсы, chat id: -1001609514955",
-                "chatname: 2025 ТВ- и Онлайн-журналистика Школа RT, chat id: -1002272002518",
-                "chatname: Ваш Слон, chat id: -1001371006753",
-                "chatname: Визы в Шенген (gofortravel.ru) - Chat, chat id: -1001994547612"
-        }; */
-
-        // List to store ContactList objects
-        List<contactList> items = new ArrayList<>();
-
         // Process each string in the array
-        for (String chat : chatData) {
-            // Split the string to extract chatname and chat id
+        List<contactList> items = new ArrayList<>();
+        for (String chat : chats) {
             String[] parts = chat.split(", chat id: ");
-            String chatName = parts[0].replace("chatname: ", ""); // Extract chatname
-            long chatId = Long.parseLong(parts[1]); // Extract chat id
+            String chatName = parts[0].replace("chatname: ", "");
+            long chatId = Long.parseLong(parts[1]);
 
-            // Skip the entire entry if chat id is negative
             if (chatId < 0) {
-                continue; // Skip this iteration
+                continue;
             }
 
-            // Use R.drawable.individual for positive chat ids
             int imageResource = R.drawable.individual;
-
-            // Create a ContactList object and add it to the list
             items.add(new contactList(chatName, imageResource, chatId));
         }
-        // Set up button click listener
 
         // Set up RecyclerView
         RecyclerView recyclerView = findViewById(R.id.recyclerView);
@@ -122,53 +81,31 @@ public class ContactsActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(adapter);
 
-
         textViewMessages = findViewById(R.id.textViewMessages);
+
         // Set up button click listener
         Button buttonSelect = findViewById(R.id.buttonselect);
         buttonSelect.setOnClickListener(v -> {
-            long selectedId = adapter.getSelectedContactId(); // Get the selected contact ID
+            long selectedId = adapter.getSelectedContactId();
             if (selectedId != -1) {
-                // Store the selected contact ID as a string
                 selectedContactId = String.valueOf(selectedId);
 
-
-
-                PyObject pyObj2 = py.getModule("helloworld");
-                PyObject con = pyObj2.callAttr("getconvo", selectedContactId);
-                List<String> cont = new ArrayList<>();
-                for (PyObject item : con.asList()) {
-                    cont.add(item.toString());
-                }
-
-
-                textViewMessages.setText(cont.toString());
-
-
-
-
-
-
-            }  else {
+                // Start LoadingActivity with the selected contact ID
+                Intent intent = new Intent(ContactsActivity.this, LoadingActivity.class);
+                intent.putExtra("selectedContactId", selectedContactId);
+                startActivity(intent);
+            } else {
                 Toast.makeText(this, "No contact selected", Toast.LENGTH_SHORT).show();
             }
-
         });
     }
 
-    public void onbut(View view){
+    public void onbut(View view) {
         System.out.println(selectedContactId);
-
-
-
     }
+
     public void onbuttonclick(View view) {
         Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
-
-
-
-
-
     }
 }
