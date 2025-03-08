@@ -1,6 +1,7 @@
 package com.example.lasttele;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -37,23 +38,6 @@ public class MainActivity extends AppCompatActivity {
 
         Button verifyid = findViewById(R.id.verifyid);
         verifyid.setOnClickListener(this::onCodeClick);
-
-        // Get the internal storage path
-        String internalStoragePath = getFilesDir().getAbsolutePath();
-        Python py = Python.getInstance();
-        PyObject pyObj = py.getModule("helloworld");
-
-        // Pass the internal storage path to Python
-        pyObj.callAttr("set_session_path", internalStoragePath + "/session_name");
-
-        // Restore session on startup
-        PyObject result = pyObj.callAttr("restoreSession");
-
-        // Display the result (session restored or not)
-        txtResult.setText("Result: " + result.toString());
-
-
-
     }
 
     public void onBtnClick(View view) {
@@ -67,11 +51,45 @@ public class MainActivity extends AppCompatActivity {
         Python py = Python.getInstance();
         PyObject pyObj = py.getModule("helloworld");  // Ensure "helloworld.py" is in "src/main/python"
 
+        // Get the internal storage path
+        String internalStoragePath = getFilesDir().getAbsolutePath();
+
+        // Set the session file path based on the phone number
+        String sessionFilePath = internalStoragePath + "/session_" + phone;
+        pyObj.callAttr("set_session_path", sessionFilePath);
+
+        // Retrieve the previous phone number from SharedPreferences
+        SharedPreferences sharedPreferences = getSharedPreferences("MyAppPrefs", MODE_PRIVATE);
+        String previousPhoneNumber = sharedPreferences.getString("last_phone_number", "");
+
+        // Check if the entered phone number matches the previous phone number
+        if (phone.equals(previousPhoneNumber)) {
+            // If the phone numbers match, restore the session
+            PyObject restoreResult = pyObj.callAttr("restoreSession");
+            txtResult.setText("Session Restore Result: " + restoreResult.toString());
+
+            // If the session is already authorized, skip OTP and go to ContactsActivity
+            if (restoreResult.toString().equals("Session restored. Already authorized.")) {
+                Intent intent = new Intent(this, ContactsActivity.class);
+                startActivity(intent);
+                finish(); // Optional: Closes the current activity so user can't go back with back button
+                return; // Exit the method to avoid sending OTP unnecessarily
+            }
+        } else {
+            // If the phone numbers don't match, inform the user
+            txtResult.setText("Phone number does not match the previous one. Sending OTP to the new number.");
+        }
+
+        // Save the current phone number to SharedPreferences
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString("last_phone_number", phone);
+        editor.apply();
+
         // Call the Python function to send OTP
         PyObject result = pyObj.callAttr("phoneNumber", phone);
 
         // Display the result (success or error message)
-        txtResult.setText("Result: " + result.toString());
+        txtResult.setText("OTP Result: " + result.toString());
 
         String resultString = result.toString();
         if (resultString.equals("Already authorized. No need for OTP.")) {

@@ -1,5 +1,6 @@
 from telethon import TelegramClient
 import asyncio
+import os
 
 # Replace with your own API credentials
 API_ID = 25016078
@@ -18,16 +19,21 @@ def set_session_path(path):
 async def send_otp_async(phone):
     global client
     try:
-        if client is None:
-            client = TelegramClient(SESSION_FILE, API_ID, API_HASH, loop=loop)
+        # Disconnect and reset the client if it exists
+        if client is not None:
+            await client.disconnect()
+            client = None
 
+        # Create a new client and session file
+        client = TelegramClient(SESSION_FILE, API_ID, API_HASH, loop=loop)
         await client.connect()
 
-        if not await client.is_user_authorized():
-            await client.send_code_request(phone)
-            return "OTP has been sent to your Telegram app. Please check."
+        # Add a small delay to ensure the connection is fully established
+        await asyncio.sleep(1)  # 1-second delay
 
-        return "Already authorized. No need for OTP."
+        # Send OTP without any checks
+        await client.send_code_request(phone)
+        return "OTP has been sent to your Telegram app. Please check."
 
     except Exception as e:
         return f"Error: {str(e)}"
@@ -70,6 +76,7 @@ async def restore_session():
 
 async def get_convo(selectedContactId):
     global client, messagess
+
     try:
         if client is None:
             client = TelegramClient(SESSION_FILE, API_ID, API_HASH, loop=loop)
@@ -114,3 +121,12 @@ def getconvo(selectedContactId):
         return result["error"]
     else:
         return result["messages"]
+
+async def disconnect_client_async():
+    global client
+    if client is not None:
+        await client.disconnect()
+        client = None
+
+def disconnect_client():
+    loop.run_until_complete(disconnect_client_async())
