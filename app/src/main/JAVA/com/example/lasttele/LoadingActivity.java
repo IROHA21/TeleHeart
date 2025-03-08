@@ -30,7 +30,7 @@ public class LoadingActivity extends AppCompatActivity {
 
         // Show initial progress
         progressBar.setProgress(1);
-        progressTextView.setText("0/2000");
+        progressTextView.setText("0/10000");
 
         // Get the selected contact ID from the intent
         String selectedContactId = getIntent().getStringExtra("selectedContactId");
@@ -42,38 +42,19 @@ public class LoadingActivity extends AppCompatActivity {
             PyObject con = pyObj.callAttr("getconvo", selectedContactId);
 
             // Convert PyObject elements to String
-            List<String> cont = new ArrayList<>();
+            List<String> messages = new ArrayList<>();
             for (PyObject obj : con.asList()) {
-                cont.add(obj.toString());
+                messages.add(obj.toString());
             }
 
-            int totalMessages = cont.size();
-            int totalCharacters = 0;
-
-            for (int i = 0; i < totalMessages; i++) {
-                totalCharacters += cont.get(i).length();
-
-                // Update progress after processing each message
-                final int progress = (int) ((i + 1) / (float) totalMessages * 100);
-                final int currentIndex = i + 1;
-
-                mainHandler.post(() -> {
-                    progressBar.setProgress(progress);
-                    progressTextView.setText(currentIndex + "/" + totalMessages);
-                });
-
-                // Simulate delay (remove this in production)
-                try {
-                    Thread.sleep(10);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
+            // Save messages to the database
+            DatabaseHelper dbHelper = new DatabaseHelper(LoadingActivity.this);
+            dbHelper.deleteAllMessages(); // Clear old data before saving new messages
+            dbHelper.saveMessages(messages); // Save new messages
 
             // Switch to ResultsActivity when done
             Intent intent = new Intent(LoadingActivity.this, ResultsActivity.class);
-            intent.putExtra("totalCharacters", totalCharacters); // Pass totalCharacters
-            intent.putStringArrayListExtra("messages", new ArrayList<>(cont)); // Pass the list of messages
+            intent.putExtra("selectedContactId", selectedContactId); // Pass the contact ID
             startActivity(intent);
             finish(); // Close the LoadingActivity
         }).start();

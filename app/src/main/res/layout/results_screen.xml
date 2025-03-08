@@ -16,20 +16,20 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Average Time to Answer: "
-        android:textSize="12sp" />
+        android:textSize="10sp" />
 
     <TextView
         android:id="@+id/favoriteEmojiTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Favorite Emoji: "
-        android:textSize="12sp" />
+        android:textSize="10sp" />
 
     <TextView
         android:id="@+id/numberOfMessagesTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Number of Messages: "
-        android:textSize="12sp" />
+        android:textSize="10sp" />
 
 </LinearLayout>

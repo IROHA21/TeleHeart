@@ -29,7 +29,7 @@ async def send_otp_async(phone):
         await client.connect()
 
         # Add a small delay to ensure the connection is fully established
-        await asyncio.sleep(1)  # 1-second delay
+
 
         # Send OTP without any checks
         await client.send_code_request(phone)
@@ -87,7 +87,7 @@ async def get_convo(selectedContactId):
             return {"error": "Client not authorized. Please log in first."}
 
         target = await client.get_entity(int(selectedContactId))
-        messages = await client.get_messages(target, limit=2000)
+        messages = await client.get_messages(target, limit=10000)
 
         messagess.clear()
 
