@@ -30,7 +30,7 @@ public class LoadingActivity extends AppCompatActivity {
 
         // Show initial progress
         progressBar.setProgress(1);
-        progressTextView.setText("0/2500");
+        progressTextView.setText("0/2000");
 
         // Get the selected contact ID from the intent
         String selectedContactId = getIntent().getStringExtra("selectedContactId");

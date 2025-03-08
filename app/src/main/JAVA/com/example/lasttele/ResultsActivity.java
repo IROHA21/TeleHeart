@@ -250,7 +250,7 @@ public class ResultsActivity extends AppCompatActivity {
             return monthCounts;
         }
 
-        // 9. Days with the most messages (sorted from highest to lowest)
+        // 9. Days with the most messages (sorted from highest to lowest, top 5 only)
         public Map<Long, List<Map.Entry<String, Integer>>> getDaysWithMostMessages() {
             Map<Long, Map<String, Integer>> dayCounts = new HashMap<>();
             SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
@@ -265,8 +265,10 @@ public class ResultsActivity extends AppCompatActivity {
             Map<Long, List<Map.Entry<String, Integer>>> sortedDays = new HashMap<>();
             for (Long chatId : dayCounts.keySet()) {
                 List<Map.Entry<String, Integer>> sortedList = new ArrayList<>(dayCounts.get(chatId).entrySet());
-                sortedList.sort((e1, e2) -> e2.getValue().compareTo(e1.getValue()));
-                sortedDays.put(chatId, sortedList);
+                sortedList.sort((e1, e2) -> e2.getValue().compareTo(e1.getValue())); // Sort by count (descending)
+
+                // Take only the top 5 days
+                sortedDays.put(chatId, sortedList.subList(0, Math.min(5, sortedList.size())));
             }
 
             return sortedDays;
@@ -290,16 +292,21 @@ public class ResultsActivity extends AppCompatActivity {
             return last10DaysCounts;
         }
 
-        // 11. Most used words (top 10)
+        // 11. Most used words (top 10, with words longer than 4 characters, excluding media files and unwanted placeholders)
         public Map<Long, Map<String, Integer>> getMostUsedWords() {
             Map<Long, Map<String, Integer>> wordCounts = new HashMap<>();
 
             for (ChatMessage message : messages) {
+                // Skip media files and unwanted placeholders
+                if (message.content.equals("<Media/Non-text message>") || message.content.contains("message>")) {
+                    continue;
+                }
+
                 Map<String, Integer> userWordCounts = wordCounts.getOrDefault(message.chatId, new HashMap<>());
                 String[] words = message.content.split("\\s+");
                 for (String word : words) {
-                    // Ignore empty words and media placeholders
-                    if (!word.isEmpty() && !word.equals("<Media/Non-text message>")) {
+                    // Ignore empty words and words with 4 or fewer characters
+                    if (!word.isEmpty() && word.length() > 4) {
                         userWordCounts.put(word, userWordCounts.getOrDefault(word, 0) + 1);
                     }
                 }
@@ -329,6 +336,7 @@ public class ResultsActivity extends AppCompatActivity {
         }
 
         // 12. Most used emojis
+        // 12. Most used emojis (top 5, in descending order)
         public Map<Long, Map<String, Integer>> getMostUsedEmojis() {
             Map<Long, Map<String, Integer>> emojiCounts = new HashMap<>();
 
@@ -343,7 +351,26 @@ public class ResultsActivity extends AppCompatActivity {
                 emojiCounts.put(message.chatId, userEmojiCounts);
             }
 
-            return emojiCounts;
+            // Limit to top 5 most used emojis for each user
+            Map<Long, Map<String, Integer>> top5Emojis = new HashMap<>();
+            for (Long chatId : emojiCounts.keySet()) {
+                Map<String, Integer> userEmojiCounts = emojiCounts.get(chatId);
+
+                // Sort the emojis by frequency (descending)
+                List<Map.Entry<String, Integer>> sortedEmojis = new ArrayList<>(userEmojiCounts.entrySet());
+                sortedEmojis.sort((e1, e2) -> e2.getValue().compareTo(e1.getValue()));
+
+                // Take the top 5
+                Map<String, Integer> top5 = new LinkedHashMap<>();
+                for (int i = 0; i < Math.min(5, sortedEmojis.size()); i++) {
+                    Map.Entry<String, Integer> entry = sortedEmojis.get(i);
+                    top5.put(entry.getKey(), entry.getValue());
+                }
+
+                top5Emojis.put(chatId, top5);
+            }
+
+            return top5Emojis;
         }
 
         // Helper method to check if a string is a single emoji
@@ -367,6 +394,7 @@ public class ResultsActivity extends AppCompatActivity {
 
             return false;
         }
+
     }
 
     // Inner class to represent a chat message
