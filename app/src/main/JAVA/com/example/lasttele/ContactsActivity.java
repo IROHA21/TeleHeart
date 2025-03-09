@@ -81,7 +81,7 @@ public class ContactsActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(adapter);
 
-        textViewMessages = findViewById(R.id.textViewMessages);
+
 
         // Set up button click listener
         Button buttonSelect = findViewById(R.id.buttonselect);

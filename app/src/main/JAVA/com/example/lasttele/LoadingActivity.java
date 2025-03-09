@@ -26,11 +26,11 @@ public class LoadingActivity extends AppCompatActivity {
         setContentView(R.layout.loading_screen);
 
         progressBar = findViewById(R.id.loadingProgressBar);
-        progressTextView = findViewById(R.id.progressTextView);
+
 
         // Show initial progress
-        progressBar.setProgress(1);
-        progressTextView.setText("0/10000");
+
+
 
         // Get the selected contact ID from the intent
         String selectedContactId = getIntent().getStringExtra("selectedContactId");

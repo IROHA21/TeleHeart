@@ -87,7 +87,7 @@ async def get_convo(selectedContactId):
             return {"error": "Client not authorized. Please log in first."}
 
         target = await client.get_entity(int(selectedContactId))
-        messages = await client.get_messages(target, limit=10000)
+        messages = await client.get_messages(target, limit=100000)
 
         messagess.clear()
 
