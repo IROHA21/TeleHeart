@@ -28,18 +28,22 @@ public class LoadingActivity extends AppCompatActivity {
         progressBar = findViewById(R.id.loadingProgressBar);
 
 
+
         // Show initial progress
 
 
 
         // Get the selected contact ID from the intent
         String selectedContactId = getIntent().getStringExtra("selectedContactId");
+        String quantityStr = getIntent().getStringExtra("quantity");
+        int quantity = Integer.parseInt(quantityStr); // Convert it back to an integer
+
 
         // Start the background task to fetch messages
         new Thread(() -> {
             Python py = Python.getInstance();
             PyObject pyObj = py.getModule("helloworld");
-            PyObject con = pyObj.callAttr("getconvo", selectedContactId);
+            PyObject con = pyObj.callAttr("getconvo", selectedContactId, quantity);
 
             // Convert PyObject elements to String
             List<String> messages = new ArrayList<>();

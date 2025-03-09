@@ -7,8 +7,8 @@ import android.os.HandlerThread;
 import android.os.Looper;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ProgressBar;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -25,7 +25,7 @@ import java.util.List;
 public class ContactsActivity extends AppCompatActivity {
     private myadapter adapter;
     private String selectedContactId;
-    private TextView textViewMessages;
+    private EditText quantity; // Added EditText for quantity
     private ProgressBar progressBar;
     private Handler backgroundHandler;
     private Handler mainHandler = new Handler(Looper.getMainLooper());
@@ -40,9 +40,9 @@ public class ContactsActivity extends AppCompatActivity {
             Python.start(new AndroidPlatform(this));
         }
 
-        // Find the ProgressBar
-
+        // Find views
         progressBar = findViewById(R.id.progressBar);
+        quantity = findViewById(R.id.quantity); // Get EditText from layout
 
         // Initialize HandlerThread for background tasks
         HandlerThread handlerThread = new HandlerThread("BackgroundThread");
@@ -81,8 +81,6 @@ public class ContactsActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(adapter);
 
-
-
         // Set up button click listener
         Button buttonSelect = findViewById(R.id.buttonselect);
         buttonSelect.setOnClickListener(v -> {
@@ -90,9 +88,32 @@ public class ContactsActivity extends AppCompatActivity {
             if (selectedId != -1) {
                 selectedContactId = String.valueOf(selectedId);
 
-                // Start LoadingActivity with the selected contact ID
+                // Get the quantity value from EditText
+                String quantityValue = quantity.getText().toString().trim();
+
+                // Validate input
+                if (quantityValue.isEmpty()) {
+                    Toast.makeText(this, "Quantity cannot be empty", Toast.LENGTH_SHORT).show();
+                    return; // Stop execution
+                }
+
+                int quantityInt;
+                try {
+                    quantityInt = Integer.parseInt(quantityValue);
+                    if (quantityInt > 100000) {
+                        Toast.makeText(this, "Quantity must be 100000 or less", Toast.LENGTH_SHORT).show();
+                        return; // Stop execution
+                    }
+                } catch (NumberFormatException e) {
+                    Toast.makeText(this, "Please enter a valid number", Toast.LENGTH_SHORT).show();
+                    return; // Stop execution
+                }
+
+                // If all validations pass, proceed to the next screen
                 Intent intent = new Intent(ContactsActivity.this, LoadingActivity.class);
                 intent.putExtra("selectedContactId", selectedContactId);
+                intent.putExtra("quantity", String.valueOf(quantityInt)); // Store it as a String
+
                 startActivity(intent);
             } else {
                 Toast.makeText(this, "No contact selected", Toast.LENGTH_SHORT).show();

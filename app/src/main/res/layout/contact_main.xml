@@ -90,5 +90,19 @@
         android:visibility="gone"
         android:layout_marginTop="13dp" />
 
+    <EditText
+        android:id="@+id/quantity"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginStart="190dp"
+        android:layout_marginTop="3dp"
+        android:layout_marginEnd="11dp"
+        android:ems="10"
+        android:inputType="text"
+        android:text="Name" />
+
 
 </RelativeLayout>

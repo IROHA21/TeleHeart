@@ -74,7 +74,7 @@ async def restore_session():
     except Exception as e:
         return f"Error: {str(e)}"
 
-async def get_convo(selectedContactId):
+async def get_convo(selectedContactId, quantity):
     global client, messagess
 
     try:
@@ -87,7 +87,8 @@ async def get_convo(selectedContactId):
             return {"error": "Client not authorized. Please log in first."}
 
         target = await client.get_entity(int(selectedContactId))
-        messages = await client.get_messages(target, limit=100000)
+        intquna = int(quantity)
+        messages = await client.get_messages(target, limit=intquna)
 
         messagess.clear()
 
@@ -115,8 +116,8 @@ def get_chats():
     global chat
     return chat
 
-def getconvo(selectedContactId):
-    result = loop.run_until_complete(get_convo(selectedContactId))
+def getconvo(selectedContactId, quantity):
+    result = loop.run_until_complete(get_convo(selectedContactId, quantity))
     if "error" in result:
         return result["error"]
     else:
