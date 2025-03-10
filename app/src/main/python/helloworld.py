@@ -6,7 +6,7 @@ import os
 API_ID = 25016078
 API_HASH = "6e818b2e5b0e074c403e3bb120f64736"
 SESSION_FILE = None  # Will be set dynamically
-
+user_id = None
 chat = []
 messagess = []
 loop = asyncio.new_event_loop()
@@ -92,8 +92,8 @@ async def get_convo(selectedContactId, quantity):
         messages = await client.get_messages(target, limit=intquna)
 
 
-        #me = await client.get_me()
-        #user_id = me.id
+        me = await client.get_me()
+        user_id = me.id
 
 
         messagess.clear()
@@ -139,6 +139,7 @@ async def disconnect_client_async():
 def disconnect_client():
     loop.run_until_complete(disconnect_client_async())
 
-#def get_user_id_sync():
-
-    #return user_id
+def get_user_id_sync():
+    global user_id
+    print(f"get_user_id_sync: user_id = {user_id}")
+    return user_id

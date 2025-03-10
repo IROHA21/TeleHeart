@@ -43,14 +43,25 @@ public class LoadingActivity extends AppCompatActivity {
         new Thread(() -> {
             Python py = Python.getInstance();
             PyObject pyObj = py.getModule("helloworld");
+
+            // Call getconvo first to ensure user_id is set
             PyObject con = pyObj.callAttr("getconvo", selectedContactId, quantity);
 
+            if (con == null) {
+                System.out.println("getconvo returned null");
+                return;
+            }
 
-            /*Python pyy = Python.getInstance();
-            PyObject pyObj2 = pyy.getModule("helloworld");
-            PyObject idu = pyObj2.callAttr("get_user_id_sync");
-            String userId = idu.get("user_id").toString();*/
+            // Now call get_user_id_sync to retrieve the user_id
+            PyObject idu = pyObj.callAttr("get_user_id_sync");
 
+            if (idu == null) {
+                System.out.println("get_user_id_sync returned null");
+                return;
+            }
+
+            // Convert PyObject to String directly
+            String userId = idu.toString();  // No need to call .get("user_id")
 
             // Convert PyObject elements to String
             List<String> messages = new ArrayList<>();
@@ -66,9 +77,8 @@ public class LoadingActivity extends AppCompatActivity {
             // Switch to ResultsActivity when done
             Intent intent = new Intent(LoadingActivity.this, ResultsActivity.class);
             intent.putExtra("selectedContactId", selectedContactId); // Pass the contact ID
-            // intent.putExtra("user_id", userId); // Pass the contact ID
+            intent.putExtra("user_id", userId); // Pass the user ID
             startActivity(intent);
             finish(); // Close the LoadingActivity
         }).start();
-    }
-}
+}}
