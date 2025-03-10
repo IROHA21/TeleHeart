@@ -102,6 +102,8 @@ public class ResultsActivity extends AppCompatActivity {
                 long yourChatId = 1541937998;
                 long herChatId = 1072804297;
 
+
+
                 // Number of Messages
                 yourMessagesTextView.setText("You: " + messageCounts.getOrDefault(yourChatId, 0));
                 herMessagesTextView.setText("Her: " + messageCounts.getOrDefault(herChatId, 0));
