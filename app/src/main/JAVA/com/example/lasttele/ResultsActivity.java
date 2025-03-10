@@ -16,10 +16,18 @@ import java.util.regex.Pattern;
 public class ResultsActivity extends AppCompatActivity {
 
     // TextViews to display results
-    private TextView resultsTextView;
-    private TextView averageTimeTextView;
-    private TextView favoriteEmojiTextView;
-    private TextView numberOfMessagesTextView;
+    private TextView yourMessagesTextView, herMessagesTextView;
+    private TextView yourAverageTimeTextView, herAverageTimeTextView;
+    private TextView yourFavoriteEmojiTextView, herFavoriteEmojiTextView;
+    private TextView yourMediaFilesTextView, herMediaFilesTextView;
+    private TextView yourLinksTextView, herLinksTextView;
+    private TextView yourDayOfWeekTextView, herDayOfWeekTextView;
+    private TextView yourHourOfDayTextView, herHourOfDayTextView;
+    private TextView yourMonthTextView, herMonthTextView;
+    private TextView yourDaysMostMessagesTextView, herDaysMostMessagesTextView;
+    private TextView yourLast10DaysTextView, herLast10DaysTextView;
+    private TextView yourMostUsedWordsTextView, herMostUsedWordsTextView;
+    private TextView yourMostUsedEmojisTextView, herMostUsedEmojisTextView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,10 +35,30 @@ public class ResultsActivity extends AppCompatActivity {
         setContentView(R.layout.results_screen);
 
         // Initialize TextViews
-        resultsTextView = findViewById(R.id.resultsTextView);
-        averageTimeTextView = findViewById(R.id.averageTimeTextView);
-        favoriteEmojiTextView = findViewById(R.id.favoriteEmojiTextView);
-        numberOfMessagesTextView = findViewById(R.id.numberOfMessagesTextView);
+        yourMessagesTextView = findViewById(R.id.yourMessagesTextView);
+        herMessagesTextView = findViewById(R.id.herMessagesTextView);
+        yourAverageTimeTextView = findViewById(R.id.yourAverageTimeTextView);
+        herAverageTimeTextView = findViewById(R.id.herAverageTimeTextView);
+        yourFavoriteEmojiTextView = findViewById(R.id.yourFavoriteEmojiTextView);
+        herFavoriteEmojiTextView = findViewById(R.id.herFavoriteEmojiTextView);
+        yourMediaFilesTextView = findViewById(R.id.yourMediaFilesTextView);
+        herMediaFilesTextView = findViewById(R.id.herMediaFilesTextView);
+        yourLinksTextView = findViewById(R.id.yourLinksTextView);
+        herLinksTextView = findViewById(R.id.herLinksTextView);
+        yourDayOfWeekTextView = findViewById(R.id.yourDayOfWeekTextView);
+        herDayOfWeekTextView = findViewById(R.id.herDayOfWeekTextView);
+        yourHourOfDayTextView = findViewById(R.id.yourHourOfDayTextView);
+        herHourOfDayTextView = findViewById(R.id.herHourOfDayTextView);
+        yourMonthTextView = findViewById(R.id.yourMonthTextView);
+        herMonthTextView = findViewById(R.id.herMonthTextView);
+        yourDaysMostMessagesTextView = findViewById(R.id.yourDaysMostMessagesTextView);
+        herDaysMostMessagesTextView = findViewById(R.id.herDaysMostMessagesTextView);
+        yourLast10DaysTextView = findViewById(R.id.yourLast10DaysTextView);
+        herLast10DaysTextView = findViewById(R.id.herLast10DaysTextView);
+        yourMostUsedWordsTextView = findViewById(R.id.yourMostUsedWordsTextView);
+        herMostUsedWordsTextView = findViewById(R.id.herMostUsedWordsTextView);
+        yourMostUsedEmojisTextView = findViewById(R.id.yourMostUsedEmojisTextView);
+        herMostUsedEmojisTextView = findViewById(R.id.herMostUsedEmojisTextView);
 
         // Retrieve messages from the database in a background thread
         new Thread(() -> {
@@ -54,37 +82,93 @@ public class ResultsActivity extends AppCompatActivity {
             Map<Long, Map<String, Integer>> mostUsedWords = analyzer.getMostUsedWords();
             Map<Long, Map<String, Integer>> mostUsedEmojis = analyzer.getMostUsedEmojis();
 
+            // Debugging outputs
+            System.out.println("Message Counts: " + messageCounts);
+            System.out.println("Average Times: " + averageTimes);
+            System.out.println("Favorite Emojis: " + favoriteEmojis);
+            System.out.println("Media Counts: " + mediaCounts);
+            System.out.println("Link Counts: " + linkCounts);
+            System.out.println("Day of Week Counts: " + dayOfWeekCounts);
+            System.out.println("Hour of Day Counts: " + hourOfDayCounts);
+            System.out.println("Month Counts: " + monthCounts);
+            System.out.println("Days with Most Messages: " + daysWithMostMessages);
+            System.out.println("Last 10 Days Counts: " + last10DaysCounts);
+            System.out.println("Most Used Words: " + mostUsedWords);
+            System.out.println("Most Used Emojis: " + mostUsedEmojis);
+
             // Update the UI on the main thread
             new Handler(Looper.getMainLooper()).post(() -> {
-                // Display the total number of messages
-                resultsTextView.setText("Total messages: " + messages.size());
+                // Assuming chatId 1 is "You" and chatId 2 is "Her"
+                long yourChatId = 1541937998;
+                long herChatId = 1072804297;
 
-                // Display the results
-                StringBuilder results = new StringBuilder();
-                for (Long chatId : messageCounts.keySet()) {
-                    results.append("User ").append(chatId).append(":\n");
-                    results.append("Number of messages: ").append(messageCounts.get(chatId)).append("\n");
-                    results.append("Average time to answer: ").append(averageTimes.get(chatId) / 1000).append(" seconds\n");
-                    results.append("Favorite emoji: ").append(favoriteEmojis.get(chatId)).append("\n");
-                    results.append("Number of media files: ").append(mediaCounts.get(chatId)).append("\n");
-                    results.append("Number of links: ").append(linkCounts.get(chatId)).append("\n");
-                    results.append("Messages per day of the week: ").append(dayOfWeekCounts.get(chatId)).append("\n");
-                    results.append("Messages per hour of the day: ").append(hourOfDayCounts.get(chatId)).append("\n");
-                    results.append("Messages per month: ").append(monthCounts.get(chatId)).append("\n");
-                    results.append("Days with most messages: ").append(daysWithMostMessages.get(chatId)).append("\n");
-                    results.append("Messages in last 10 days: ").append(last10DaysCounts.get(chatId)).append("\n");
-                    results.append("Most used words: ").append(mostUsedWords.get(chatId)).append("\n");
-                    results.append("Most used emojis: ").append(mostUsedEmojis.get(chatId)).append("\n\n");
-                }
+                // Number of Messages
+                yourMessagesTextView.setText("You: " + messageCounts.getOrDefault(yourChatId, 0));
+                herMessagesTextView.setText("Her: " + messageCounts.getOrDefault(herChatId, 0));
 
-                averageTimeTextView.setText("Average Time to Answer: Calculated");
-                favoriteEmojiTextView.setText("Favorite Emoji: Calculated");
-                numberOfMessagesTextView.setText("Number of Messages: Calculated");
+                // Average Time to Answer
+                yourAverageTimeTextView.setText("You: " + (averageTimes.getOrDefault(yourChatId, 0L) / 1000) + "s");
+                herAverageTimeTextView.setText("Her: " + (averageTimes.getOrDefault(herChatId, 0L) / 1000) + "s");
 
-                // Display the detailed results in the main TextView
-                resultsTextView.append("\n\nAnalysis Results:\n" + results.toString());
+                // Favorite Emoji
+                yourFavoriteEmojiTextView.setText("You: " + favoriteEmojis.getOrDefault(yourChatId, ""));
+                herFavoriteEmojiTextView.setText("Her: " + favoriteEmojis.getOrDefault(herChatId, ""));
+
+                // Number of Media Files
+                yourMediaFilesTextView.setText("You: " + mediaCounts.getOrDefault(yourChatId, 0));
+                herMediaFilesTextView.setText("Her: " + mediaCounts.getOrDefault(herChatId, 0));
+
+                // Number of Links
+                yourLinksTextView.setText("You: " + linkCounts.getOrDefault(yourChatId, 0));
+                herLinksTextView.setText("Her: " + linkCounts.getOrDefault(herChatId, 0));
+
+                // Messages per Day of the Week
+                yourDayOfWeekTextView.setText("You: " + formatMap(dayOfWeekCounts.getOrDefault(yourChatId, new HashMap<>())));
+                herDayOfWeekTextView.setText("Her: " + formatMap(dayOfWeekCounts.getOrDefault(herChatId, new HashMap<>())));
+
+                // Messages per Hour of the Day
+                yourHourOfDayTextView.setText("You: " + formatMap(hourOfDayCounts.getOrDefault(yourChatId, new HashMap<>())));
+                herHourOfDayTextView.setText("Her: " + formatMap(hourOfDayCounts.getOrDefault(herChatId, new HashMap<>())));
+
+                // Messages per Month
+                yourMonthTextView.setText("You: " + formatMap(monthCounts.getOrDefault(yourChatId, new HashMap<>())));
+                herMonthTextView.setText("Her: " + formatMap(monthCounts.getOrDefault(herChatId, new HashMap<>())));
+
+                // Days with Most Messages
+                yourDaysMostMessagesTextView.setText("You: " + formatList(daysWithMostMessages.getOrDefault(yourChatId, new ArrayList<>())));
+                herDaysMostMessagesTextView.setText("Her: " + formatList(daysWithMostMessages.getOrDefault(herChatId, new ArrayList<>())));
+
+                // Messages in Last 10 Days
+                yourLast10DaysTextView.setText("You: " + last10DaysCounts.getOrDefault(yourChatId, 0));
+                herLast10DaysTextView.setText("Her: " + last10DaysCounts.getOrDefault(herChatId, 0));
+
+                // Most Used Words
+                yourMostUsedWordsTextView.setText("You: " + formatMap(mostUsedWords.getOrDefault(yourChatId, new HashMap<>())));
+                herMostUsedWordsTextView.setText("Her: " + formatMap(mostUsedWords.getOrDefault(herChatId, new HashMap<>())));
+
+                // Most Used Emojis
+                yourMostUsedEmojisTextView.setText("You: " + formatMap(mostUsedEmojis.getOrDefault(yourChatId, new HashMap<>())));
+                herMostUsedEmojisTextView.setText("Her: " + formatMap(mostUsedEmojis.getOrDefault(herChatId, new HashMap<>())));
             });
         }).start();
+    }
+
+    // Helper method to format a Map into a readable string
+    private String formatMap(Map<?, ?> map) {
+        StringBuilder result = new StringBuilder();
+        for (Map.Entry<?, ?> entry : map.entrySet()) {
+            result.append(entry.getKey()).append(" - ").append(entry.getValue()).append(", ");
+        }
+        return result.length() > 0 ? result.substring(0, result.length() - 2) : "";
+    }
+
+    // Helper method to format a List of Map entries into a readable string
+    private String formatList(List<Map.Entry<String, Integer>> list) {
+        StringBuilder result = new StringBuilder();
+        for (Map.Entry<String, Integer> entry : list) {
+            result.append(entry.getKey()).append(" - ").append(entry.getValue()).append(", ");
+        }
+        return result.length() > 0 ? result.substring(0, result.length() - 2) : "";
     }
 
     // Inner class to analyze chat data
@@ -163,7 +247,6 @@ public class ResultsActivity extends AppCompatActivity {
         }
 
         // 3. Find the favorite emoji for each user
-        // 3. Find the favorite emoji for each user
         public Map<Long, String> getFavoriteEmojiPerUser() {
             Map<Long, Map<String, Integer>> emojiCounts = new HashMap<>();
 
@@ -190,7 +273,6 @@ public class ResultsActivity extends AppCompatActivity {
 
             return favoriteEmojis;
         }
-
 
         // 4. Number of media files per user
         public Map<Long, Integer> getNumberOfMediaFilesPerUser() {
@@ -415,29 +497,6 @@ public class ResultsActivity extends AppCompatActivity {
                     (codePoint >= 0x1F900 && codePoint <= 0x1F9FF) || // Supplemental Symbols and Pictographs
                     (codePoint >= 0x1F1E6 && codePoint <= 0x1F1FF);   // Flags
         }
-
-        // Helper method to check if a string is a single emoji
-        private boolean isEmoji(String input) {
-            if (input == null || input.isEmpty()) {
-                return false;
-            }
-
-            // Check if the input is a single character and falls within emoji Unicode ranges
-            if (input.codePointCount(0, input.length()) == 1) {
-                int codePoint = input.codePointAt(0);
-                return (codePoint >= 0x1F600 && codePoint <= 0x1F64F) || // Emoticons
-                        (codePoint >= 0x1F300 && codePoint <= 0x1F5FF) || // Misc Symbols and Pictographs
-                        (codePoint >= 0x1F680 && codePoint <= 0x1F6FF) || // Transport and Map Symbols
-                        (codePoint >= 0x2600 && codePoint <= 0x26FF) ||   // Misc Symbols
-                        (codePoint >= 0x2700 && codePoint <= 0x27BF) ||   // Dingbats
-                        (codePoint >= 0xFE00 && codePoint <= 0xFE0F) ||   // Variation Selectors
-                        (codePoint >= 0x1F900 && codePoint <= 0x1F9FF) || // Supplemental Symbols and Pictographs
-                        (codePoint >= 0x1F1E6 && codePoint <= 0x1F1FF);   // Flags
-            }
-
-            return false;
-        }
-
     }
 
     // Inner class to represent a chat message
