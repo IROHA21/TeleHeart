@@ -9,9 +9,9 @@
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
-        android:icon="@drawable/mylogo"
+        android:icon="@drawable/noborder"
         android:label="TeleHeart"
-        android:roundIcon="@drawable/mylogo"
+        android:roundIcon="@drawable/noborder"
         android:supportsRtl="true"
         android:theme="@style/Theme.Lasttele"
         tools:targetApi="31">
