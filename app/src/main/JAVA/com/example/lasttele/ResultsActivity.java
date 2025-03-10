@@ -19,6 +19,10 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+
+
+
 public class ResultsActivity extends AppCompatActivity {
 
     // TextViews to display results
@@ -108,11 +112,12 @@ public class ResultsActivity extends AppCompatActivity {
                 Intent intent = getIntent();
                 String selectedContactId = intent.getStringExtra("selectedContactId");
                 long selectedContactId2 = Long.parseLong(selectedContactId);
-                long yourChatId = 1541937998;
-                long herChatId = selectedContactId2;
 
-
-
+                /*long herChatId = selectedContactId2;
+                String user_id = intent.getStringExtra("user_id");
+                long longid = Long.parseLong(user_id);
+                long yourChatId = longid;*/
+                long yourChatId = ;
                 // Number of Messages
                 yourMessagesTextView.setText("You: " + messageCounts.getOrDefault(yourChatId, 0));
                 herMessagesTextView.setText("Her: " + messageCounts.getOrDefault(herChatId, 0));

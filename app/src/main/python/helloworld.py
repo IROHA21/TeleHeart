@@ -12,6 +12,7 @@ messagess = []
 loop = asyncio.new_event_loop()
 client = None
 
+
 def set_session_path(path):
     global SESSION_FILE
     SESSION_FILE = path
@@ -75,7 +76,7 @@ async def restore_session():
         return f"Error: {str(e)}"
 
 async def get_convo(selectedContactId, quantity):
-    global client, messagess
+    global client, messagess, user_id
 
     try:
         if client is None:
@@ -90,6 +91,11 @@ async def get_convo(selectedContactId, quantity):
         intquna = int(quantity)
         messages = await client.get_messages(target, limit=intquna)
 
+
+        #me = await client.get_me()
+        #user_id = me.id
+
+
         messagess.clear()
 
         for message in messages:
@@ -102,6 +108,7 @@ async def get_convo(selectedContactId, quantity):
 
     except Exception as e:
         return {"error": f"Error: {str(e)}"}
+
 
 def phoneNumber(phone):
     return loop.run_until_complete(send_otp_async(phone))
@@ -131,3 +138,7 @@ async def disconnect_client_async():
 
 def disconnect_client():
     loop.run_until_complete(disconnect_client_async())
+
+#def get_user_id_sync():
+
+    #return user_id

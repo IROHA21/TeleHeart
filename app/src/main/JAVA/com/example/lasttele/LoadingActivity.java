@@ -45,6 +45,13 @@ public class LoadingActivity extends AppCompatActivity {
             PyObject pyObj = py.getModule("helloworld");
             PyObject con = pyObj.callAttr("getconvo", selectedContactId, quantity);
 
+
+            /*Python pyy = Python.getInstance();
+            PyObject pyObj2 = pyy.getModule("helloworld");
+            PyObject idu = pyObj2.callAttr("get_user_id_sync");
+            String userId = idu.get("user_id").toString();*/
+
+
             // Convert PyObject elements to String
             List<String> messages = new ArrayList<>();
             for (PyObject obj : con.asList()) {
@@ -59,6 +66,7 @@ public class LoadingActivity extends AppCompatActivity {
             // Switch to ResultsActivity when done
             Intent intent = new Intent(LoadingActivity.this, ResultsActivity.class);
             intent.putExtra("selectedContactId", selectedContactId); // Pass the contact ID
+            // intent.putExtra("user_id", userId); // Pass the contact ID
             startActivity(intent);
             finish(); // Close the LoadingActivity
         }).start();
