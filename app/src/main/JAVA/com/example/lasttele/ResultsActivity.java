@@ -4,15 +4,21 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.widget.TextView;
-
+import android.content.Intent;
 import androidx.appcompat.app.AppCompatActivity;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
 public class ResultsActivity extends AppCompatActivity {
 
     // TextViews to display results
@@ -99,8 +105,11 @@ public class ResultsActivity extends AppCompatActivity {
             // Update the UI on the main thread
             new Handler(Looper.getMainLooper()).post(() -> {
                 // Assuming chatId 1 is "You" and chatId 2 is "Her"
+                Intent intent = getIntent();
+                String selectedContactId = intent.getStringExtra("selectedContactId");
+                long selectedContactId2 = Long.parseLong(selectedContactId);
                 long yourChatId = 1541937998;
-                long herChatId = 1072804297;
+                long herChatId = selectedContactId2;
 
 
 

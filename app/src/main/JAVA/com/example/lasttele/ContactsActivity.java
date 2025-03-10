@@ -122,7 +122,9 @@ public class ContactsActivity extends AppCompatActivity {
     }
 
     public void onbut(View view) {
+
         System.out.println(selectedContactId);
+        
     }
 
     public void onbuttonclick(View view) {

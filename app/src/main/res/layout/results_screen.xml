@@ -54,14 +54,14 @@
                         android:id="@+id/yourMessagesTextView"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="You: 406"
+                        android:text="N/A"
                         android:textSize="12sp"/>
 
                     <TextView
                         android:id="@+id/herMessagesTextView"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Her: 594"
+                        android:text="N/A"
                         android:textSize="12sp"/>
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
@@ -92,14 +92,14 @@
                         android:id="@+id/yourAverageTimeTextView"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="You: 521s"
+                        android:text="N/A"
                         android:textSize="12sp"/>
 
                     <TextView
                         android:id="@+id/herAverageTimeTextView"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Her: 386s"
+                        android:text="N/A"
                         android:textSize="12sp"/>
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
@@ -130,14 +130,14 @@
                         android:id="@+id/yourFavoriteEmojiTextView"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="You: 😊"
+                        android:text="N/A"
                         android:textSize="12sp"/>
 
                     <TextView
                         android:id="@+id/herFavoriteEmojiTextView"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Her: ❤️"
+                        android:text="N/A"
                         android:textSize="12sp"/>
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
@@ -168,14 +168,14 @@
                         android:id="@+id/yourMediaFilesTextView"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="You: 36"
+                        android:text="N/A"
                         android:textSize="12sp"/>
 
                     <TextView
                         android:id="@+id/herMediaFilesTextView"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Her: 153"
+                        android:text="N/A"
                         android:textSize="12sp"/>
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
@@ -206,14 +206,14 @@
                         android:id="@+id/yourLinksTextView"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="You: 4"
+                        android:text="N/A"
                         android:textSize="12sp"/>
 
                     <TextView
                         android:id="@+id/herLinksTextView"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Her: 1"
+                        android:text="N/A"
                         android:textSize="12sp"/>
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
@@ -244,14 +244,14 @@
                         android:id="@+id/yourDayOfWeekTextView"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="You: Mon - 100"
+                        android:text="N/A"
                         android:textSize="12sp"/>
 
                     <TextView
                         android:id="@+id/herDayOfWeekTextView"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Her: Fri - 150"
+                        android:text="N/A"
                         android:textSize="12sp"/>
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
@@ -282,14 +282,14 @@
                         android:id="@+id/yourHourOfDayTextView"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="You: 18:00 - 50"
+                        android:text="N/A"
                         android:textSize="12sp"/>
 
                     <TextView
                         android:id="@+id/herHourOfDayTextView"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Her: 20:00 - 70"
+                        android:text="N/A"
                         android:textSize="12sp"/>
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
@@ -320,14 +320,14 @@
                         android:id="@+id/yourMonthTextView"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="You: Jan - 200"
+                        android:text="N/A"
                         android:textSize="12sp"/>
 
                     <TextView
                         android:id="@+id/herMonthTextView"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Her: Feb - 250"
+                        android:text="N/A"
                         android:textSize="12sp"/>
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
@@ -358,14 +358,14 @@
                         android:id="@+id/yourDaysMostMessagesTextView"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="You: 2023-10-01 - 50"
+                        android:text="N/A"
                         android:textSize="12sp"/>
 
                     <TextView
                         android:id="@+id/herDaysMostMessagesTextView"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Her: 2023-10-05 - 60"
+                        android:text="N/A"
                         android:textSize="12sp"/>
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
@@ -396,14 +396,14 @@
                         android:id="@+id/yourLast10DaysTextView"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="You: 100"
+                        android:text="N/A"
                         android:textSize="12sp"/>
 
                     <TextView
                         android:id="@+id/herLast10DaysTextView"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Her: 150"
+                        android:text="N/A"
                         android:textSize="12sp"/>
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
@@ -434,14 +434,14 @@
                         android:id="@+id/yourMostUsedWordsTextView"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="You: Hello, Hi"
+                        android:text="N/A"
                         android:textSize="12sp"/>
 
                     <TextView
                         android:id="@+id/herMostUsedWordsTextView"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Her: Love, Thanks"
+                        android:text="N/A"
                         android:textSize="12sp"/>
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
@@ -472,14 +472,14 @@
                         android:id="@+id/yourMostUsedEmojisTextView"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="You: 😊, ❤️"
+                        android:text="N/A"
                         android:textSize="12sp"/>
 
                     <TextView
                         android:id="@+id/herMostUsedEmojisTextView"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Her: 😂, 🥰"
+                        android:text="N/A"
                         android:textSize="12sp"/>
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
