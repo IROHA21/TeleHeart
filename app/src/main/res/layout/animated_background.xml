@@ -1,0 +1,51 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/gradient_background"
+    android:orientation="vertical"
+    android:clipChildren="false"
+    android:clipToPadding="false">
+
+    <!-- White Image 1 -->
+    <ImageView
+        android:id="@+id/white1"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:src="@drawable/white"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="50dp"
+        android:layout_marginStart="20dp" />
+
+    <!-- Blue Image 1 -->
+    <ImageView
+        android:id="@+id/blue1"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:src="@drawable/blue"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginBottom="100dp"
+        android:layout_marginEnd="40dp" />
+
+    <!-- White Image 2 -->
+    <ImageView
+        android:id="@+id/white2"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:src="@drawable/white"
+        android:layout_centerInParent="true"
+        android:layout_marginTop="200dp"
+        android:layout_marginStart="150dp" />
+
+    <!-- Blue Image 2 -->
+    <ImageView
+        android:id="@+id/blue2"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:src="@drawable/blue"
+        android:layout_centerInParent="true"
+        android:layout_marginTop="300dp"
+        android:layout_marginStart="50dp" />
+
+</RelativeLayout>
