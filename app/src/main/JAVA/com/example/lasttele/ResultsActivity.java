@@ -121,51 +121,51 @@ public class ResultsActivity extends AppCompatActivity {
 
                 // Number of Messages
                 yourMessagesTextView.setText("You: " + messageCounts.getOrDefault(yourChatId, 0));
-                herMessagesTextView.setText("Her: " + messageCounts.getOrDefault(herChatId, 0));
+                herMessagesTextView.setText("Them: " + messageCounts.getOrDefault(herChatId, 0));
 
                 // Average Time to Answer
                 yourAverageTimeTextView.setText("You: " + (averageTimes.getOrDefault(yourChatId, 0L) / 1000) + "s");
-                herAverageTimeTextView.setText("Her: " + (averageTimes.getOrDefault(herChatId, 0L) / 1000) + "s");
+                herAverageTimeTextView.setText("Them: " + (averageTimes.getOrDefault(herChatId, 0L) / 1000) + "s");
 
                 // Favorite Emoji
                 yourFavoriteEmojiTextView.setText("You: " + favoriteEmojis.getOrDefault(yourChatId, ""));
-                herFavoriteEmojiTextView.setText("Her: " + favoriteEmojis.getOrDefault(herChatId, ""));
+                herFavoriteEmojiTextView.setText("Them: " + favoriteEmojis.getOrDefault(herChatId, ""));
 
                 // Number of Media Files
                 yourMediaFilesTextView.setText("You: " + mediaCounts.getOrDefault(yourChatId, 0));
-                herMediaFilesTextView.setText("Her: " + mediaCounts.getOrDefault(herChatId, 0));
+                herMediaFilesTextView.setText("Them: " + mediaCounts.getOrDefault(herChatId, 0));
 
                 // Number of Links
                 yourLinksTextView.setText("You: " + linkCounts.getOrDefault(yourChatId, 0));
-                herLinksTextView.setText("Her: " + linkCounts.getOrDefault(herChatId, 0));
+                herLinksTextView.setText("Them: " + linkCounts.getOrDefault(herChatId, 0));
 
                 // Messages per Day of the Week
                 yourDayOfWeekTextView.setText("You: " + formatMap(dayOfWeekCounts.getOrDefault(yourChatId, new HashMap<>())));
-                herDayOfWeekTextView.setText("Her: " + formatMap(dayOfWeekCounts.getOrDefault(herChatId, new HashMap<>())));
+                herDayOfWeekTextView.setText("Them: " + formatMap(dayOfWeekCounts.getOrDefault(herChatId, new HashMap<>())));
 
                 // Messages per Hour of the Day
                 yourHourOfDayTextView.setText("You: " + formatMap(hourOfDayCounts.getOrDefault(yourChatId, new HashMap<>())));
-                herHourOfDayTextView.setText("Her: " + formatMap(hourOfDayCounts.getOrDefault(herChatId, new HashMap<>())));
+                herHourOfDayTextView.setText("Them: " + formatMap(hourOfDayCounts.getOrDefault(herChatId, new HashMap<>())));
 
                 // Messages per Month
                 yourMonthTextView.setText("You: " + formatMap(monthCounts.getOrDefault(yourChatId, new HashMap<>())));
-                herMonthTextView.setText("Her: " + formatMap(monthCounts.getOrDefault(herChatId, new HashMap<>())));
+                herMonthTextView.setText("Them: " + formatMap(monthCounts.getOrDefault(herChatId, new HashMap<>())));
 
                 // Days with Most Messages
                 yourDaysMostMessagesTextView.setText("You: " + formatList(daysWithMostMessages.getOrDefault(yourChatId, new ArrayList<>())));
-                herDaysMostMessagesTextView.setText("Her: " + formatList(daysWithMostMessages.getOrDefault(herChatId, new ArrayList<>())));
+                herDaysMostMessagesTextView.setText("Them: " + formatList(daysWithMostMessages.getOrDefault(herChatId, new ArrayList<>())));
 
                 // Messages in Last 10 Days
                 yourLast10DaysTextView.setText("You: " + last10DaysCounts.getOrDefault(yourChatId, 0));
-                herLast10DaysTextView.setText("Her: " + last10DaysCounts.getOrDefault(herChatId, 0));
+                herLast10DaysTextView.setText("Them: " + last10DaysCounts.getOrDefault(herChatId, 0));
 
                 // Most Used Words
                 yourMostUsedWordsTextView.setText("You: " + formatMap(mostUsedWords.getOrDefault(yourChatId, new HashMap<>())));
-                herMostUsedWordsTextView.setText("Her: " + formatMap(mostUsedWords.getOrDefault(herChatId, new HashMap<>())));
+                herMostUsedWordsTextView.setText("Them: " + formatMap(mostUsedWords.getOrDefault(herChatId, new HashMap<>())));
 
                 // Most Used Emojis
                 yourMostUsedEmojisTextView.setText("You: " + formatMap(mostUsedEmojis.getOrDefault(yourChatId, new HashMap<>())));
-                herMostUsedEmojisTextView.setText("Her: " + formatMap(mostUsedEmojis.getOrDefault(herChatId, new HashMap<>())));
+                herMostUsedEmojisTextView.setText("Them: " + formatMap(mostUsedEmojis.getOrDefault(herChatId, new HashMap<>())));
             });
         }).start();
     }

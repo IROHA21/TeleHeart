@@ -1,39 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/background_1"
-    tools:context=".ContactsActivity"
-
-    >
+    tools:context=".ContactsActivity">
 
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView"
-        android:layout_width="match_parent"
-        android:layout_height="620dp"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentBottom="true"
-        android:layout_marginTop="101dp"
-        android:layout_marginEnd="0dp"
-        android:layout_marginBottom="170dp"
+        android:layout_width="411dp"
+        android:layout_height="587dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+
     <TextView
         android:id="@+id/textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentEnd="true"
         android:layout_marginStart="132dp"
         android:layout_marginTop="44dp"
         android:layout_marginEnd="132dp"
@@ -42,74 +32,60 @@
         android:textColor="#FAFFFFFF"
         android:textSize="20sp"
         android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/recyclerView"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintHorizontal_bias="0.4"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0" />
 
     <Button
         android:id="@+id/buttonselect"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentBottom="true"
-        android:layout_marginStart="160dp"
-        android:layout_marginEnd="160dp"
-        android:layout_marginBottom="20dp"
         android:backgroundTint="#1C3B9B"
-        android:color="#1C3B9B"
         android:onClick="onbut"
         android:text="next"
         android:textSize="15sp"
-        android:textStyle="bold" />
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/quantity"
+        app:layout_constraintVertical_bias="0.238" />
 
     <Button
         android:id="@+id/return_button"
-        android:onClick="onbuttonclick"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginStart="9dp"
-        android:layout_marginTop="34dp"
+        android:layout_marginStart="28dp"
+        android:layout_marginTop="24dp"
         android:backgroundTint="#001C3B9B"
-        android:color="#1C3B9B"
-        android:fontFamily="sans-serif-black"
-        android:textSize="10sp"
-        app:icon="@drawable/return_icon" />
+        android:onClick="onbuttonclick"
 
-    <ProgressBar
-        android:id="@+id/progressBar"
-        style="?android:attr/progressBarStyle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginStart="315dp"
-        android:visibility="gone"
-        android:layout_marginTop="13dp" />
+        app:layout_constraintEnd_toStartOf="@+id/textView"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:icon="@drawable/return_icon"
+        />
 
     <EditText
         android:id="@+id/quantity"
         android:layout_width="wrap_content"
-        android:layout_height="40dp"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentBottom="true"
-        android:layout_marginStart="100dp"
-        android:layout_marginEnd="101dp"
+        android:layout_height="48dp"
+        android:layout_marginTop="12dp"
         android:background="@drawable/rounded_edittext2"
-        android:layout_marginBottom="97dp"
-
-
-        android:textColor="#FAFFFFFF"
-        android:ems="10"
-
         android:hint="number of messages"
+
         android:inputType="text"
-        android:textAlignment="center"  /> <!-- Optional: Adds padding for better appearance -->
+        android:textAlignment="center"
+        android:textColor="#FAFFFFFF"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.497"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/recyclerView" /> <!-- Optional: Adds padding for better appearance -->
 
 
-
-</RelativeLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

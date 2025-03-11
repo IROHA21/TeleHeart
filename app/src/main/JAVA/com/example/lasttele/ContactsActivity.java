@@ -41,7 +41,7 @@ public class ContactsActivity extends AppCompatActivity {
         }
 
         // Find views
-        progressBar = findViewById(R.id.progressBar);
+
         quantity = findViewById(R.id.quantity); // Get EditText from layout
 
         // Initialize HandlerThread for background tasks

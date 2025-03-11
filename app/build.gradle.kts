@@ -19,7 +19,7 @@ android {
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         ndk {
             // Define ABIs for native libraries
-            abiFilters += listOf("arm64-v8a", "x86_64") // Add others if necessary
+            abiFilters += listOf("arm64-v8a", "x86_64","armeabi-v7a","x86") // Add others if necessary
         }
     }
 
