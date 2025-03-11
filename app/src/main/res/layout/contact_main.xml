@@ -12,8 +12,8 @@
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView"
-        android:layout_width="411dp"
-        android:layout_height="587dp"
+        android:layout_width="409dp"
+        android:layout_height="614dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
@@ -75,17 +75,19 @@
         android:id="@+id/quantity"
         android:layout_width="wrap_content"
         android:layout_height="48dp"
-        android:layout_marginTop="12dp"
+        android:layout_marginTop="4dp"
         android:background="@drawable/rounded_edittext2"
         android:hint="number of messages"
 
         android:inputType="text"
         android:textAlignment="center"
         android:textColor="#FAFFFFFF"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/recyclerView" /> <!-- Optional: Adds padding for better appearance -->
+        app:layout_constraintTop_toBottomOf="@+id/recyclerView"
+        app:layout_constraintVertical_bias="0.121" /> <!-- Optional: Adds padding for better appearance -->
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

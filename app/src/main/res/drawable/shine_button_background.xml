@@ -1,0 +1,14 @@
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item>
+        <shape android:shape="rectangle">
+            <!-- Button Background Color -->
+            <solid android:color="#60efff" />
+            <!-- Rounded Corners -->
+            <corners android:radius="20dp" />
+            <!-- Shine Effect -->
+            <stroke
+                android:width="2dp"
+                android:color="#80ffffff" />
+        </shape>
+    </item>
+</selector>

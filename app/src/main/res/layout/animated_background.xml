@@ -1,10 +1,72 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/root_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/gradient_background"
-    android:orientation="vertical"
     android:clipChildren="false"
     android:clipToPadding="false">
+
+    <!-- Welcome Message -->
+    <TextView
+        android:id="@+id/welcome_message"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Welcome to TeleHeart"
+        android:textColor="@android:color/white"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="50dp"
+        android:elevation="10dp" />
+
+    <!-- Heart Image -->
+    <ImageView
+        android:id="@+id/heart_image"
+        android:layout_width="320dp"
+        android:layout_height="389dp"
+        android:layout_below="@id/welcome_message"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="20dp"
+        android:elevation="10dp"
+        android:src="@drawable/heart" />
+
+    <!-- Start Button -->
+
+    <!-- Tutorial Button -->
+
+    <Button
+        android:id="@+id/start_button"
+        android:layout_width="202dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/heart_image"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginStart="105dp"
+        android:layout_marginTop="15dp"
+        android:layout_marginEnd="104dp"
+        android:backgroundTint="#0061ff"
+        android:elevation="10dp"
+        android:onClick="onStartClick"
+        android:paddingHorizontal="40dp"
+        android:paddingVertical="20dp"
+        android:text="Start"
+        android:textColor="@android:color/white" />
+
+    <Button
+        android:id="@+id/tutorial_button"
+        android:layout_width="162dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/start_button"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="20dp"
+        android:backgroundTint="#0061ff"
+        android:elevation="10dp"
+        android:paddingHorizontal="40dp"
+        android:paddingVertical="20dp"
+        android:text="Tutorial"
+        android:textColor="@android:color/white" />
 
     <!-- White Image 1 -->
     <ImageView
