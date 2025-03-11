@@ -60,16 +60,15 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="28dp"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="36dp"
         android:backgroundTint="#001C3B9B"
         android:onClick="onbuttonclick"
-
+        app:icon="@drawable/return_icon"
         app:layout_constraintEnd_toStartOf="@+id/textView"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:icon="@drawable/return_icon"
-        />
+
+        app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
         android:id="@+id/quantity"
