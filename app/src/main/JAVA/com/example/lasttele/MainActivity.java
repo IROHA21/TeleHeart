@@ -99,7 +99,7 @@ public class MainActivity extends AppCompatActivity {
         // Display the result (success or error message)
         Toast.makeText(this,"OTP Result: " + result.toString(), Toast.LENGTH_SHORT).show();
         String resultString = result.toString();
-        if  (resultString.equals("OTP has been sent to your Telegram app. Please check.")){
+        if  (resultString.equals("Code sent check your email")){
             progressBar.setVisibility(View.INVISIBLE);
         }
 
@@ -134,7 +134,7 @@ public class MainActivity extends AppCompatActivity {
         if (resultString.equals("Logged in successfully.")) {
             Intent intent = new Intent(this, ContactsActivity.class);
             startActivity(intent);
-            finish(); // Optional: Closes the current activity so user can't go back with back button
+
         }
     }
 }

@@ -34,7 +34,7 @@ async def send_otp_async(phone):
 
         # Send OTP without any checks
         await client.send_code_request(phone)
-        return "OTP has been sent to your Telegram app. Please check."
+        return "Code sent check your email"
 
     except Exception as e:
         return f"Error: {str(e)}"
