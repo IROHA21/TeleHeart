@@ -7,10 +7,10 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.SwitchCompat;
 
 import com.chaquo.python.PyObject;
 import com.chaquo.python.Python;
@@ -19,7 +19,8 @@ import com.chaquo.python.android.AndroidPlatform;
 public class MainActivity extends AppCompatActivity {
 
     EditText editTextPhone2, editTextCode;
-    TextView txtResult;
+    SwitchCompat switch1;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,7 +35,7 @@ public class MainActivity extends AppCompatActivity {
 
 
         editTextPhone2 = findViewById(R.id.editTextPhone2);
-
+        switch1 = findViewById(R.id.switch1);
         editTextCode = findViewById(R.id.codeid);
 
         Button button123 = findViewById(R.id.button123);
@@ -42,6 +43,9 @@ public class MainActivity extends AppCompatActivity {
 
         Button verifyid = findViewById(R.id.verifyid);
         verifyid.setOnClickListener(this::onCodeClick);
+
+
+
     }
 
     public void onBtnClick(View view) {
@@ -74,7 +78,6 @@ public class MainActivity extends AppCompatActivity {
             PyObject restoreResult = pyObj.callAttr("restoreSession");
             Toast.makeText(this, "Session Restore Result: " + restoreResult.toString(), Toast.LENGTH_SHORT).show();
 
-
             // If the session is already authorized, skip OTP and go to ContactsActivity
             if (restoreResult.toString().equals("Session restored. Already authorized.")) {
                 Intent intent = new Intent(this, ContactsActivity.class);
@@ -84,25 +87,34 @@ public class MainActivity extends AppCompatActivity {
             }
         } else {
             // If the phone numbers don't match, inform the user
-            Toast.makeText(this,"Phone number does not match the previous one. Sending OTP to the new number.", Toast.LENGTH_SHORT).show();
-
+            Toast.makeText(this, "Phone number does not match the previous one. Sending OTP to the new number.", Toast.LENGTH_SHORT).show();
         }
 
-        // Save the current phone number to SharedPreferences
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putString("last_phone_number", phone);
-        editor.apply();
+        // Check the state of the switch
+        if (switch1.isChecked()) {
+            // If the switch is on, save the current phone number to SharedPreferences
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.putString("last_phone_number", phone);
+            editor.apply();
+        } else {
+            // If the switch is off, clear the saved phone number (optional)
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.remove("last_phone_number");
+            editor.apply();
+        }
 
         // Call the Python function to send OTP
         PyObject result = pyObj.callAttr("phoneNumber", phone);
 
         // Display the result (success or error message)
-        Toast.makeText(this,"OTP Result: " + result.toString(), Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, "OTP Result: " + result.toString(), Toast.LENGTH_SHORT).show();
         String resultString = result.toString();
-        if  (resultString.equals("Code sent check your email")){
+        System.out.println("before" + resultString);
+        String check = "Code sent check your telegram";
+        if (resultString.equals(check)) {
+            System.out.println("after" + resultString);
             progressBar.setVisibility(View.INVISIBLE);
         }
-
 
         if (resultString.equals("Already authorized. No need for OTP.")) {
             Intent intent = new Intent(this, ContactsActivity.class);

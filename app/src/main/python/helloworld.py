@@ -34,7 +34,7 @@ async def send_otp_async(phone):
 
         # Send OTP without any checks
         await client.send_code_request(phone)
-        return "Code sent check your email"
+        return "Code sent check your telegram"
 
     except Exception as e:
         return f"Error: {str(e)}"
@@ -110,6 +110,35 @@ async def get_convo(selectedContactId, quantity):
         return {"error": f"Error: {str(e)}"}
 
 
+
+# Function to disconnect all sessions
+async def disconnect_all_sessions_async(session_files):
+    global client
+    for session_file in session_files:
+        try:
+            # Initialize a client for each session file
+            client = TelegramClient(session_file, API_ID, API_HASH, loop=loop)
+            await client.connect()
+
+            # Disconnect the client
+            await client.disconnect()
+            print(f"Disconnected session: {session_file}")
+        except Exception as e:
+            print(f"Error disconnecting session {session_file}: {str(e)}")
+        finally:
+            client = None
+
+# Function to delete all session files
+def delete_all_session_files(session_files):
+    for session_file in session_files:
+        try:
+            os.remove(session_file)
+            print(f"Deleted session file: {session_file}")
+        except Exception as e:
+            print(f"Error deleting session file {session_file}: {str(e)}")
+
+
+
 def phoneNumber(phone):
     return loop.run_until_complete(send_otp_async(phone))
 
@@ -143,3 +172,13 @@ def get_user_id_sync():
     global user_id
     print(f"get_user_id_sync: user_id = {user_id}")
     return user_id
+
+# Wrapper function to disconnect and delete all sessions
+def disconnect_and_delete_all_sessions(session_files):
+    # Disconnect all sessions
+    loop.run_until_complete(disconnect_all_sessions_async(session_files))
+
+    # Delete all session files
+    delete_all_session_files(session_files)
+
+    return "All sessions disconnected and deleted."
