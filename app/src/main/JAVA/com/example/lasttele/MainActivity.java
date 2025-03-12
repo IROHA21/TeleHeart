@@ -33,7 +33,6 @@ public class MainActivity extends AppCompatActivity {
         }
 
 
-
         editTextPhone2 = findViewById(R.id.editTextPhone2);
         switch1 = findViewById(R.id.switch1);
         editTextCode = findViewById(R.id.codeid);
@@ -43,6 +42,8 @@ public class MainActivity extends AppCompatActivity {
 
         Button verifyid = findViewById(R.id.verifyid);
         verifyid.setOnClickListener(this::onCodeClick);
+
+
 
 
 
@@ -149,4 +150,6 @@ public class MainActivity extends AppCompatActivity {
 
         }
     }
+
+
 }

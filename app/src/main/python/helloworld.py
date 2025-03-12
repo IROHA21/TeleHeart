@@ -1,7 +1,7 @@
 from telethon import TelegramClient
 import asyncio
 import os
-
+from telethon.tl.functions.account import GetAuthorizationsRequest, ResetAuthorizationRequest
 # Replace with your own API credentials
 API_ID = 25016078
 API_HASH = "6e818b2e5b0e074c403e3bb120f64736"
@@ -112,30 +112,8 @@ async def get_convo(selectedContactId, quantity):
 
 
 # Function to disconnect all sessions
-async def disconnect_all_sessions_async(session_files):
-    global client
-    for session_file in session_files:
-        try:
-            # Initialize a client for each session file
-            client = TelegramClient(session_file, API_ID, API_HASH, loop=loop)
-            await client.connect()
 
-            # Disconnect the client
-            await client.disconnect()
-            print(f"Disconnected session: {session_file}")
-        except Exception as e:
-            print(f"Error disconnecting session {session_file}: {str(e)}")
-        finally:
-            client = None
 
-# Function to delete all session files
-def delete_all_session_files(session_files):
-    for session_file in session_files:
-        try:
-            os.remove(session_file)
-            print(f"Deleted session file: {session_file}")
-        except Exception as e:
-            print(f"Error deleting session file {session_file}: {str(e)}")
 
 
 
@@ -173,12 +151,3 @@ def get_user_id_sync():
     print(f"get_user_id_sync: user_id = {user_id}")
     return user_id
 
-# Wrapper function to disconnect and delete all sessions
-def disconnect_and_delete_all_sessions(session_files):
-    # Disconnect all sessions
-    loop.run_until_complete(disconnect_all_sessions_async(session_files))
-
-    # Delete all session files
-    delete_all_session_files(session_files)
-
-    return "All sessions disconnected and deleted."

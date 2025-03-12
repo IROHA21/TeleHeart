@@ -40,6 +40,7 @@ public class ContactsActivity extends AppCompatActivity {
             Python.start(new AndroidPlatform(this));
         }
 
+
         // Find views
 
         quantity = findViewById(R.id.quantity); // Get EditText from layout
@@ -131,4 +132,5 @@ public class ContactsActivity extends AppCompatActivity {
         Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
     }
+
 }
