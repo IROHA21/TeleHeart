@@ -133,8 +133,16 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="#FAFFFFFF"
-            android:text="remember account" />
+            android:text="remember account"
+            android:textColor="#FAFFFFFF" />
+
+        <Button
+            android:id="@+id/button"
+            android:layout_width="64dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:backgroundTint="#001C3B9B"
+            app:icon="@drawable/info" />
     </LinearLayout>
 
 
