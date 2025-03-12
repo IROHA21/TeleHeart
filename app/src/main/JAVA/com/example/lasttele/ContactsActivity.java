@@ -35,8 +35,13 @@ public class ContactsActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.contact_main);
+
+
+
         Intent intent = getIntent();
         switcher = intent.getBooleanExtra("switcher", false);
+
+        System.out.println("switcher check inside of contact : " + switcher );
 
         // Initialize Python environment
         if (!Python.isStarted()) {

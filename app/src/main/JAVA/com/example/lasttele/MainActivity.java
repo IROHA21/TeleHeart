@@ -62,6 +62,14 @@ public class MainActivity extends AppCompatActivity {
             return;
         }
 
+
+        if (switch1.isChecked()) {
+            // If the switch is on, save the current phone number to SharedPreferences
+            switcher = true;
+        }
+
+
+
         Python py = Python.getInstance();
         PyObject pyObj = py.getModule("helloworld");  // Ensure "helloworld.py" is in "src/main/python"
 
@@ -84,6 +92,7 @@ public class MainActivity extends AppCompatActivity {
 
             // If the session is already authorized, skip OTP and go to ContactsActivity
             if (restoreResult.toString().equals("Session restored. Already authorized.")) {
+                System.out.println("switcher check : "+ switcher);
                 Intent intent = new Intent(this, ContactsActivity.class);
                 intent.putExtra("switcher", switcher); // Pass the user ID
                 startActivity(intent);
@@ -117,12 +126,13 @@ public class MainActivity extends AppCompatActivity {
         System.out.println("before" + resultString);
         String check = "Code sent check your telegram";
         if (resultString.equals(check)) {
-            System.out.println("after" + resultString);
-            switcher  = true;
+
+
             progressBar.setVisibility(View.INVISIBLE);
         }
 
         if (resultString.equals("Already authorized. No need for OTP.")) {
+            System.out.println("switcher check no need: "+ switcher);
             Intent intent = new Intent(this, ContactsActivity.class);
             intent.putExtra("switcher", switcher); // Pass the user ID
             startActivity(intent);
@@ -131,6 +141,11 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void onCodeClick(View view) {
+
+        if (switch1.isChecked()) {
+            // If the switch is on, save the current phone number to SharedPreferences
+            switcher = true;
+        }
         String phone = editTextPhone2.getText().toString().trim();
         String code = editTextCode.getText().toString().trim();
         if (code.isEmpty()) {
@@ -151,8 +166,15 @@ public class MainActivity extends AppCompatActivity {
 
         // If login is successful, switch to ContactsActivity
         if (resultString.equals("Logged in successfully.")) {
+
+            System.out.println("switcher value in before sending " + switcher);
             Intent intent = new Intent(this, ContactsActivity.class);
-            intent.putExtra("switchbutton", switcher); // Pass the user ID
+            intent.putExtra("switcher", switcher); // Pass the user ID
+
+
+            Intent intent2 = new Intent(this, LoadingActivity.class);
+            intent2.putExtra("switcher", switcher); // Pass the user ID
+
             startActivity(intent);
 
         }

@@ -19,6 +19,8 @@ public class LoadingActivity extends AppCompatActivity {
     private ProgressBar progressBar;
     private TextView progressTextView;
     private Handler mainHandler = new Handler(Looper.getMainLooper());
+    private boolean switcher;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
