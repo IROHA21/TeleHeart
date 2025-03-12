@@ -29,11 +29,14 @@ public class ContactsActivity extends AppCompatActivity {
     private ProgressBar progressBar;
     private Handler backgroundHandler;
     private Handler mainHandler = new Handler(Looper.getMainLooper());
+    private boolean switcher;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.contact_main);
+        Intent intent = getIntent();
+        switcher = intent.getBooleanExtra("switcher", false);
 
         // Initialize Python environment
         if (!Python.isStarted()) {
@@ -111,7 +114,7 @@ public class ContactsActivity extends AppCompatActivity {
                 }
 
                 // If all validations pass, proceed to the next screen
-                Intent intent = new Intent(ContactsActivity.this, LoadingActivity.class);
+
                 intent.putExtra("selectedContactId", selectedContactId);
                 intent.putExtra("quantity", String.valueOf(quantityInt)); // Store it as a String
 
@@ -132,5 +135,23 @@ public class ContactsActivity extends AppCompatActivity {
         Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
     }
+
+
+    protected void onPause() {
+        super.onPause();
+
+        // Check if the user chose "Don't remember me"
+
+
+
+        if (!switcher) {
+            // Terminate the session and disconnect the client
+            Python py = Python.getInstance();
+            PyObject pyObj = py.getModule("helloworld");
+            PyObject result = pyObj.callAttr("terminate_and_disconnect");
+            Toast.makeText(this, result.toString(), Toast.LENGTH_SHORT).show();
+        }
+    }
+
 
 }

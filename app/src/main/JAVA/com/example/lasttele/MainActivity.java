@@ -21,12 +21,15 @@ public class MainActivity extends AppCompatActivity {
     EditText editTextPhone2, editTextCode;
     SwitchCompat switch1;
 
+    boolean switcher;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
+        switcher  = false;
         // Initialize Python environment
         if (!Python.isStarted()) {
             Python.start(new AndroidPlatform(this));
@@ -82,6 +85,7 @@ public class MainActivity extends AppCompatActivity {
             // If the session is already authorized, skip OTP and go to ContactsActivity
             if (restoreResult.toString().equals("Session restored. Already authorized.")) {
                 Intent intent = new Intent(this, ContactsActivity.class);
+                intent.putExtra("switcher", switcher); // Pass the user ID
                 startActivity(intent);
                 finish(); // Optional: Closes the current activity so user can't go back with back button
                 return; // Exit the method to avoid sending OTP unnecessarily
@@ -114,11 +118,13 @@ public class MainActivity extends AppCompatActivity {
         String check = "Code sent check your telegram";
         if (resultString.equals(check)) {
             System.out.println("after" + resultString);
+            switcher  = true;
             progressBar.setVisibility(View.INVISIBLE);
         }
 
         if (resultString.equals("Already authorized. No need for OTP.")) {
             Intent intent = new Intent(this, ContactsActivity.class);
+            intent.putExtra("switcher", switcher); // Pass the user ID
             startActivity(intent);
             finish(); // Optional: Closes the current activity so user can't go back with back button
         }
@@ -146,10 +152,16 @@ public class MainActivity extends AppCompatActivity {
         // If login is successful, switch to ContactsActivity
         if (resultString.equals("Logged in successfully.")) {
             Intent intent = new Intent(this, ContactsActivity.class);
+            intent.putExtra("switchbutton", switcher); // Pass the user ID
             startActivity(intent);
 
         }
+
+
     }
+
+
+
 
 
 }

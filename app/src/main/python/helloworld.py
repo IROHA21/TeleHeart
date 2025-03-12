@@ -115,7 +115,24 @@ async def get_convo(selectedContactId, quantity):
 
 
 
+async def terminate_and_disconnect_async():
+    global client
+    try:
+        if client is None:
+            client = TelegramClient(SESSION_FILE, API_ID, API_HASH, loop=loop)
 
+        await client.connect()
+
+        # Log out of the current session
+        await client.log_out()
+
+        # Disconnect the client
+        await client.disconnect()
+
+        print("Disconnected from Telegram.")
+
+    except Exception as e:
+        print(f"Error: {str(e)}")
 
 def phoneNumber(phone):
     return loop.run_until_complete(send_otp_async(phone))
@@ -151,3 +168,5 @@ def get_user_id_sync():
     print(f"get_user_id_sync: user_id = {user_id}")
     return user_id
 
+def terminate_and_disconnect():
+    return loop.run_until_complete(terminate_and_disconnect_async())
