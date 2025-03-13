@@ -79,4 +79,5 @@ dependencies {
     debugImplementation(libs.ui.test.manifest)
     implementation("androidx.appcompat:appcompat:1.6.1")
     implementation ("androidx.lifecycle:lifecycle-process:2.6.2")
+    implementation ("com.github.PhilJay:MPAndroidChart:v3.1.0")
 }

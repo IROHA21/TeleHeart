@@ -370,14 +370,11 @@
                         android:textSize="14sp"
                         android:textStyle="bold" />
 
-                    <TextView
-                        android:id="@+id/yourDayOfWeekTextView"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="you : N/A"
-                        android:textSize="12sp" />
-
-
+                    <!-- Use HorizontalBarChart instead of BarChart -->
+                    <com.github.mikephil.charting.charts.HorizontalBarChart
+                        android:id="@+id/yourbarcharts"
+                        android:layout_width="match_parent"
+                        android:layout_height="400dp" /> <!-- Adjust height as needed -->
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
 
@@ -399,17 +396,14 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Messages per Day of the Week"
-                        android:textStyle="bold"
-                        android:textSize="14sp"/>
+                        android:textSize="14sp"
+                        android:textStyle="bold" />
 
-
-
-                    <TextView
-                        android:id="@+id/herDayOfWeekTextView"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="them : N/A"
-                        android:textSize="12sp"/>
+                    <!-- Use HorizontalBarChart instead of BarChart -->
+                    <com.github.mikephil.charting.charts.HorizontalBarChart
+                        android:id="@+id/herbarcharts"
+                        android:layout_width="match_parent"
+                        android:layout_height="400dp" /> <!-- Adjust height as needed -->
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
 

@@ -1,19 +1,28 @@
 package com.example.lasttele;
 
+import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.widget.TextView;
-import android.content.Intent;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.chaquo.python.PyObject;
 import com.chaquo.python.Python;
+import com.github.mikephil.charting.charts.HorizontalBarChart;
+import com.github.mikephil.charting.components.XAxis;
+import com.github.mikephil.charting.components.YAxis;
+import com.github.mikephil.charting.data.BarData;
+import com.github.mikephil.charting.data.BarDataSet;
+import com.github.mikephil.charting.data.BarEntry;
+import com.github.mikephil.charting.formatter.IndexAxisValueFormatter;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.AbstractMap;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -24,9 +33,6 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-
-
 
 public class ResultsActivity extends AppCompatActivity {
 
@@ -44,19 +50,23 @@ public class ResultsActivity extends AppCompatActivity {
     private TextView yourMostUsedWordsTextView, herMostUsedWordsTextView;
     private TextView yourMostUsedEmojisTextView, herMostUsedEmojisTextView;
     private boolean switcher;
+    private Handler handler = new Handler(Looper.getMainLooper()); // Single Handler instance
     private Runnable disconnectRunnable;
-    private int countdownTime = 3 * 60; // 3 minutes in seconds
-    private Handler handler = new Handler(Looper.getMainLooper());
+    private int countdownTime = 3 * 60;
+
+    // Bar charts for days of the week
+    private HorizontalBarChart yourBarChart;
+    private HorizontalBarChart herBarChart;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.results_screen);
 
-
         Intent intent3 = getIntent();
         switcher = intent3.getBooleanExtra("switcher", false);
 
-        System.out.println("switcher check inside of result : " + switcher );
+        System.out.println("switcher check inside of result : " + switcher);
 
         // Initialize TextViews
         yourMessagesTextView = findViewById(R.id.yourMessagesTextView);
@@ -69,8 +79,11 @@ public class ResultsActivity extends AppCompatActivity {
         herMediaFilesTextView = findViewById(R.id.herMediaFilesTextView);
         yourLinksTextView = findViewById(R.id.yourLinksTextView);
         herLinksTextView = findViewById(R.id.herLinksTextView);
-        yourDayOfWeekTextView = findViewById(R.id.yourDayOfWeekTextView);
-        herDayOfWeekTextView = findViewById(R.id.herDayOfWeekTextView);
+
+        // Initialize bar charts
+        yourBarChart = findViewById(R.id.yourbarcharts);
+        herBarChart = findViewById(R.id.herbarcharts);
+
         yourHourOfDayTextView = findViewById(R.id.yourHourOfDayTextView);
         herHourOfDayTextView = findViewById(R.id.herHourOfDayTextView);
         yourMonthTextView = findViewById(R.id.yourMonthTextView);
@@ -154,8 +167,11 @@ public class ResultsActivity extends AppCompatActivity {
                 herLinksTextView.setText("Them: " + linkCounts.getOrDefault(herChatId, 0));
 
                 // Messages per Day of the Week
-                yourDayOfWeekTextView.setText("You: " + formatMap(dayOfWeekCounts.getOrDefault(yourChatId, new HashMap<>())));
-                herDayOfWeekTextView.setText("Them: " + formatMap(dayOfWeekCounts.getOrDefault(herChatId, new HashMap<>())));
+
+
+                // Set up bar charts for days of the week
+                setupBarChart(yourBarChart, dayOfWeekCounts.getOrDefault(yourChatId, new HashMap<>()), "You");
+                setupBarChart(herBarChart, dayOfWeekCounts.getOrDefault(herChatId, new HashMap<>()), "Them");
 
                 // Messages per Hour of the Day
                 yourHourOfDayTextView.setText("You: " + formatMap(hourOfDayCounts.getOrDefault(yourChatId, new HashMap<>())));
@@ -200,6 +216,81 @@ public class ResultsActivity extends AppCompatActivity {
             result.append(entry.getKey()).append(" - ").append(entry.getValue()).append(", ");
         }
         return result.length() > 0 ? result.substring(0, result.length() - 2) : "";
+    }
+
+    // Helper method to set up the bar chart
+    private void setupBarChart(HorizontalBarChart barChart, Map<String, Integer> data, String label) {
+        // Create a list of BarEntry objects
+        List<BarEntry> barEntries = new ArrayList<>();
+        List<String> labels = new ArrayList<>();
+
+        // Sort the data by value (descending order)
+        String[] daysOfWeek = {"Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"};
+        List<Map.Entry<String, Integer>> sortedData = new ArrayList<>();
+        for (String day : daysOfWeek) {
+            if (data.containsKey(day)) {
+                sortedData.add(new AbstractMap.SimpleEntry<>(day, data.get(day)));
+            }
+        }
+
+        // Add data to barEntries and labels
+        for (int i = 0; i < sortedData.size(); i++) {
+            barEntries.add(new BarEntry(i, sortedData.get(i).getValue()));
+            labels.add(sortedData.get(i).getKey());
+        }
+
+        // Create a BarDataSet with the sorted entries
+        BarDataSet barDataSet = new BarDataSet(barEntries, label);
+        barDataSet.setColor(barChart == yourBarChart ? Color.parseColor("#1C3B9B") : Color.parseColor("#800080")); // Set bar color based on chart
+        barDataSet.setValueTextColor(Color.BLACK); // Set text color for values
+        barDataSet.setValueTextSize(12f); // Set text size for values
+
+        // Create a BarData object with the BarDataSet
+        BarData barData = new BarData(barDataSet);
+        barData.setBarWidth(0.5f); // Set the width of the bars
+        barChart.setData(barData);
+
+        // Customize the chart
+        barChart.getDescription().setEnabled(false); // Disable description
+        barChart.setDrawValueAboveBar(true); // Draw values above bars
+        barChart.setFitBars(true); // Make the bars fit the chart
+
+        // Configure X-axis (vertical axis in HorizontalBarChart)
+        XAxis xAxis = barChart.getXAxis();
+        xAxis.setPosition(XAxis.XAxisPosition.BOTTOM); // Place X-axis at the bottom
+        xAxis.setDrawGridLines(false); // Disable grid lines for X-axis
+        xAxis.setValueFormatter(new IndexAxisValueFormatter(labels)); // Set sorted day labels
+        // With this:
+        xAxis.setLabelCount(labels.size()); // Ensure all labels are shown
+        xAxis.setGranularity(1f); // Set granularity to 1 to avoid skipping labels
+        xAxis.setLabelRotationAngle(-45); // Rotate labels for better visibility
+        xAxis.setPosition(XAxis.XAxisPosition.BOTTOM); // Place X-axis at the bottom
+        xAxis.setDrawGridLines(false); // Disable grid lines for X-axis
+        xAxis.setValueFormatter(new IndexAxisValueFormatter(labels)); // Set sorted day labels
+        xAxis.setDrawLabels(true); // Enable day labels
+
+// Add padding to the left axis to make space for the labels
+        barChart.setExtraLeftOffset(30f); // Increase left margin for labels
+        xAxis.setGranularity(1f); // Set granularity to 1 to avoid skipping labels
+        xAxis.setDrawLabels(true); // Enable day labels
+
+        // Configure Y-axis (horizontal axis in HorizontalBarChart)
+        YAxis leftAxis = barChart.getAxisLeft();
+        leftAxis.setAxisMinimum(0f); // Start Y-axis from 0
+        leftAxis.setDrawLabels(false); // Disable Y-axis labels (0, 20, 40, ...)
+        leftAxis.setDrawGridLines(false); // Disable grid lines for Y-axis
+
+        YAxis rightAxis = barChart.getAxisRight();
+        rightAxis.setEnabled(false); // Disable right Y-axis
+
+        // Disable the legend (if any)
+        barChart.getLegend().setEnabled(false);
+
+        // Animate the chart
+        barChart.animateY(1000); // Animate the chart vertically
+
+        // Refresh the chart
+        barChart.invalidate();
     }
 
     // Inner class to analyze chat data
@@ -544,50 +635,67 @@ public class ResultsActivity extends AppCompatActivity {
     }
 
 
-    @Override
-    protected void onPause() {
-        super.onPause();
 
-        System.out.println("switcher destroy activated login");
 
-        if (!switcher) {
-            disconnectRunnable = new Runnable() {
-                @Override
-                public void run() {
-                    if (countdownTime > 0) {
-                        // Log the remaining seconds
-                        System.out.println("Seconds remaining: " + countdownTime);
+         // 3 minutes in seconds
 
-                        // Decrement the countdown time
-                        countdownTime--;
+        @Override
+        protected void onPause() {
+            super.onPause();
 
-                        // Schedule the next iteration after 1 second
-                        handler.postDelayed(this, 1000); // 1000ms = 1 second
-                    } else {
-                        // Time's up, disconnect the client
-                        Python py = Python.getInstance();
-                        PyObject pyObj = py.getModule("helloworld");
-                        PyObject result = pyObj.callAttr("terminate_and_disconnect");
-                        Toast.makeText(ResultsActivity.this, result.toString(), Toast.LENGTH_SHORT).show();
+            System.out.println("switcher destroy activated login");
+
+            if (!switcher) {
+                // Clear any existing tasks
+                handler.removeCallbacks(disconnectRunnable);
+
+                // Create a new Runnable for the countdown
+                disconnectRunnable = new Runnable() {
+                    @Override
+                    public void run() {
+                        if (countdownTime > 0) {
+                            // Log the remaining seconds
+                            System.out.println("Seconds remaining: " + countdownTime);
+
+                            // Decrement the countdown time
+                            countdownTime--;
+
+                            // Schedule the next iteration after 1 second
+                            handler.postDelayed(this, 1000); // 1000ms = 1 second
+                        } else {
+                            // Time's up, disconnect the client
+                            Python py = Python.getInstance();
+                            PyObject pyObj = py.getModule("helloworld");
+                            PyObject result = pyObj.callAttr("terminate_and_disconnect");
+                            Toast.makeText(ResultsActivity.this, result.toString(), Toast.LENGTH_SHORT).show();
+                        }
                     }
-                }
-            };
+                };
 
-            // Start the countdown
-            handler.post(disconnectRunnable);
+                // Start the countdown
+                handler.post(disconnectRunnable);
+            }
+        }
+
+        @Override
+        protected void onResume() {
+            super.onResume();
+
+            // Cancel the countdown if the user returns to the app
+            if (disconnectRunnable != null) {
+                handler.removeCallbacks(disconnectRunnable);
+                disconnectRunnable = null;
+                countdownTime = 3 * 60; // Reset the countdown time
+            }
+        }
+
+        @Override
+        protected void onDestroy() {
+            super.onDestroy();
+
+            // Ensure the Handler is cleared when the activity is destroyed
+            if (disconnectRunnable != null) {
+                handler.removeCallbacks(disconnectRunnable);
+            }
         }
     }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-
-        // Cancel the countdown if the user returns to the app
-        if (disconnectRunnable != null) {
-            handler.removeCallbacks(disconnectRunnable);
-            disconnectRunnable = null;
-            countdownTime = 3 * 60; // Reset the countdown time
-        }
-    }
-
-}
