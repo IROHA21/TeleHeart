@@ -476,6 +476,8 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_columnWeight="1"
+
+                android:layout_columnSpan="2"
                 android:layout_margin="4dp"
                 app:cardCornerRadius="8dp"
                 app:cardElevation="4dp">
@@ -491,16 +493,15 @@
                         android:layout_height="wrap_content"
                         android:text="Messages per Hour of the Day"
                         android:textSize="14sp"
-                        android:textStyle="bold" />
+                        android:textStyle="bold"
+                        android:layout_gravity="center_horizontal"
+                        android:paddingBottom="10dp"/>
 
-                    <TextView
-                        android:id="@+id/yourHourOfDayTextView"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="you : N/A"
-                        android:textSize="12sp" />
-
-
+                    <!-- LineChart to display messages per hour of the day -->
+                    <com.github.mikephil.charting.charts.LineChart
+                        android:id="@+id/yourhourOfDayLineChart"
+                        android:layout_width="match_parent"
+                        android:layout_height="400dp" />
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
 
@@ -508,6 +509,8 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_columnWeight="1"
+
+                android:layout_columnSpan="2"
                 android:layout_margin="4dp"
                 app:cardCornerRadius="8dp"
                 app:cardElevation="4dp">
@@ -522,17 +525,16 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Messages per Hour of the Day"
+                        android:textSize="14sp"
                         android:textStyle="bold"
-                        android:textSize="14sp"/>
+                        android:layout_gravity="center_horizontal"
+                        android:paddingBottom="10dp"/>
 
-
-
-                    <TextView
-                        android:id="@+id/herHourOfDayTextView"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="them : N/A"
-                        android:textSize="12sp"/>
+                    <!-- LineChart to display messages per hour of the day -->
+                    <com.github.mikephil.charting.charts.LineChart
+                        android:id="@+id/herhourOfDayLineChart"
+                        android:layout_width="match_parent"
+                        android:layout_height="400dp" />
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
 

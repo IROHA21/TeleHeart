@@ -13,11 +13,15 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.chaquo.python.PyObject;
 import com.chaquo.python.Python;
 import com.github.mikephil.charting.charts.HorizontalBarChart;
+import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.BarData;
 import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.BarEntry;
+import com.github.mikephil.charting.data.Entry;
+import com.github.mikephil.charting.data.LineData;
+import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.formatter.IndexAxisValueFormatter;
 
 import java.text.ParseException;
@@ -42,8 +46,6 @@ public class ResultsActivity extends AppCompatActivity {
     private TextView yourFavoriteEmojiTextView, herFavoriteEmojiTextView;
     private TextView yourMediaFilesTextView, herMediaFilesTextView;
     private TextView yourLinksTextView, herLinksTextView;
-    private TextView yourDayOfWeekTextView, herDayOfWeekTextView;
-    private TextView yourHourOfDayTextView, herHourOfDayTextView;
     private TextView yourMonthTextView, herMonthTextView;
     private TextView yourDaysMostMessagesTextView, herDaysMostMessagesTextView;
     private TextView yourLast10DaysTextView, herLast10DaysTextView;
@@ -57,6 +59,10 @@ public class ResultsActivity extends AppCompatActivity {
     // Bar charts for days of the week
     private HorizontalBarChart yourBarChart;
     private HorizontalBarChart herBarChart;
+
+    // Line charts for messages per hour of the day
+    private LineChart yourHourOfDayLineChart;
+    private LineChart herHourOfDayLineChart;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -84,8 +90,10 @@ public class ResultsActivity extends AppCompatActivity {
         yourBarChart = findViewById(R.id.yourbarcharts);
         herBarChart = findViewById(R.id.herbarcharts);
 
-        yourHourOfDayTextView = findViewById(R.id.yourHourOfDayTextView);
-        herHourOfDayTextView = findViewById(R.id.herHourOfDayTextView);
+        // Initialize line charts
+        yourHourOfDayLineChart = findViewById(R.id.yourhourOfDayLineChart);
+        herHourOfDayLineChart = findViewById(R.id.herhourOfDayLineChart);
+
         yourMonthTextView = findViewById(R.id.yourMonthTextView);
         herMonthTextView = findViewById(R.id.herMonthTextView);
         yourDaysMostMessagesTextView = findViewById(R.id.yourDaysMostMessagesTextView);
@@ -167,15 +175,12 @@ public class ResultsActivity extends AppCompatActivity {
                 herLinksTextView.setText("Them: " + linkCounts.getOrDefault(herChatId, 0));
 
                 // Messages per Day of the Week
-
-
-                // Set up bar charts for days of the week
                 setupBarChart(yourBarChart, dayOfWeekCounts.getOrDefault(yourChatId, new HashMap<>()), "You");
                 setupBarChart(herBarChart, dayOfWeekCounts.getOrDefault(herChatId, new HashMap<>()), "Them");
 
                 // Messages per Hour of the Day
-                yourHourOfDayTextView.setText("You: " + formatMap(hourOfDayCounts.getOrDefault(yourChatId, new HashMap<>())));
-                herHourOfDayTextView.setText("Them: " + formatMap(hourOfDayCounts.getOrDefault(herChatId, new HashMap<>())));
+                setupHourOfDayLineChart(yourHourOfDayLineChart, hourOfDayCounts.getOrDefault(yourChatId, new HashMap<>()), "You", Color.BLUE);
+                setupHourOfDayLineChart(herHourOfDayLineChart, hourOfDayCounts.getOrDefault(herChatId, new HashMap<>()), "Them", Color.parseColor("#800080"));
 
                 // Messages per Month
                 yourMonthTextView.setText("You: " + formatMap(monthCounts.getOrDefault(yourChatId, new HashMap<>())));
@@ -260,19 +265,13 @@ public class ResultsActivity extends AppCompatActivity {
         xAxis.setPosition(XAxis.XAxisPosition.BOTTOM); // Place X-axis at the bottom
         xAxis.setDrawGridLines(false); // Disable grid lines for X-axis
         xAxis.setValueFormatter(new IndexAxisValueFormatter(labels)); // Set sorted day labels
-        // With this:
         xAxis.setLabelCount(labels.size()); // Ensure all labels are shown
         xAxis.setGranularity(1f); // Set granularity to 1 to avoid skipping labels
         xAxis.setLabelRotationAngle(-45); // Rotate labels for better visibility
-        xAxis.setPosition(XAxis.XAxisPosition.BOTTOM); // Place X-axis at the bottom
-        xAxis.setDrawGridLines(false); // Disable grid lines for X-axis
-        xAxis.setValueFormatter(new IndexAxisValueFormatter(labels)); // Set sorted day labels
         xAxis.setDrawLabels(true); // Enable day labels
 
-// Add padding to the left axis to make space for the labels
+        // Add padding to the left axis to make space for the labels
         barChart.setExtraLeftOffset(30f); // Increase left margin for labels
-        xAxis.setGranularity(1f); // Set granularity to 1 to avoid skipping labels
-        xAxis.setDrawLabels(true); // Enable day labels
 
         // Configure Y-axis (horizontal axis in HorizontalBarChart)
         YAxis leftAxis = barChart.getAxisLeft();
@@ -291,6 +290,70 @@ public class ResultsActivity extends AppCompatActivity {
 
         // Refresh the chart
         barChart.invalidate();
+    }
+
+    // Helper method to set up the LineChart for "Messages per Hour of the Day"
+    private void setupHourOfDayLineChart(LineChart lineChart, Map<Integer, Integer> hourOfDayCounts, String label, int lineColor) {
+        // Create entries for the LineChart
+        ArrayList<Entry> entries = new ArrayList<>();
+        for (int hour = 0; hour < 24; hour++) {
+            entries.add(new Entry(hour, hourOfDayCounts.getOrDefault(hour, 0)));
+        }
+
+        // Create a LineDataSet with the entries
+        LineDataSet dataSet = new LineDataSet(entries, label);
+        dataSet.setColor(lineColor); // Set line color
+        dataSet.setCircleColor(lineColor); // Set circle color
+        dataSet.setLineWidth(2f); // Set line width
+        dataSet.setCircleRadius(4f); // Set circle radius
+        dataSet.setValueTextSize(10f); // Set value text size
+
+        // Create a LineData object with the LineDataSet
+        LineData lineData = new LineData(dataSet);
+        lineChart.setData(lineData);
+
+        // Customize the chart
+        lineChart.getDescription().setEnabled(false); // Disable description
+        lineChart.setDrawGridBackground(false); // Disable grid background
+        lineChart.setTouchEnabled(true); // Enable touch interactions
+        lineChart.setDragEnabled(true); // Enable dragging
+        lineChart.setScaleEnabled(true); // Enable scaling
+        lineChart.setPinchZoom(true); // Enable pinch zoom
+
+        // Configure X-axis
+        XAxis xAxis = lineChart.getXAxis();
+        xAxis.setPosition(XAxis.XAxisPosition.BOTTOM); // Place X-axis at the bottom
+        xAxis.setGranularity(1f); // Set granularity to 1 hour
+        xAxis.setValueFormatter(new IndexAxisValueFormatter(getHourLabels())); // Set hour labels
+        xAxis.setLabelCount(24, true); // Show all 24 hours
+        xAxis.setDrawGridLines(false); // Disable grid lines for X-axis
+
+        // Configure Y-axis
+        YAxis leftAxis = lineChart.getAxisLeft();
+        leftAxis.setAxisMinimum(0f); // Start Y-axis from 0
+        leftAxis.setGranularity(1f); // Set granularity to 1 message
+        leftAxis.setDrawGridLines(true); // Enable grid lines for Y-axis
+
+        YAxis rightAxis = lineChart.getAxisRight();
+        rightAxis.setEnabled(false); // Disable right Y-axis
+
+        // Disable the legend (if any)
+        lineChart.getLegend().setEnabled(true); // Enable legend to show the label
+
+        // Animate the chart
+        lineChart.animateY(1000); // Animate the chart vertically
+
+        // Refresh the chart
+        lineChart.invalidate();
+    }
+
+    // Helper method to generate hour labels (0-23)
+    private String[] getHourLabels() {
+        String[] labels = new String[24];
+        for (int i = 0; i < 24; i++) {
+            labels[i] = String.valueOf(i);
+        }
+        return labels;
     }
 
     // Inner class to analyze chat data
@@ -634,68 +697,63 @@ public class ResultsActivity extends AppCompatActivity {
         }
     }
 
+    @Override
+    protected void onPause() {
+        super.onPause();
 
+        System.out.println("switcher destroy activated login");
 
+        if (!switcher) {
+            // Clear any existing tasks
+            handler.removeCallbacks(disconnectRunnable);
 
-         // 3 minutes in seconds
+            // Create a new Runnable for the countdown
+            disconnectRunnable = new Runnable() {
+                @Override
+                public void run() {
+                    if (countdownTime > 0) {
+                        // Log the remaining seconds
+                        System.out.println("Seconds remaining: " + countdownTime);
 
-        @Override
-        protected void onPause() {
-            super.onPause();
+                        // Decrement the countdown time
+                        countdownTime--;
 
-            System.out.println("switcher destroy activated login");
-
-            if (!switcher) {
-                // Clear any existing tasks
-                handler.removeCallbacks(disconnectRunnable);
-
-                // Create a new Runnable for the countdown
-                disconnectRunnable = new Runnable() {
-                    @Override
-                    public void run() {
-                        if (countdownTime > 0) {
-                            // Log the remaining seconds
-                            System.out.println("Seconds remaining: " + countdownTime);
-
-                            // Decrement the countdown time
-                            countdownTime--;
-
-                            // Schedule the next iteration after 1 second
-                            handler.postDelayed(this, 1000); // 1000ms = 1 second
-                        } else {
-                            // Time's up, disconnect the client
-                            Python py = Python.getInstance();
-                            PyObject pyObj = py.getModule("helloworld");
-                            PyObject result = pyObj.callAttr("terminate_and_disconnect");
-                            Toast.makeText(ResultsActivity.this, result.toString(), Toast.LENGTH_SHORT).show();
-                        }
+                        // Schedule the next iteration after 1 second
+                        handler.postDelayed(this, 1000); // 1000ms = 1 second
+                    } else {
+                        // Time's up, disconnect the client
+                        Python py = Python.getInstance();
+                        PyObject pyObj = py.getModule("helloworld");
+                        PyObject result = pyObj.callAttr("terminate_and_disconnect");
+                        Toast.makeText(ResultsActivity.this, result.toString(), Toast.LENGTH_SHORT).show();
                     }
-                };
+                }
+            };
 
-                // Start the countdown
-                handler.post(disconnectRunnable);
-            }
-        }
-
-        @Override
-        protected void onResume() {
-            super.onResume();
-
-            // Cancel the countdown if the user returns to the app
-            if (disconnectRunnable != null) {
-                handler.removeCallbacks(disconnectRunnable);
-                disconnectRunnable = null;
-                countdownTime = 3 * 60; // Reset the countdown time
-            }
-        }
-
-        @Override
-        protected void onDestroy() {
-            super.onDestroy();
-
-            // Ensure the Handler is cleared when the activity is destroyed
-            if (disconnectRunnable != null) {
-                handler.removeCallbacks(disconnectRunnable);
-            }
+            // Start the countdown
+            handler.post(disconnectRunnable);
         }
     }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        // Cancel the countdown if the user returns to the app
+        if (disconnectRunnable != null) {
+            handler.removeCallbacks(disconnectRunnable);
+            disconnectRunnable = null;
+            countdownTime = 3 * 60; // Reset the countdown time
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+
+        // Ensure the Handler is cleared when the activity is destroyed
+        if (disconnectRunnable != null) {
+            handler.removeCallbacks(disconnectRunnable);
+        }
+    }
+}
