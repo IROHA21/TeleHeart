@@ -271,7 +271,9 @@ public class ResultsActivity extends AppCompatActivity {
         xAxis.setDrawLabels(true); // Enable day labels
 
         // Add padding to the left axis to make space for the labels
-        barChart.setExtraLeftOffset(30f); // Increase left margin for labels
+        barChart.setExtraLeftOffset(25f);
+        barChart.setExtraRightOffset(25f);
+
 
         // Configure Y-axis (horizontal axis in HorizontalBarChart)
         YAxis leftAxis = barChart.getAxisLeft();
