@@ -117,13 +117,14 @@ public class ContactsActivity extends AppCompatActivity {
                     Toast.makeText(this, "Please enter a valid number", Toast.LENGTH_SHORT).show();
                     return; // Stop execution
                 }
+                Intent intent2 = new Intent(ContactsActivity.this, LoadingActivity.class);
 
                 // If all validations pass, proceed to the next screen
 
-                intent.putExtra("selectedContactId", selectedContactId);
-                intent.putExtra("quantity", String.valueOf(quantityInt)); // Store it as a String
+                intent2.putExtra("selectedContactId", selectedContactId);
+                intent2.putExtra("quantity", String.valueOf(quantityInt)); // Store it as a String
 
-                startActivity(intent);
+                startActivity(intent2);
             } else {
                 Toast.makeText(this, "No contact selected", Toast.LENGTH_SHORT).show();
             }
@@ -141,12 +142,12 @@ public class ContactsActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-
-    protected void onPause() {
-        super.onPause();
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
 
         // Check if the user chose "Don't remember me"
-
+        System.out.println("switcher destroy activated contacts");
 
 
         if (!switcher) {

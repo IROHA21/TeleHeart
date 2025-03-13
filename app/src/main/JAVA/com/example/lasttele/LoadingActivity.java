@@ -6,6 +6,7 @@ import android.os.Handler;
 import android.os.Looper;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -19,7 +20,9 @@ public class LoadingActivity extends AppCompatActivity {
     private ProgressBar progressBar;
     private TextView progressTextView;
     private Handler mainHandler = new Handler(Looper.getMainLooper());
+
     private boolean switcher;
+    private static boolean isResultActivityStarted = false;
 
 
     @Override
@@ -30,9 +33,11 @@ public class LoadingActivity extends AppCompatActivity {
         progressBar = findViewById(R.id.loadingProgressBar);
 
 
-
         // Show initial progress
+        Intent intent2 = getIntent();
+        switcher = intent2.getBooleanExtra("switcher", false);
 
+        System.out.println("switcher check inside of loading : " + switcher );
 
 
         // Get the selected contact ID from the intent
@@ -81,6 +86,26 @@ public class LoadingActivity extends AppCompatActivity {
             intent.putExtra("selectedContactId", selectedContactId); // Pass the contact ID
             intent.putExtra("user_id", userId); // Pass the user ID
             startActivity(intent);
-            finish(); // Close the LoadingActivity
+            isResultActivityStarted = true;
+            finish();
+             // Close the LoadingActivity
         }).start();
-}}
+}
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+
+        // Check if the user chose "Don't remember me"
+        System.out.println("switcher destroy activated login");
+
+
+        if (!switcher && !isResultActivityStarted){
+            // Terminate the session and disconnect the client
+            Python py = Python.getInstance();
+            PyObject pyObj = py.getModule("helloworld");
+            PyObject result = pyObj.callAttr("terminate_and_disconnect");
+            Toast.makeText(this, result.toString(), Toast.LENGTH_SHORT).show();
+        }
+    }
+
+}

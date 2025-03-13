@@ -5,7 +5,12 @@ import android.os.Handler;
 import android.os.Looper;
 import android.widget.TextView;
 import android.content.Intent;
+import android.widget.Toast;
+
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.chaquo.python.PyObject;
+import com.chaquo.python.Python;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -38,11 +43,20 @@ public class ResultsActivity extends AppCompatActivity {
     private TextView yourLast10DaysTextView, herLast10DaysTextView;
     private TextView yourMostUsedWordsTextView, herMostUsedWordsTextView;
     private TextView yourMostUsedEmojisTextView, herMostUsedEmojisTextView;
-
+    private boolean switcher;
+    private Runnable disconnectRunnable;
+    private int countdownTime = 3 * 60; // 3 minutes in seconds
+    private Handler handler = new Handler(Looper.getMainLooper());
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.results_screen);
+
+
+        Intent intent3 = getIntent();
+        switcher = intent3.getBooleanExtra("switcher", false);
+
+        System.out.println("switcher check inside of result : " + switcher );
 
         // Initialize TextViews
         yourMessagesTextView = findViewById(R.id.yourMessagesTextView);
@@ -528,4 +542,52 @@ public class ResultsActivity extends AppCompatActivity {
             this.content = content;
         }
     }
+
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+
+        System.out.println("switcher destroy activated login");
+
+        if (!switcher) {
+            disconnectRunnable = new Runnable() {
+                @Override
+                public void run() {
+                    if (countdownTime > 0) {
+                        // Log the remaining seconds
+                        System.out.println("Seconds remaining: " + countdownTime);
+
+                        // Decrement the countdown time
+                        countdownTime--;
+
+                        // Schedule the next iteration after 1 second
+                        handler.postDelayed(this, 1000); // 1000ms = 1 second
+                    } else {
+                        // Time's up, disconnect the client
+                        Python py = Python.getInstance();
+                        PyObject pyObj = py.getModule("helloworld");
+                        PyObject result = pyObj.callAttr("terminate_and_disconnect");
+                        Toast.makeText(ResultsActivity.this, result.toString(), Toast.LENGTH_SHORT).show();
+                    }
+                }
+            };
+
+            // Start the countdown
+            handler.post(disconnectRunnable);
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        // Cancel the countdown if the user returns to the app
+        if (disconnectRunnable != null) {
+            handler.removeCallbacks(disconnectRunnable);
+            disconnectRunnable = null;
+            countdownTime = 3 * 60; // Reset the countdown time
+        }
+    }
+
 }

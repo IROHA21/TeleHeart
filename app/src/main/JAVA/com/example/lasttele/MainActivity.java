@@ -175,6 +175,9 @@ public class MainActivity extends AppCompatActivity {
             Intent intent2 = new Intent(this, LoadingActivity.class);
             intent2.putExtra("switcher", switcher); // Pass the user ID
 
+            Intent intent3 = new Intent(this, ResultsActivity.class);
+            intent3.putExtra("switcher", switcher); // Pass the user ID
+
             startActivity(intent);
 
         }

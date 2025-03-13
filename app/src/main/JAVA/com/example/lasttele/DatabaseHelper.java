@@ -77,4 +77,5 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL("DELETE FROM " + TABLE_MESSAGES);
         db.close();
     }
+
 }
