@@ -89,6 +89,9 @@ public class ResultsActivity extends AppCompatActivity {
 
     // Longest messages
     private TextView herlongestmesssage, yourlongestmesssage;
+    // TextViews for Median Answering Time
+    private TextView yourMedianAnsweringTimeTextView;
+    private TextView herMedianAnsweringTimeTextView;
 
 
 
@@ -148,7 +151,8 @@ public class ResultsActivity extends AppCompatActivity {
         yourlongestmesssage = findViewById(R.id.yourlongestmesssage);
 
         // Median answer time
-
+        yourMedianAnsweringTimeTextView = findViewById(R.id.yourMedianAnsweringTimeTextView);
+        herMedianAnsweringTimeTextView = findViewById(R.id.herMedianAnsweringTimeTextView);
 
         // Retrieve messages from the database in a background thread
         new Thread(() -> {
@@ -172,6 +176,7 @@ public class ResultsActivity extends AppCompatActivity {
             Map<Long, Map<String, Integer>> mostUsedWords = analyzer.getMostUsedWords();
             Map<Long, Map<String, Integer>> mostUsedEmojis = analyzer.getMostUsedEmojis();
             Map<Long, String> longestMessages = analyzer.getLongestMessagePerUser();
+            Map<Long, Long> medianTimes = analyzer.getMedianAnsweringTime();
 
 
             // Debugging outputs
@@ -188,6 +193,7 @@ public class ResultsActivity extends AppCompatActivity {
             System.out.println("Most Used Words: " + mostUsedWords);
             System.out.println("Most Used Emojis: " + mostUsedEmojis);
             System.out.println("Longest message: " + longestMessages);
+            System.out.println("Median Answering Times: " + medianTimes);
 
             // Update the UI on the main thread
             new Handler(Looper.getMainLooper()).post(() -> {
@@ -264,11 +270,19 @@ public class ResultsActivity extends AppCompatActivity {
                 yourLongestMessageCard.setOnClickListener(v -> showOverlay(yourLongestMessage));
                 herLongestMessageCard.setOnClickListener(v -> showOverlay(herLongestMessage));
 
+                // Update UI
+                setupMedianAnsweringTimeTextView(yourMedianAnsweringTimeTextView, medianTimes.getOrDefault(yourChatId, 0L), "You");
+                setupMedianAnsweringTimeTextView(herMedianAnsweringTimeTextView, medianTimes.getOrDefault(herChatId, 0L), "Them");
+
             });
         }).start();
     }
 
-
+    // Helper method to set up the Median Answering Time TextView
+    private void setupMedianAnsweringTimeTextView(TextView textView, long medianTime, String label) {
+        long medianTimeSeconds = medianTime / 1000; // Convert milliseconds to seconds
+        textView.setText(label + ": " + medianTimeSeconds + "s");
+    }
 
     // Helper method to set up the Number of Links per User pie chart
     private void setupLinksPieChart(PieChart pieChart, Map<String, Integer> linkCounts, String label) {
@@ -1157,6 +1171,45 @@ public class ResultsActivity extends AppCompatActivity {
             }
 
             return longestMessages;
+        }
+
+
+        // 14. Calculate the median answering time for each user
+        public Map<Long, Long> getMedianAnsweringTime() {
+            // Sort messages by date
+            messages.sort((m1, m2) -> m1.date.compareTo(m2.date));
+
+            Map<Long, List<Long>> responseTimes = new HashMap<>();
+            Map<Long, Date> lastMessageTimes = new HashMap<>();
+
+            // Define the maximum time difference for a conversation (3 hours in milliseconds)
+            long maxConversationGap = 3 * 60 * 60 * 1000; // 3 hours in milliseconds
+
+            for (ChatMessage message : messages) {
+                if (lastMessageTimes.containsKey(message.chatId)) {
+                    long timeDiff = message.date.getTime() - lastMessageTimes.get(message.chatId).getTime();
+
+                    // Only consider time differences within the conversation threshold
+                    if (timeDiff >= 0 && timeDiff <= maxConversationGap) {
+                        responseTimes.computeIfAbsent(message.chatId, k -> new ArrayList<>()).add(timeDiff);
+                    }
+                }
+                lastMessageTimes.put(message.chatId, message.date);
+            }
+
+            Map<Long, Long> medianTimes = new HashMap<>();
+            for (Long chatId : responseTimes.keySet()) {
+                List<Long> times = responseTimes.get(chatId);
+                Collections.sort(times);
+                int middle = times.size() / 2;
+                if (times.size() % 2 == 1) {
+                    medianTimes.put(chatId, times.get(middle));
+                } else {
+                    medianTimes.put(chatId, (times.get(middle - 1) + times.get(middle)) / 2);
+                }
+            }
+
+            return medianTimes;
         }
 
 
