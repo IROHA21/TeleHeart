@@ -93,6 +93,16 @@ public class ResultsActivity extends AppCompatActivity {
     private TextView yourMedianAnsweringTimeTextView;
     private TextView herMedianAnsweringTimeTextView;
 
+    // TextViews for Largest No Conversation Days
+    private TextView yourLargestNoConversationDaysTextView;
+
+    // TextViews for Conversation Starts
+    private TextView yourConversationStartsTextView;
+    private TextView herConversationStartsTextView;
+
+    // TextViews for Unreplied Chats
+    private TextView yourUnrepliedChatsTextView;
+    private TextView herUnrepliedChatsTextView;
 
 
     @Override
@@ -153,6 +163,16 @@ public class ResultsActivity extends AppCompatActivity {
         // Median answer time
         yourMedianAnsweringTimeTextView = findViewById(R.id.yourMedianAnsweringTimeTextView);
         herMedianAnsweringTimeTextView = findViewById(R.id.herMedianAnsweringTimeTextView);
+       // largest no conv days
+        yourLargestNoConversationDaysTextView = findViewById(R.id.yourLargestNoConversationDaysTextView);
+       // who starts convs
+        yourConversationStartsTextView = findViewById(R.id.yourConversationStartsTextView);
+        herConversationStartsTextView = findViewById(R.id.herConversationStartsTextView);
+
+        yourUnrepliedChatsTextView = findViewById(R.id.yourUnrepliedChatsTextView);
+        herUnrepliedChatsTextView = findViewById(R.id.herUnrepliedChatsTextView);
+
+
 
         // Retrieve messages from the database in a background thread
         new Thread(() -> {
@@ -177,8 +197,9 @@ public class ResultsActivity extends AppCompatActivity {
             Map<Long, Map<String, Integer>> mostUsedEmojis = analyzer.getMostUsedEmojis();
             Map<Long, String> longestMessages = analyzer.getLongestMessagePerUser();
             Map<Long, Long> medianTimes = analyzer.getMedianAnsweringTime();
-
-
+            Map<Long, Integer> largestGaps = analyzer.getLargestNoConversationDays();
+            Map<Long, Integer> conversationStarts = analyzer.getConversationStarts();
+            Map<Long, Integer> unrepliedChats = analyzer.getUnrepliedChats();
             // Debugging outputs
             System.out.println("Message Counts: " + messageCounts);
             System.out.println("Average Times: " + averageTimes);
@@ -194,6 +215,8 @@ public class ResultsActivity extends AppCompatActivity {
             System.out.println("Most Used Emojis: " + mostUsedEmojis);
             System.out.println("Longest message: " + longestMessages);
             System.out.println("Median Answering Times: " + medianTimes);
+            System.out.println("Conversation Starts: " + conversationStarts);
+            System.out.println("Unreplied Chats: " + unrepliedChats);
 
             // Update the UI on the main thread
             new Handler(Looper.getMainLooper()).post(() -> {
@@ -270,12 +293,33 @@ public class ResultsActivity extends AppCompatActivity {
                 yourLongestMessageCard.setOnClickListener(v -> showOverlay(yourLongestMessage));
                 herLongestMessageCard.setOnClickListener(v -> showOverlay(herLongestMessage));
 
-                // Update UI
+                //median answer time
                 setupMedianAnsweringTimeTextView(yourMedianAnsweringTimeTextView, medianTimes.getOrDefault(yourChatId, 0L), "You");
                 setupMedianAnsweringTimeTextView(herMedianAnsweringTimeTextView, medianTimes.getOrDefault(herChatId, 0L), "Them");
+                //LargestNoConversationDays
+                setupLargestNoConversationDaysTextView(yourLargestNoConversationDaysTextView, largestGaps.getOrDefault(yourChatId, 0), "You");
+               // conv started
+                setupConversationStartsTextView(yourConversationStartsTextView, conversationStarts.getOrDefault(yourChatId, 0), "You");
+                setupConversationStartsTextView(herConversationStartsTextView, conversationStarts.getOrDefault(herChatId, 0), "Them");
+
+                setupUnrepliedChatsTextView(yourUnrepliedChatsTextView, unrepliedChats.getOrDefault(yourChatId, 0), "You");
+                setupUnrepliedChatsTextView(herUnrepliedChatsTextView, unrepliedChats.getOrDefault(herChatId, 0), "Them");
 
             });
         }).start();
+    }
+    // Helper method to set up the Unreplied Chats TextView
+    private void setupUnrepliedChatsTextView(TextView textView, int unreplied, String label) {
+        textView.setText(label + ": " + unreplied + " times");
+    }
+    // Helper method to set up the Conversation Starts TextView
+    private void setupConversationStartsTextView(TextView textView, int starts, String label) {
+        textView.setText(label + ": " + starts + " times");
+    }
+
+    // Helper method to set up the Largest No Conversation Days TextView
+    private void setupLargestNoConversationDaysTextView(TextView textView, int days, String label) {
+        textView.setText("maximum" + ": " + days + " days");
     }
 
     // Helper method to set up the Median Answering Time TextView
@@ -1211,6 +1255,88 @@ public class ResultsActivity extends AppCompatActivity {
 
             return medianTimes;
         }
+
+
+        // 15. Calculate the largest number of days with no conversation
+        public Map<Long, Integer> getLargestNoConversationDays() {
+            // Sort messages by date
+            messages.sort((m1, m2) -> m1.date.compareTo(m2.date));
+
+            Map<Long, Integer> largestGaps = new HashMap<>();
+            Map<Long, Date> lastMessageTimes = new HashMap<>();
+
+            for (ChatMessage message : messages) {
+                if (lastMessageTimes.containsKey(message.chatId)) {
+                    long timeDiff = message.date.getTime() - lastMessageTimes.get(message.chatId).getTime();
+                    int daysDiff = (int) (timeDiff / (1000 * 60 * 60 * 24));
+
+                    if (daysDiff > largestGaps.getOrDefault(message.chatId, 0)) {
+                        largestGaps.put(message.chatId, daysDiff);
+                    }
+                }
+                lastMessageTimes.put(message.chatId, message.date);
+            }
+
+            return largestGaps;
+        }
+        // 16. Calculate the number of times each user started a conversation
+        public Map<Long, Integer> getConversationStarts() {
+            // Sort messages by date
+            messages.sort((m1, m2) -> m1.date.compareTo(m2.date));
+
+            Map<Long, Integer> conversationStarts = new HashMap<>();
+            Map<Long, Date> lastMessageTimes = new HashMap<>();
+
+            // Define the maximum time difference for a conversation (3 hours in milliseconds)
+            long maxConversationGap = 3 * 60 * 60 * 1000; // 3 hours in milliseconds
+
+            for (ChatMessage message : messages) {
+                if (!lastMessageTimes.containsKey(message.chatId) ||
+                        message.date.getTime() - lastMessageTimes.get(message.chatId).getTime() > maxConversationGap) {
+                    // If the gap is more than 3 hours, it's a new conversation start
+                    conversationStarts.put(message.chatId, conversationStarts.getOrDefault(message.chatId, 0) + 1);
+                }
+                // Update the last message time for this user
+                lastMessageTimes.put(message.chatId, message.date);
+            }
+
+            return conversationStarts;
+        }
+
+
+
+        // 17. Find chats where the last message was from the user, but no reply came back
+        public Map<Long, Integer> getUnrepliedChats() {
+            // Sort messages by date
+            messages.sort((m1, m2) -> m1.date.compareTo(m2.date));
+
+            Map<Long, Integer> unrepliedChats = new HashMap<>();
+            long maxConversationGap = 3 * 60 * 60 * 1000; // 3 hours in milliseconds
+
+            for (int i = 0; i < messages.size(); i++) {
+                ChatMessage currentMessage = messages.get(i);
+                long currentUserId = currentMessage.chatId;
+
+                // Check if there is a next message
+                if (i < messages.size() - 1) {
+                    ChatMessage nextMessage = messages.get(i + 1);
+                    long nextUserId = nextMessage.chatId;
+                    long timeDiff = nextMessage.date.getTime() - currentMessage.date.getTime();
+
+                    // If the next message is from the other user and within 3 hours, the chat continues
+                    if (nextUserId != currentUserId && timeDiff <= maxConversationGap) {
+                        continue; // Chat is ongoing, no unreplied chat yet
+                    }
+                }
+
+                // If no reply within 3 hours, mark the current message as unreplied
+                unrepliedChats.put(currentUserId, unrepliedChats.getOrDefault(currentUserId, 0) + 1);
+            }
+
+            return unrepliedChats;
+        }
+
+
 
 
     }
