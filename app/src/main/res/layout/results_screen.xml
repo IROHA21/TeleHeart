@@ -28,7 +28,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:columnCount="2"
-            android:rowCount="13"
+            android:rowCount="14"
             android:padding="4dp">
 
             <!-- Number of Messages -->
@@ -539,10 +539,12 @@
             </androidx.cardview.widget.CardView>
 
             <!-- Messages per Month -->
+            <!-- Messages per Month -->
             <androidx.cardview.widget.CardView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_columnWeight="1"
+                android:layout_columnSpan="2"
                 android:layout_margin="4dp"
                 app:cardCornerRadius="8dp"
                 app:cardElevation="4dp">
@@ -558,16 +560,15 @@
                         android:layout_height="wrap_content"
                         android:text="Messages per Month"
                         android:textSize="14sp"
-                        android:textStyle="bold" />
+                        android:textStyle="bold"
+                        android:layout_gravity="center_horizontal"
+                        android:paddingBottom="10dp"/>
 
-                    <TextView
-                        android:id="@+id/yourMonthTextView"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="you : N/A"
-                        android:textSize="12sp" />
-
-
+                    <!-- LineChart to display messages per month -->
+                    <com.github.mikephil.charting.charts.LineChart
+                        android:id="@+id/yourMessagesPerMonthLineChart"
+                        android:layout_width="match_parent"
+                        android:layout_height="200dp" />
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
 
@@ -575,6 +576,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_columnWeight="1"
+                android:layout_columnSpan="2"
                 android:layout_margin="4dp"
                 app:cardCornerRadius="8dp"
                 app:cardElevation="4dp">
@@ -589,17 +591,16 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Messages per Month"
+                        android:textSize="14sp"
                         android:textStyle="bold"
-                        android:textSize="14sp"/>
+                        android:layout_gravity="center_horizontal"
+                        android:paddingBottom="10dp"/>
 
-
-
-                    <TextView
-                        android:id="@+id/herMonthTextView"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="them : N/A"
-                        android:textSize="12sp"/>
+                    <!-- LineChart to display messages per month -->
+                    <com.github.mikephil.charting.charts.LineChart
+                        android:id="@+id/herMessagesPerMonthLineChart"
+                        android:layout_width="match_parent"
+                        android:layout_height="200dp" />
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
 
@@ -734,6 +735,7 @@
             </androidx.cardview.widget.CardView>
 
             <!-- Most Used Words -->
+            <!-- Most Used Words -->
             <androidx.cardview.widget.CardView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -755,14 +757,11 @@
                         android:textSize="14sp"
                         android:textStyle="bold" />
 
-                    <TextView
-                        android:id="@+id/yourMostUsedWordsTextView"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="you : N/A"
-                        android:textSize="12sp" />
-
-
+                    <!-- HorizontalBarChart for Most Used Words -->
+                    <com.github.mikephil.charting.charts.HorizontalBarChart
+                        android:id="@+id/yourMostUsedWordsChart"
+                        android:layout_width="match_parent"
+                        android:layout_height="400dp" /> <!-- Adjust height as needed -->
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
 
@@ -784,17 +783,14 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Most Used Words"
-                        android:textStyle="bold"
-                        android:textSize="14sp"/>
+                        android:textSize="14sp"
+                        android:textStyle="bold" />
 
-
-
-                    <TextView
-                        android:id="@+id/herMostUsedWordsTextView"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="them : N/A"
-                        android:textSize="12sp"/>
+                    <!-- HorizontalBarChart for Most Used Words -->
+                    <com.github.mikephil.charting.charts.HorizontalBarChart
+                        android:id="@+id/herMostUsedWordsChart"
+                        android:layout_width="match_parent"
+                        android:layout_height="400dp" /> <!-- Adjust height as needed -->
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
 
@@ -820,14 +816,11 @@
                         android:textSize="14sp"
                         android:textStyle="bold" />
 
-                    <TextView
-                        android:id="@+id/yourMostUsedEmojisTextView"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="you : N/A"
-                        android:textSize="12sp" />
-
-
+                    <!-- HorizontalBarChart for Most Used Emojis -->
+                    <com.github.mikephil.charting.charts.HorizontalBarChart
+                        android:id="@+id/yourMostUsedEmojisChart"
+                        android:layout_width="match_parent"
+                        android:layout_height="200dp" /> <!-- Adjust height as needed -->
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
 
@@ -849,17 +842,104 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Most Used Emojis"
-                        android:textStyle="bold"
-                        android:textSize="14sp"/>
 
+                        android:textSize="14sp"
+                        android:textStyle="bold" />
+
+                    <!-- HorizontalBarChart for Most Used Emojis -->
+                    <com.github.mikephil.charting.charts.HorizontalBarChart
+                        android:id="@+id/herMostUsedEmojisChart"
+                        android:layout_width="match_parent"
+                        android:layout_height="200dp" /> <!-- Adjust height as needed -->
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+            <androidx.cardview.widget.CardView
+                android:id="@+id/your_longest_message_card"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_columnWeight="1"
+                android:layout_margin="4dp"
+                app:cardCornerRadius="8dp"
+                app:cardElevation="4dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="12dp">
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Longest Message"
+                            android:textStyle="bold"
+                            android:textSize="14sp" />
+
+                        <ImageView
+
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:src="@drawable/zoomin"
+                            android:layout_marginStart="8dp" />
+                    </LinearLayout>
+
+                    <TextView
+                        android:id="@+id/yourlongestmesssage"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="You: N/A"
+                        android:textSize="12sp"/>
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/her_longest_message_card"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_columnWeight="1"
+                android:layout_margin="4dp"
+                app:cardCornerRadius="8dp"
+                app:cardElevation="4dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="12dp">
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Longest Message"
+                            android:textStyle="bold"
+                            android:textSize="14sp" />
+
+                        <ImageView
+                            android:id="@+id/icon"
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:src="@drawable/zoomin"
+                            android:layout_marginStart="8dp" />
+                    </LinearLayout>
 
 
                     <TextView
-                        android:id="@+id/herMostUsedEmojisTextView"
+                        android:id="@+id/herlongestmesssage"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="them : N/A"
-                        android:textSize="12sp" />
+                        android:text="Them: N/A"
+                        android:textSize="12sp"/>
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
 

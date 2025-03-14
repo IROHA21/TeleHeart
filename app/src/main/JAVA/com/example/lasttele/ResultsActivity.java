@@ -5,10 +5,13 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
 
 import com.chaquo.python.PyObject;
 import com.chaquo.python.Python;
@@ -23,12 +26,14 @@ import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.formatter.IndexAxisValueFormatter;
+import com.google.android.material.bottomsheet.BottomSheetDialog;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.AbstractMap;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -46,11 +51,17 @@ public class ResultsActivity extends AppCompatActivity {
     private TextView yourFavoriteEmojiTextView, herFavoriteEmojiTextView;
     private TextView yourMediaFilesTextView, herMediaFilesTextView;
     private TextView yourLinksTextView, herLinksTextView;
-    private TextView yourMonthTextView, herMonthTextView;
+    // Line charts for messages per month
+    private LineChart yourMessagesPerMonthLineChart;
+    private LineChart herMessagesPerMonthLineChart;
     private TextView yourDaysMostMessagesTextView, herDaysMostMessagesTextView;
     private TextView yourLast10DaysTextView, herLast10DaysTextView;
-    private TextView yourMostUsedWordsTextView, herMostUsedWordsTextView;
-    private TextView yourMostUsedEmojisTextView, herMostUsedEmojisTextView;
+
+
+    // Bar charts for most used words
+    private HorizontalBarChart yourMostUsedWordsChart;
+    private HorizontalBarChart herMostUsedWordsChart;
+
     private boolean switcher;
     private Handler handler = new Handler(Looper.getMainLooper()); // Single Handler instance
     private Runnable disconnectRunnable;
@@ -63,6 +74,15 @@ public class ResultsActivity extends AppCompatActivity {
     // Line charts for messages per hour of the day
     private LineChart yourHourOfDayLineChart;
     private LineChart herHourOfDayLineChart;
+
+
+
+    // Bar charts for most used emojis
+    private HorizontalBarChart yourMostUsedEmojisChart;
+    private HorizontalBarChart herMostUsedEmojisChart;
+
+    // Longest messages
+    private TextView herlongestmesssage, yourlongestmesssage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -94,16 +114,27 @@ public class ResultsActivity extends AppCompatActivity {
         yourHourOfDayLineChart = findViewById(R.id.yourhourOfDayLineChart);
         herHourOfDayLineChart = findViewById(R.id.herhourOfDayLineChart);
 
-        yourMonthTextView = findViewById(R.id.yourMonthTextView);
-        herMonthTextView = findViewById(R.id.herMonthTextView);
+        // Initialize most used emojis charts
+        yourMostUsedEmojisChart = findViewById(R.id.yourMostUsedEmojisChart);
+        herMostUsedEmojisChart = findViewById(R.id.herMostUsedEmojisChart);
+
+        // Initialize messages per month line charts
+        yourMessagesPerMonthLineChart = findViewById(R.id.yourMessagesPerMonthLineChart);
+        herMessagesPerMonthLineChart = findViewById(R.id.herMessagesPerMonthLineChart);
+
+
         yourDaysMostMessagesTextView = findViewById(R.id.yourDaysMostMessagesTextView);
         herDaysMostMessagesTextView = findViewById(R.id.herDaysMostMessagesTextView);
         yourLast10DaysTextView = findViewById(R.id.yourLast10DaysTextView);
         herLast10DaysTextView = findViewById(R.id.herLast10DaysTextView);
-        yourMostUsedWordsTextView = findViewById(R.id.yourMostUsedWordsTextView);
-        herMostUsedWordsTextView = findViewById(R.id.herMostUsedWordsTextView);
-        yourMostUsedEmojisTextView = findViewById(R.id.yourMostUsedEmojisTextView);
-        herMostUsedEmojisTextView = findViewById(R.id.herMostUsedEmojisTextView);
+        // Initialize most used words charts
+        yourMostUsedWordsChart = findViewById(R.id.yourMostUsedWordsChart);
+        herMostUsedWordsChart = findViewById(R.id.herMostUsedWordsChart);
+
+
+        // Longest message
+        herlongestmesssage = findViewById(R.id.herlongestmesssage);
+        yourlongestmesssage = findViewById(R.id.yourlongestmesssage);
 
         // Retrieve messages from the database in a background thread
         new Thread(() -> {
@@ -126,6 +157,7 @@ public class ResultsActivity extends AppCompatActivity {
             Map<Long, Integer> last10DaysCounts = analyzer.getMessagesInLast10Days();
             Map<Long, Map<String, Integer>> mostUsedWords = analyzer.getMostUsedWords();
             Map<Long, Map<String, Integer>> mostUsedEmojis = analyzer.getMostUsedEmojis();
+            Map<Long, String> longestMessages = analyzer.getLongestMessagePerUser();
 
             // Debugging outputs
             System.out.println("Message Counts: " + messageCounts);
@@ -140,6 +172,7 @@ public class ResultsActivity extends AppCompatActivity {
             System.out.println("Last 10 Days Counts: " + last10DaysCounts);
             System.out.println("Most Used Words: " + mostUsedWords);
             System.out.println("Most Used Emojis: " + mostUsedEmojis);
+            System.out.println("Longest message: " + longestMessages);
 
             // Update the UI on the main thread
             new Handler(Looper.getMainLooper()).post(() -> {
@@ -182,10 +215,9 @@ public class ResultsActivity extends AppCompatActivity {
                 setupHourOfDayLineChart(yourHourOfDayLineChart, hourOfDayCounts.getOrDefault(yourChatId, new HashMap<>()), "You", Color.BLUE);
                 setupHourOfDayLineChart(herHourOfDayLineChart, hourOfDayCounts.getOrDefault(herChatId, new HashMap<>()), "Them", Color.parseColor("#800080"));
 
-                // Messages per Month
-                yourMonthTextView.setText("You: " + formatMap(monthCounts.getOrDefault(yourChatId, new HashMap<>())));
-                herMonthTextView.setText("Them: " + formatMap(monthCounts.getOrDefault(herChatId, new HashMap<>())));
-
+                // Set up Messages per Month line charts
+                setupMessagesPerMonthLineChart(yourMessagesPerMonthLineChart, monthCounts.getOrDefault(yourChatId, new HashMap<>()), "You", Color.BLUE);
+                setupMessagesPerMonthLineChart(herMessagesPerMonthLineChart, monthCounts.getOrDefault(herChatId, new HashMap<>()), "Them", Color.parseColor("#800080"));
                 // Days with Most Messages
                 yourDaysMostMessagesTextView.setText("You: " + formatList(daysWithMostMessages.getOrDefault(yourChatId, new ArrayList<>())));
                 herDaysMostMessagesTextView.setText("Them: " + formatList(daysWithMostMessages.getOrDefault(herChatId, new ArrayList<>())));
@@ -194,15 +226,253 @@ public class ResultsActivity extends AppCompatActivity {
                 yourLast10DaysTextView.setText("You: " + last10DaysCounts.getOrDefault(yourChatId, 0));
                 herLast10DaysTextView.setText("Them: " + last10DaysCounts.getOrDefault(herChatId, 0));
 
-                // Most Used Words
-                yourMostUsedWordsTextView.setText("You: " + formatMap(mostUsedWords.getOrDefault(yourChatId, new HashMap<>())));
-                herMostUsedWordsTextView.setText("Them: " + formatMap(mostUsedWords.getOrDefault(herChatId, new HashMap<>())));
 
-                // Most Used Emojis
-                yourMostUsedEmojisTextView.setText("You: " + formatMap(mostUsedEmojis.getOrDefault(yourChatId, new HashMap<>())));
-                herMostUsedEmojisTextView.setText("Them: " + formatMap(mostUsedEmojis.getOrDefault(herChatId, new HashMap<>())));
+
+                // Set up Most Used Words charts
+                setupMostUsedWordsChart(yourMostUsedWordsChart, mostUsedWords.getOrDefault(yourChatId, new HashMap<>()), "You");
+                setupMostUsedWordsChart(herMostUsedWordsChart, mostUsedWords.getOrDefault(herChatId, new HashMap<>()), "Them");
+
+                // Longest message
+                String yourLongestMessage = longestMessages.getOrDefault(yourChatId, "N/A");
+                yourlongestmesssage.setText("You: " + yourLongestMessage.length() + " characters");
+
+                String herLongestMessage = longestMessages.getOrDefault(herChatId, "N/A");
+                herlongestmesssage.setText("Them: " + herLongestMessage.length() + " characters");
+
+                // Set up Most Used Emojis charts
+                setupMostUsedEmojisChart(yourMostUsedEmojisChart, mostUsedEmojis.getOrDefault(yourChatId, new HashMap<>()), "You");
+                setupMostUsedEmojisChart(herMostUsedEmojisChart, mostUsedEmojis.getOrDefault(herChatId, new HashMap<>()), "Them");
+
+                // Set click listeners for the CardViews
+                CardView yourLongestMessageCard = findViewById(R.id.your_longest_message_card);
+                CardView herLongestMessageCard = findViewById(R.id.her_longest_message_card);
+
+                yourLongestMessageCard.setOnClickListener(v -> showOverlay(yourLongestMessage));
+                herLongestMessageCard.setOnClickListener(v -> showOverlay(herLongestMessage));
             });
         }).start();
+    }
+
+
+
+
+    // Helper method to set up the Messages per Month line chart
+    // Helper method to set up the Messages per Month line chart
+    // Helper method to set up the Messages per Month line chart
+    private void setupMessagesPerMonthLineChart(LineChart lineChart, Map<String, Integer> monthCounts, String label, int lineColor) {
+        // Create entries for the LineChart
+        ArrayList<Entry> entries = new ArrayList<>();
+        List<String> labels = new ArrayList<>();
+
+        // Get the last 12 months (or fewer if the conversation is shorter)
+        Calendar calendar = Calendar.getInstance();
+        SimpleDateFormat monthFormat = new SimpleDateFormat("MMM yyyy", Locale.US); // Use "MMM" for short month names
+
+        // Create a list of the last 12 months
+        List<String> last12Months = new ArrayList<>();
+        for (int i = 0; i < 12; i++) {
+            last12Months.add(monthFormat.format(calendar.getTime()));
+            calendar.add(Calendar.MONTH, -1); // Move to the previous month
+        }
+
+        // Reverse the list to show the oldest month first
+        Collections.reverse(last12Months);
+
+        // Add data to entries and labels
+        for (int i = 0; i < last12Months.size(); i++) {
+            String month = last12Months.get(i);
+            // Convert the month label to the format used in monthCounts (e.g., "January 2023")
+            SimpleDateFormat fullMonthFormat = new SimpleDateFormat("MMMM yyyy", Locale.US);
+            try {
+                Date date = monthFormat.parse(month);
+                String fullMonth = fullMonthFormat.format(date);
+
+                // Get the count for the month
+                int count = monthCounts.getOrDefault(fullMonth, 0);
+                entries.add(new Entry(i, count));
+                labels.add(month.substring(0, 3)); // Use only the first 3 letters of the month
+            } catch (ParseException e) {
+                e.printStackTrace();
+                // Handle the exception (e.g., log it or skip this month)
+            }
+        }
+
+        // Create a LineDataSet with the entries
+        LineDataSet dataSet = new LineDataSet(entries, label);
+        dataSet.setColor(lineColor); // Set line color
+        dataSet.setCircleColor(lineColor); // Set circle color
+        dataSet.setLineWidth(2f); // Set line width
+        dataSet.setCircleRadius(4f); // Set circle radius
+        dataSet.setValueTextSize(10f); // Set value text size
+
+        // Create a LineData object with the LineDataSet
+        LineData lineData = new LineData(dataSet);
+        lineChart.setData(lineData);
+
+        // Customize the chart
+        lineChart.getDescription().setEnabled(false); // Disable description
+        lineChart.setDrawGridBackground(false); // Disable grid background
+        lineChart.setTouchEnabled(true); // Enable touch interactions
+        lineChart.setDragEnabled(true); // Enable dragging
+        lineChart.setScaleEnabled(true); // Enable scaling
+        lineChart.setPinchZoom(true); // Enable pinch zoom
+
+        // Configure X-axis
+        XAxis xAxis = lineChart.getXAxis();
+        xAxis.setPosition(XAxis.XAxisPosition.BOTTOM); // Place X-axis at the bottom
+        xAxis.setGranularity(1f); // Set granularity to 1 month
+        xAxis.setValueFormatter(new IndexAxisValueFormatter(labels)); // Set month labels
+        xAxis.setLabelCount(labels.size(), true); // Show all month labels
+        xAxis.setDrawGridLines(false); // Disable grid lines for X-axis
+        xAxis.setLabelRotationAngle(90); // Rotate labels vertically
+        lineChart.setExtraBottomOffset(20f);
+
+        // Configure Y-axis
+        YAxis leftAxis = lineChart.getAxisLeft();
+        leftAxis.setAxisMinimum(0f); // Start Y-axis from 0
+        leftAxis.setGranularity(1f); // Set granularity to 1 message
+        leftAxis.setDrawGridLines(true); // Enable grid lines for Y-axis
+
+        YAxis rightAxis = lineChart.getAxisRight();
+        rightAxis.setEnabled(false); // Disable right Y-axis
+
+        // Disable the legend (if any)
+        lineChart.getLegend().setEnabled(true); // Enable legend to show the label
+
+        // Animate the chart
+        lineChart.animateY(1000); // Animate the chart vertically
+
+        // Refresh the chart
+        lineChart.invalidate();
+    }
+
+    // Helper method to set up the Most Used Words chart
+    private void setupMostUsedWordsChart(HorizontalBarChart barChart, Map<String, Integer> wordCounts, String label) {
+        // Create a list of BarEntry objects
+        List<BarEntry> barEntries = new ArrayList<>();
+        List<String> labels = new ArrayList<>();
+
+        // Sort the words by count (descending)
+        List<Map.Entry<String, Integer>> sortedWords = new ArrayList<>(wordCounts.entrySet());
+        sortedWords.sort((e1, e2) -> e2.getValue().compareTo(e1.getValue()));
+
+        // Take the top 10 words
+        for (int i = 0; i < Math.min(10, sortedWords.size()); i++) {
+            barEntries.add(new BarEntry(i, sortedWords.get(i).getValue()));
+            labels.add(sortedWords.get(i).getKey());
+        }
+
+        // Create a BarDataSet with the sorted entries
+        BarDataSet barDataSet = new BarDataSet(barEntries, label);
+        barDataSet.setColor(barChart == yourMostUsedWordsChart ? Color.parseColor("#1C3B9B") : Color.parseColor("#800080")); // Set bar color based on chart
+        barDataSet.setValueTextColor(Color.BLACK); // Set text color for values
+        barDataSet.setValueTextSize(12f); // Set text size for values
+
+        // Create a BarData object with the BarDataSet
+        BarData barData = new BarData(barDataSet);
+        barData.setBarWidth(0.5f); // Set the width of the bars
+        barChart.setData(barData);
+
+        // Customize the chart
+        barChart.getDescription().setEnabled(false); // Disable description
+        barChart.setDrawValueAboveBar(true); // Draw values above bars
+        barChart.setFitBars(true); // Make the bars fit the chart
+
+        // Configure X-axis (vertical axis in HorizontalBarChart)
+        XAxis xAxis = barChart.getXAxis();
+        xAxis.setPosition(XAxis.XAxisPosition.BOTTOM); // Place X-axis at the bottom
+        xAxis.setDrawGridLines(false); // Disable grid lines for X-axis
+        xAxis.setValueFormatter(new IndexAxisValueFormatter(labels)); // Set word labels
+        xAxis.setLabelCount(labels.size()); // Ensure all labels are shown
+        xAxis.setGranularity(1f); // Set granularity to 1 to avoid skipping labels
+        xAxis.setLabelRotationAngle(-45); // Rotate labels for better visibility
+        xAxis.setDrawLabels(true); // Enable word labels
+
+        // Add padding to the left axis to make space for the labels
+        barChart.setExtraLeftOffset(25f);
+        barChart.setExtraRightOffset(30f);
+
+        // Configure Y-axis (horizontal axis in HorizontalBarChart)
+        YAxis leftAxis = barChart.getAxisLeft();
+        leftAxis.setAxisMinimum(0f); // Start Y-axis from 0
+        leftAxis.setDrawLabels(false); // Disable Y-axis labels (0, 20, 40, ...)
+        leftAxis.setDrawGridLines(false); // Disable grid lines for Y-axis
+
+        YAxis rightAxis = barChart.getAxisRight();
+        rightAxis.setEnabled(false); // Disable right Y-axis
+
+        // Disable the legend (if any)
+        barChart.getLegend().setEnabled(false);
+
+        // Animate the chart
+        barChart.animateY(1000); // Animate the chart vertically
+
+        // Refresh the chart
+        barChart.invalidate();
+    }
+    // Helper method to set up the Most Used Emojis chart
+    private void setupMostUsedEmojisChart(HorizontalBarChart barChart, Map<String, Integer> emojiCounts, String label) {
+        // Create a list of BarEntry objects
+        List<BarEntry> barEntries = new ArrayList<>();
+        List<String> labels = new ArrayList<>();
+
+        // Sort the emojis by count (descending)
+        List<Map.Entry<String, Integer>> sortedEmojis = new ArrayList<>(emojiCounts.entrySet());
+        sortedEmojis.sort((e1, e2) -> e2.getValue().compareTo(e1.getValue()));
+
+        // Take the top 5 emojis
+        for (int i = 0; i < Math.min(5, sortedEmojis.size()); i++) {
+            barEntries.add(new BarEntry(i, sortedEmojis.get(i).getValue()));
+            labels.add(sortedEmojis.get(i).getKey());
+        }
+
+        // Create a BarDataSet with the sorted entries
+        BarDataSet barDataSet = new BarDataSet(barEntries, label);
+        barDataSet.setColor(barChart == yourMostUsedEmojisChart ? Color.parseColor("#1C3B9B") : Color.parseColor("#800080")); // Set bar color based on chart
+        barDataSet.setValueTextColor(Color.BLACK); // Set text color for values
+        barDataSet.setValueTextSize(12f); // Set text size for values
+
+        // Create a BarData object with the BarDataSet
+        BarData barData = new BarData(barDataSet);
+        barData.setBarWidth(0.5f); // Set the width of the bars
+        barChart.setData(barData);
+
+        // Customize the chart
+        barChart.getDescription().setEnabled(false); // Disable description
+        barChart.setDrawValueAboveBar(true); // Draw values above bars
+        barChart.setFitBars(true); // Make the bars fit the chart
+
+        // Configure X-axis (vertical axis in HorizontalBarChart)
+        XAxis xAxis = barChart.getXAxis();
+        xAxis.setPosition(XAxis.XAxisPosition.BOTTOM); // Place X-axis at the bottom
+        xAxis.setDrawGridLines(false); // Disable grid lines for X-axis
+        xAxis.setValueFormatter(new IndexAxisValueFormatter(labels)); // Set emoji labels
+        xAxis.setLabelCount(labels.size()); // Ensure all labels are shown
+        xAxis.setGranularity(1f); // Set granularity to 1 to avoid skipping labels
+
+        xAxis.setDrawLabels(true); // Enable emoji labels
+
+        // Add padding to the left axis to make space for the labels
+        barChart.setExtraLeftOffset(25f);
+        barChart.setExtraRightOffset(30f);
+
+        // Configure Y-axis (horizontal axis in HorizontalBarChart)
+        YAxis leftAxis = barChart.getAxisLeft();
+        leftAxis.setAxisMinimum(0f); // Start Y-axis from 0
+        leftAxis.setDrawLabels(false); // Disable Y-axis labels (0, 20, 40, ...)
+        leftAxis.setDrawGridLines(false); // Disable grid lines for Y-axis
+
+        YAxis rightAxis = barChart.getAxisRight();
+        rightAxis.setEnabled(false); // Disable right Y-axis
+
+        // Disable the legend (if any)
+        barChart.getLegend().setEnabled(false);
+
+        // Animate the chart
+        barChart.animateY(1000); // Animate the chart vertically
+
+        // Refresh the chart
+        barChart.invalidate();
     }
 
     // Helper method to format a Map into a readable string
@@ -272,8 +542,7 @@ public class ResultsActivity extends AppCompatActivity {
 
         // Add padding to the left axis to make space for the labels
         barChart.setExtraLeftOffset(25f);
-        barChart.setExtraRightOffset(25f);
-
+        barChart.setExtraRightOffset(30f);
 
         // Configure Y-axis (horizontal axis in HorizontalBarChart)
         YAxis leftAxis = barChart.getAxisLeft();
@@ -357,6 +626,30 @@ public class ResultsActivity extends AppCompatActivity {
         }
         return labels;
     }
+
+    // Method to show the overlay with the longest message
+    private void showOverlay(String longestMessage) {
+        BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(this);
+        View overlayView = getLayoutInflater().inflate(R.layout.overlay_longest_message, null);
+        bottomSheetDialog.setContentView(overlayView);
+
+        if (bottomSheetDialog.getWindow() != null) {
+            bottomSheetDialog.getWindow().setLayout(
+                    (int) (getResources().getDisplayMetrics().widthPixels * 0.8),
+                    (int) (getResources().getDisplayMetrics().heightPixels * 0.8)
+            );
+        }
+
+        TextView overlayText = overlayView.findViewById(R.id.overlay_longest_message_text);
+        overlayText.setText(longestMessage);
+
+        Button closeButton = overlayView.findViewById(R.id.close_button);
+        closeButton.setOnClickListener(v -> bottomSheetDialog.dismiss());
+
+        bottomSheetDialog.show();
+    }
+
+
 
     // Inner class to analyze chat data
     private static class ChatAnalyzer {
@@ -684,6 +977,32 @@ public class ResultsActivity extends AppCompatActivity {
                     (codePoint >= 0x1F900 && codePoint <= 0x1F9FF) || // Supplemental Symbols and Pictographs
                     (codePoint >= 0x1F1E6 && codePoint <= 0x1F1FF);   // Flags
         }
+
+        // 13. Get the longest message per user
+        public Map<Long, String> getLongestMessagePerUser() {
+            Map<Long, String> longestMessages = new HashMap<>();
+
+            // Regular expression to detect URLs
+            Pattern urlPattern = Pattern.compile("https?://\\S+");
+
+            for (ChatMessage message : messages) {
+                // Skip messages that contain a URL
+                Matcher matcher = urlPattern.matcher(message.content);
+                if (matcher.find()) {
+                    continue; // Skip this message if it contains a URL
+                }
+
+                // Get the current longest message for this user (default to empty string if not found)
+                String currentLongestMessage = longestMessages.getOrDefault(message.chatId, "");
+
+                // Check if the current message is longer
+                if (message.content.length() > currentLongestMessage.length()) {
+                    longestMessages.put(message.chatId, message.content);
+                }
+            }
+
+            return longestMessages;
+        }
     }
 
     // Inner class to represent a chat message
@@ -696,6 +1015,27 @@ public class ResultsActivity extends AppCompatActivity {
             this.date = date;
             this.chatId = chatId;
             this.content = content;
+        }
+    }
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        // Cancel the countdown if the user returns to the app
+        if (disconnectRunnable != null) {
+            handler.removeCallbacks(disconnectRunnable);
+            disconnectRunnable = null;
+            countdownTime = 3 * 60; // Reset the countdown time
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+
+        // Ensure the Handler is cleared when the activity is destroyed
+        if (disconnectRunnable != null) {
+            handler.removeCallbacks(disconnectRunnable);
         }
     }
 
@@ -737,25 +1077,4 @@ public class ResultsActivity extends AppCompatActivity {
         }
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-
-        // Cancel the countdown if the user returns to the app
-        if (disconnectRunnable != null) {
-            handler.removeCallbacks(disconnectRunnable);
-            disconnectRunnable = null;
-            countdownTime = 3 * 60; // Reset the countdown time
-        }
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-
-        // Ensure the Handler is cleared when the activity is destroyed
-        if (disconnectRunnable != null) {
-            handler.removeCallbacks(disconnectRunnable);
-        }
-    }
 }
