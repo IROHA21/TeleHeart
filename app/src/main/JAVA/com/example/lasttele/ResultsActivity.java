@@ -66,7 +66,6 @@ public class ResultsActivity extends AppCompatActivity {
     private HorizontalBarChart herDaysMostMessagesChart;
     private TextView yourLast10DaysTextView, herLast10DaysTextView;
 
-
     // Bar charts for most used words
     private HorizontalBarChart yourMostUsedWordsChart;
     private HorizontalBarChart herMostUsedWordsChart;
@@ -84,14 +83,14 @@ public class ResultsActivity extends AppCompatActivity {
     private LineChart yourHourOfDayLineChart;
     private LineChart herHourOfDayLineChart;
 
-
-
     // Bar charts for most used emojis
     private HorizontalBarChart yourMostUsedEmojisChart;
     private HorizontalBarChart herMostUsedEmojisChart;
 
     // Longest messages
     private TextView herlongestmesssage, yourlongestmesssage;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -112,6 +111,7 @@ public class ResultsActivity extends AppCompatActivity {
         herFavoriteEmojiTextView = findViewById(R.id.herFavoriteEmojiTextView);
         yourMediaFilesTextView = findViewById(R.id.yourMediaFilesTextView);
         herMediaFilesTextView = findViewById(R.id.herMediaFilesTextView);
+
         // Initialize number of links pie charts
         yourLinksPieChart = findViewById(R.id.yourLinksPieChart);
         herLinksPieChart = findViewById(R.id.herLinksPieChart);
@@ -132,21 +132,23 @@ public class ResultsActivity extends AppCompatActivity {
         yourMessagesPerMonthLineChart = findViewById(R.id.yourMessagesPerMonthLineChart);
         herMessagesPerMonthLineChart = findViewById(R.id.herMessagesPerMonthLineChart);
 
-// Initialize days with the most messages charts
+        // Initialize days with the most messages charts
         yourDaysMostMessagesChart = findViewById(R.id.yourDaysMostMessagesChart);
         herDaysMostMessagesChart = findViewById(R.id.herDaysMostMessagesChart);
 
-
         yourLast10DaysTextView = findViewById(R.id.yourLast10DaysTextView);
         herLast10DaysTextView = findViewById(R.id.herLast10DaysTextView);
+
         // Initialize most used words charts
         yourMostUsedWordsChart = findViewById(R.id.yourMostUsedWordsChart);
         herMostUsedWordsChart = findViewById(R.id.herMostUsedWordsChart);
 
-
         // Longest message
         herlongestmesssage = findViewById(R.id.herlongestmesssage);
         yourlongestmesssage = findViewById(R.id.yourlongestmesssage);
+
+        // Median answer time
+
 
         // Retrieve messages from the database in a background thread
         new Thread(() -> {
@@ -170,6 +172,7 @@ public class ResultsActivity extends AppCompatActivity {
             Map<Long, Map<String, Integer>> mostUsedWords = analyzer.getMostUsedWords();
             Map<Long, Map<String, Integer>> mostUsedEmojis = analyzer.getMostUsedEmojis();
             Map<Long, String> longestMessages = analyzer.getLongestMessagePerUser();
+
 
             // Debugging outputs
             System.out.println("Message Counts: " + messageCounts);
@@ -216,10 +219,9 @@ public class ResultsActivity extends AppCompatActivity {
                 herMediaFilesTextView.setText("Them: " + mediaCounts.getOrDefault(herChatId, 0));
 
                 // Set up Number of Links per User pie charts
-                // Set up Number of Links per User pie charts
-
                 setupLinksPieChart(yourLinksPieChart, linkCounts.getOrDefault(yourChatId, new HashMap<>()), "You");
                 setupLinksPieChart(herLinksPieChart, linkCounts.getOrDefault(herChatId, new HashMap<>()), "Them");
+
                 // Messages per Day of the Week
                 setupBarChart(yourBarChart, dayOfWeekCounts.getOrDefault(yourChatId, new HashMap<>()), "You");
                 setupBarChart(herBarChart, dayOfWeekCounts.getOrDefault(herChatId, new HashMap<>()), "Them");
@@ -231,15 +233,14 @@ public class ResultsActivity extends AppCompatActivity {
                 // Set up Messages per Month line charts
                 setupMessagesPerMonthLineChart(yourMessagesPerMonthLineChart, monthCounts.getOrDefault(yourChatId, new HashMap<>()), "You", Color.BLUE);
                 setupMessagesPerMonthLineChart(herMessagesPerMonthLineChart, monthCounts.getOrDefault(herChatId, new HashMap<>()), "Them", Color.parseColor("#800080"));
+
                 // Days with Most Messages
-                // Set up Days with the Most Messages charts
                 setupDaysMostMessagesChart(yourDaysMostMessagesChart, daysWithMostMessages.getOrDefault(yourChatId, new ArrayList<>()), "You");
                 setupDaysMostMessagesChart(herDaysMostMessagesChart, daysWithMostMessages.getOrDefault(herChatId, new ArrayList<>()), "Them");
+
                 // Messages in Last 10 Days
                 yourLast10DaysTextView.setText("You: " + last10DaysCounts.getOrDefault(yourChatId, 0));
                 herLast10DaysTextView.setText("Them: " + last10DaysCounts.getOrDefault(herChatId, 0));
-
-
 
                 // Set up Most Used Words charts
                 setupMostUsedWordsChart(yourMostUsedWordsChart, mostUsedWords.getOrDefault(yourChatId, new HashMap<>()), "You");
@@ -262,9 +263,12 @@ public class ResultsActivity extends AppCompatActivity {
 
                 yourLongestMessageCard.setOnClickListener(v -> showOverlay(yourLongestMessage));
                 herLongestMessageCard.setOnClickListener(v -> showOverlay(herLongestMessage));
+
             });
         }).start();
     }
+
+
 
     // Helper method to set up the Number of Links per User pie chart
     private void setupLinksPieChart(PieChart pieChart, Map<String, Integer> linkCounts, String label) {
@@ -407,6 +411,7 @@ public class ResultsActivity extends AppCompatActivity {
         // Refresh the chart
         barChart.invalidate();
     }
+
     // Helper method to set up the Messages per Month line chart
     private void setupMessagesPerMonthLineChart(LineChart lineChart, Map<String, Integer> monthCounts, String label, int lineColor) {
         // Create entries for the LineChart
@@ -559,6 +564,7 @@ public class ResultsActivity extends AppCompatActivity {
         // Refresh the chart
         barChart.invalidate();
     }
+
     // Helper method to set up the Most Used Emojis chart
     private void setupMostUsedEmojisChart(HorizontalBarChart barChart, Map<String, Integer> emojiCounts, String label) {
         // Create a list of BarEntry objects
@@ -598,7 +604,6 @@ public class ResultsActivity extends AppCompatActivity {
         xAxis.setValueFormatter(new IndexAxisValueFormatter(labels)); // Set emoji labels
         xAxis.setLabelCount(labels.size()); // Ensure all labels are shown
         xAxis.setGranularity(1f); // Set granularity to 1 to avoid skipping labels
-
         xAxis.setDrawLabels(true); // Enable emoji labels
 
         // Add padding to the left axis to make space for the labels
@@ -798,8 +803,6 @@ public class ResultsActivity extends AppCompatActivity {
         bottomSheetDialog.show();
     }
 
-
-
     // Inner class to analyze chat data
     private static class ChatAnalyzer {
         private final List<ChatMessage> messages;
@@ -916,7 +919,6 @@ public class ResultsActivity extends AppCompatActivity {
             return mediaCounts;
         }
 
-        // 5. Number of links per user
         // 5. Number of links per user, grouped by website
         public Map<Long, Map<String, Integer>> getNumberOfLinksPerUser() {
             Map<Long, Map<String, Integer>> linkCounts = new HashMap<>();
@@ -1156,37 +1158,8 @@ public class ResultsActivity extends AppCompatActivity {
 
             return longestMessages;
         }
-        // 14. Get the median message length and message length distribution
-        public Map<Long, Map<String, Integer>> getMessageLengthDistribution() {
-            Map<Long, Map<String, Integer>> messageLengthDistribution = new HashMap<>();
 
-            for (ChatMessage message : messages) {
-                // Skip media files and unwanted placeholders
-                if (message.content.equals("<Media/Non-text message>") || message.content.contains("message>")) {
-                    continue;
-                }
 
-                // Get the message length
-                int messageLength = message.content.length();
-
-                // Group message lengths into buckets (e.g., 0-10, 11-20, etc.)
-                String bucket = getMessageLengthBucket(messageLength);
-
-                // Update the distribution for the user
-                Map<String, Integer> userDistribution = messageLengthDistribution.getOrDefault(message.chatId, new HashMap<>());
-                userDistribution.put(bucket, userDistribution.getOrDefault(bucket, 0) + 1);
-                messageLengthDistribution.put(message.chatId, userDistribution);
-            }
-
-            return messageLengthDistribution;
-        }
-        // Helper method to group message lengths into buckets
-        private String getMessageLengthBucket(int messageLength) {
-            int bucketSize = 10; // Define the size of each bucket (e.g., 10 characters)
-            int lowerBound = (messageLength / bucketSize) * bucketSize;
-            int upperBound = lowerBound + bucketSize - 1;
-            return lowerBound + "-" + upperBound;
-        }
     }
 
     // Inner class to represent a chat message
@@ -1201,6 +1174,7 @@ public class ResultsActivity extends AppCompatActivity {
             this.content = content;
         }
     }
+
     @Override
     protected void onResume() {
         super.onResume();
@@ -1260,5 +1234,4 @@ public class ResultsActivity extends AppCompatActivity {
             handler.post(disconnectRunnable);
         }
     }
-
 }

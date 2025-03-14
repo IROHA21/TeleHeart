@@ -28,7 +28,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:columnCount="2"
-            android:rowCount="14"
+            android:rowCount="13"
             android:padding="4dp">
 
             <!-- Number of Messages -->
@@ -931,6 +931,7 @@
                         android:textSize="12sp"/>
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
+
 
 
         </GridLayout>
