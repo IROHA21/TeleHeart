@@ -407,11 +407,12 @@
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
 
-            <!-- Messages per Hour of the Day -->
+            <!-- Number of Links per User -->
             <androidx.cardview.widget.CardView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_columnWeight="1"
+                android:layout_columnSpan="2"
                 android:layout_margin="4dp"
                 app:cardCornerRadius="8dp"
                 app:cardElevation="4dp">
@@ -425,18 +426,15 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Number of Links Shared"
+                        android:text="Number of Links per User"
                         android:textSize="14sp"
                         android:textStyle="bold" />
 
-                    <TextView
-                        android:id="@+id/yourLinksTextView"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="you : N/A"
-                        android:textSize="12sp" />
-
-
+                    <!-- PieChart for Number of Links per User -->
+                    <com.github.mikephil.charting.charts.PieChart
+                        android:id="@+id/yourLinksPieChart"
+                        android:layout_width="match_parent"
+                        android:layout_height="400dp" /> <!-- Adjust height as needed -->
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
 
@@ -444,6 +442,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_columnWeight="1"
+                android:layout_columnSpan="2"
                 android:layout_margin="4dp"
                 app:cardCornerRadius="8dp"
                 app:cardElevation="4dp">
@@ -457,18 +456,15 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Number of Links Shared"
+                        android:text="Number of Links per User"
                         android:textSize="14sp"
                         android:textStyle="bold" />
 
-
-
-                    <TextView
-                        android:id="@+id/herLinksTextView"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="them : N/A"
-                        android:textSize="12sp" />
+                    <!-- PieChart for Number of Links per User -->
+                    <com.github.mikephil.charting.charts.PieChart
+                        android:id="@+id/herLinksPieChart"
+                        android:layout_width="match_parent"
+                        android:layout_height="400dp" /> <!-- Adjust height as needed -->
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
 
@@ -604,7 +600,7 @@
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
 
-            <!-- Days with Most Messages -->
+            <!-- Days with the Most Messages -->
             <androidx.cardview.widget.CardView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -622,18 +618,15 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Days with Most Messages"
+                        android:text="Days with the Most Messages"
                         android:textSize="14sp"
                         android:textStyle="bold" />
 
-                    <TextView
-                        android:id="@+id/yourDaysMostMessagesTextView"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="you : N/A"
-                        android:textSize="12sp" />
-
-
+                    <!-- HorizontalBarChart for Days with the Most Messages -->
+                    <com.github.mikephil.charting.charts.HorizontalBarChart
+                        android:id="@+id/yourDaysMostMessagesChart"
+                        android:layout_width="match_parent"
+                        android:layout_height="200dp" /> <!-- Adjust height as needed -->
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
 
@@ -654,19 +647,15 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Days with Most Messages"
-                        android:textStyle="bold"
-                        android:textSize="14sp"/>
+                        android:text="Days with the Most Messages"
+                        android:textSize="14sp"
+                        android:textStyle="bold" />
 
-
-
-
-                    <TextView
-                        android:id="@+id/herDaysMostMessagesTextView"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="them : N/A"
-                        android:textSize="12sp"/>
+                    <!-- HorizontalBarChart for Days with the Most Messages -->
+                    <com.github.mikephil.charting.charts.HorizontalBarChart
+                        android:id="@+id/herDaysMostMessagesChart"
+                        android:layout_width="match_parent"
+                        android:layout_height="200dp" /> <!-- Adjust height as needed -->
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
 

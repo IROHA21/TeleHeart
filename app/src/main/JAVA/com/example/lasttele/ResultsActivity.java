@@ -17,6 +17,8 @@ import com.chaquo.python.PyObject;
 import com.chaquo.python.Python;
 import com.github.mikephil.charting.charts.HorizontalBarChart;
 import com.github.mikephil.charting.charts.LineChart;
+import com.github.mikephil.charting.charts.PieChart;
+import com.github.mikephil.charting.components.Legend;
 import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.BarData;
@@ -25,6 +27,9 @@ import com.github.mikephil.charting.data.BarEntry;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
+import com.github.mikephil.charting.data.PieData;
+import com.github.mikephil.charting.data.PieDataSet;
+import com.github.mikephil.charting.data.PieEntry;
 import com.github.mikephil.charting.formatter.IndexAxisValueFormatter;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 
@@ -50,11 +55,15 @@ public class ResultsActivity extends AppCompatActivity {
     private TextView yourAverageTimeTextView, herAverageTimeTextView;
     private TextView yourFavoriteEmojiTextView, herFavoriteEmojiTextView;
     private TextView yourMediaFilesTextView, herMediaFilesTextView;
-    private TextView yourLinksTextView, herLinksTextView;
+    // Pie charts for number of links per user
+    private PieChart yourLinksPieChart;
+    private PieChart herLinksPieChart;
     // Line charts for messages per month
     private LineChart yourMessagesPerMonthLineChart;
     private LineChart herMessagesPerMonthLineChart;
-    private TextView yourDaysMostMessagesTextView, herDaysMostMessagesTextView;
+    // Bar charts for days with the most messages
+    private HorizontalBarChart yourDaysMostMessagesChart;
+    private HorizontalBarChart herDaysMostMessagesChart;
     private TextView yourLast10DaysTextView, herLast10DaysTextView;
 
 
@@ -103,8 +112,9 @@ public class ResultsActivity extends AppCompatActivity {
         herFavoriteEmojiTextView = findViewById(R.id.herFavoriteEmojiTextView);
         yourMediaFilesTextView = findViewById(R.id.yourMediaFilesTextView);
         herMediaFilesTextView = findViewById(R.id.herMediaFilesTextView);
-        yourLinksTextView = findViewById(R.id.yourLinksTextView);
-        herLinksTextView = findViewById(R.id.herLinksTextView);
+        // Initialize number of links pie charts
+        yourLinksPieChart = findViewById(R.id.yourLinksPieChart);
+        herLinksPieChart = findViewById(R.id.herLinksPieChart);
 
         // Initialize bar charts
         yourBarChart = findViewById(R.id.yourbarcharts);
@@ -122,9 +132,11 @@ public class ResultsActivity extends AppCompatActivity {
         yourMessagesPerMonthLineChart = findViewById(R.id.yourMessagesPerMonthLineChart);
         herMessagesPerMonthLineChart = findViewById(R.id.herMessagesPerMonthLineChart);
 
+// Initialize days with the most messages charts
+        yourDaysMostMessagesChart = findViewById(R.id.yourDaysMostMessagesChart);
+        herDaysMostMessagesChart = findViewById(R.id.herDaysMostMessagesChart);
 
-        yourDaysMostMessagesTextView = findViewById(R.id.yourDaysMostMessagesTextView);
-        herDaysMostMessagesTextView = findViewById(R.id.herDaysMostMessagesTextView);
+
         yourLast10DaysTextView = findViewById(R.id.yourLast10DaysTextView);
         herLast10DaysTextView = findViewById(R.id.herLast10DaysTextView);
         // Initialize most used words charts
@@ -149,7 +161,7 @@ public class ResultsActivity extends AppCompatActivity {
             Map<Long, Long> averageTimes = analyzer.getAverageTimeToAnswer();
             Map<Long, String> favoriteEmojis = analyzer.getFavoriteEmojiPerUser();
             Map<Long, Integer> mediaCounts = analyzer.getNumberOfMediaFilesPerUser();
-            Map<Long, Integer> linkCounts = analyzer.getNumberOfLinksPerUser();
+            Map<Long, Map<String, Integer>> linkCounts = analyzer.getNumberOfLinksPerUser();
             Map<Long, Map<String, Integer>> dayOfWeekCounts = analyzer.getMessagesPerDayOfWeek();
             Map<Long, Map<Integer, Integer>> hourOfDayCounts = analyzer.getMessagesPerHourOfDay();
             Map<Long, Map<String, Integer>> monthCounts = analyzer.getMessagesPerMonth();
@@ -203,10 +215,11 @@ public class ResultsActivity extends AppCompatActivity {
                 yourMediaFilesTextView.setText("You: " + mediaCounts.getOrDefault(yourChatId, 0));
                 herMediaFilesTextView.setText("Them: " + mediaCounts.getOrDefault(herChatId, 0));
 
-                // Number of Links
-                yourLinksTextView.setText("You: " + linkCounts.getOrDefault(yourChatId, 0));
-                herLinksTextView.setText("Them: " + linkCounts.getOrDefault(herChatId, 0));
+                // Set up Number of Links per User pie charts
+                // Set up Number of Links per User pie charts
 
+                setupLinksPieChart(yourLinksPieChart, linkCounts.getOrDefault(yourChatId, new HashMap<>()), "You");
+                setupLinksPieChart(herLinksPieChart, linkCounts.getOrDefault(herChatId, new HashMap<>()), "Them");
                 // Messages per Day of the Week
                 setupBarChart(yourBarChart, dayOfWeekCounts.getOrDefault(yourChatId, new HashMap<>()), "You");
                 setupBarChart(herBarChart, dayOfWeekCounts.getOrDefault(herChatId, new HashMap<>()), "Them");
@@ -219,9 +232,9 @@ public class ResultsActivity extends AppCompatActivity {
                 setupMessagesPerMonthLineChart(yourMessagesPerMonthLineChart, monthCounts.getOrDefault(yourChatId, new HashMap<>()), "You", Color.BLUE);
                 setupMessagesPerMonthLineChart(herMessagesPerMonthLineChart, monthCounts.getOrDefault(herChatId, new HashMap<>()), "Them", Color.parseColor("#800080"));
                 // Days with Most Messages
-                yourDaysMostMessagesTextView.setText("You: " + formatList(daysWithMostMessages.getOrDefault(yourChatId, new ArrayList<>())));
-                herDaysMostMessagesTextView.setText("Them: " + formatList(daysWithMostMessages.getOrDefault(herChatId, new ArrayList<>())));
-
+                // Set up Days with the Most Messages charts
+                setupDaysMostMessagesChart(yourDaysMostMessagesChart, daysWithMostMessages.getOrDefault(yourChatId, new ArrayList<>()), "You");
+                setupDaysMostMessagesChart(herDaysMostMessagesChart, daysWithMostMessages.getOrDefault(herChatId, new ArrayList<>()), "Them");
                 // Messages in Last 10 Days
                 yourLast10DaysTextView.setText("You: " + last10DaysCounts.getOrDefault(yourChatId, 0));
                 herLast10DaysTextView.setText("Them: " + last10DaysCounts.getOrDefault(herChatId, 0));
@@ -253,11 +266,147 @@ public class ResultsActivity extends AppCompatActivity {
         }).start();
     }
 
+    // Helper method to set up the Number of Links per User pie chart
+    private void setupLinksPieChart(PieChart pieChart, Map<String, Integer> linkCounts, String label) {
+        // Create a list of PieEntry objects
+        List<PieEntry> pieEntries = new ArrayList<>();
 
+        // Sort the links by count (descending)
+        List<Map.Entry<String, Integer>> sortedLinks = new ArrayList<>(linkCounts.entrySet());
+        sortedLinks.sort((e1, e2) -> e2.getValue().compareTo(e1.getValue())); // Sort by count (descending)
 
+        // Add data to pieEntries (top 5 websites)
+        for (int i = 0; i < Math.min(5, sortedLinks.size()); i++) {
+            Map.Entry<String, Integer> entry = sortedLinks.get(i);
+            pieEntries.add(new PieEntry(entry.getValue(), entry.getKey())); // Add website and count
+        }
 
-    // Helper method to set up the Messages per Month line chart
-    // Helper method to set up the Messages per Month line chart
+        // Create a PieDataSet with the entries
+        PieDataSet pieDataSet = new PieDataSet(pieEntries, label);
+
+        // Define a custom color array with more unique colors
+        int[] customColors = {
+                Color.rgb(255, 102, 102), // Light red
+                Color.rgb(102, 178, 255), // Light blue
+                Color.rgb(255, 178, 102), // Light orange
+                Color.rgb(102, 255, 178), // Light green
+                Color.rgb(178, 102, 255), // Light purple
+                Color.rgb(255, 255, 102), // Light yellow
+                Color.rgb(102, 255, 255), // Light cyan
+                Color.rgb(255, 102, 255)  // Light magenta
+        };
+
+        // Use the custom colors for the PieDataSet
+        pieDataSet.setColors(customColors);
+
+        pieDataSet.setValueTextColor(Color.BLACK); // Set text color for values
+        pieDataSet.setValueTextSize(12f); // Set text size for values
+
+        // Create a PieData object with the PieDataSet
+        PieData pieData = new PieData(pieDataSet);
+        pieChart.setData(pieData);
+
+        // Customize the chart
+        pieChart.getDescription().setEnabled(false); // Disable description
+        pieChart.setDrawHoleEnabled(true); // Enable a hole in the center of the pie chart
+        pieChart.setHoleRadius(30f); // Set the radius of the hole
+        pieChart.setTransparentCircleRadius(35f); // Set the radius of the transparent circle
+        pieChart.setEntryLabelColor(Color.BLACK); // Set the color of the entry labels
+        pieChart.setEntryLabelTextSize(12f); // Set the size of the entry labels
+
+        // Configure the legend
+        Legend legend = pieChart.getLegend();
+        legend.setVerticalAlignment(Legend.LegendVerticalAlignment.BOTTOM);
+        legend.setHorizontalAlignment(Legend.LegendHorizontalAlignment.CENTER);
+        legend.setOrientation(Legend.LegendOrientation.HORIZONTAL);
+        legend.setDrawInside(false); // Draw the legend outside the chart
+        legend.setXEntrySpace(7f); // Set the space between legend entries
+        legend.setYEntrySpace(0f); // Set the space between legend rows
+        legend.setYOffset(10f); // Set the vertical offset of the legend
+
+        // Animate the chart
+        pieChart.animateY(1000); // Animate the chart vertically
+
+        // Refresh the chart
+        pieChart.invalidate();
+    }
+
+    // Helper method to extract the website category from a link
+    private String extractWebsiteCategory(String link) {
+        try {
+            // Extract the host (e.g., www.ozon.ru) from the link
+            java.net.URI uri = new java.net.URI(link);
+            String host = uri.getHost();
+            if (host != null) {
+                return host.startsWith("www.") ? host.substring(4) : host; // Remove "www." if present
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return "Unknown"; // Default category if the link is invalid
+    }
+
+    // Helper method to set up the Days with the Most Messages bar chart
+    private void setupDaysMostMessagesChart(HorizontalBarChart barChart, List<Map.Entry<String, Integer>> daysWithMostMessages, String label) {
+        // Create a list of BarEntry objects
+        List<BarEntry> barEntries = new ArrayList<>();
+        List<String> labels = new ArrayList<>();
+
+        // Add data to barEntries and labels
+        for (int i = 0; i < daysWithMostMessages.size(); i++) {
+            Map.Entry<String, Integer> entry = daysWithMostMessages.get(i);
+            barEntries.add(new BarEntry(i, entry.getValue()));
+            labels.add(entry.getKey()); // Use the date as the label
+        }
+
+        // Create a BarDataSet with the sorted entries
+        BarDataSet barDataSet = new BarDataSet(barEntries, label);
+        barDataSet.setColor(barChart == yourDaysMostMessagesChart ? Color.parseColor("#1C3B9B") : Color.parseColor("#800080")); // Set bar color based on chart
+        barDataSet.setValueTextColor(Color.BLACK); // Set text color for values
+        barDataSet.setValueTextSize(12f); // Set text size for values
+
+        // Create a BarData object with the BarDataSet
+        BarData barData = new BarData(barDataSet);
+        barData.setBarWidth(0.4f); // Set the width of the bars
+        barChart.setData(barData);
+
+        // Customize the chart
+        barChart.getDescription().setEnabled(false); // Disable description
+        barChart.setDrawValueAboveBar(true); // Draw values above bars
+        barChart.setFitBars(true); // Make the bars fit the chart
+
+        // Configure X-axis (vertical axis in HorizontalBarChart)
+        XAxis xAxis = barChart.getXAxis();
+        xAxis.setPosition(XAxis.XAxisPosition.BOTTOM); // Place X-axis at the bottom
+        xAxis.setDrawGridLines(false); // Disable grid lines for X-axis
+        xAxis.setValueFormatter(new IndexAxisValueFormatter(labels)); // Set date labels
+        xAxis.setLabelCount(labels.size()); // Ensure all labels are shown
+        xAxis.setGranularity(1f); // Set granularity to 1 to avoid skipping labels
+        xAxis.setLabelRotationAngle(-45); // Rotate labels for better visibility
+        xAxis.setDrawLabels(true); // Enable date labels
+
+        // Add padding to the left axis to make space for the labels
+        barChart.setExtraLeftOffset(25f);
+        barChart.setExtraRightOffset(30f);
+
+        // Configure Y-axis (horizontal axis in HorizontalBarChart)
+        YAxis leftAxis = barChart.getAxisLeft();
+        leftAxis.setAxisMinimum(0f); // Start Y-axis from 0
+        leftAxis.setDrawLabels(false); // Disable Y-axis labels (0, 20, 40, ...)
+        leftAxis.setDrawGridLines(false); // Disable grid lines for Y-axis
+
+        YAxis rightAxis = barChart.getAxisRight();
+        rightAxis.setEnabled(false); // Disable right Y-axis
+
+        // Disable the legend (if any)
+        barChart.getLegend().setEnabled(false);
+
+        // Animate the chart
+        barChart.animateY(1000); // Animate the chart vertically
+
+        // Refresh the chart
+        barChart.invalidate();
+    }
     // Helper method to set up the Messages per Month line chart
     private void setupMessagesPerMonthLineChart(LineChart lineChart, Map<String, Integer> monthCounts, String label, int lineColor) {
         // Create entries for the LineChart
@@ -768,14 +917,18 @@ public class ResultsActivity extends AppCompatActivity {
         }
 
         // 5. Number of links per user
-        public Map<Long, Integer> getNumberOfLinksPerUser() {
-            Map<Long, Integer> linkCounts = new HashMap<>();
-            Pattern linkPattern = Pattern.compile("https?://\\S+");
+        // 5. Number of links per user, grouped by website
+        public Map<Long, Map<String, Integer>> getNumberOfLinksPerUser() {
+            Map<Long, Map<String, Integer>> linkCounts = new HashMap<>();
+            Pattern linkPattern = Pattern.compile("https?://([^/]+)"); // Extract the domain part of the URL
 
             for (ChatMessage message : messages) {
                 Matcher matcher = linkPattern.matcher(message.content);
                 while (matcher.find()) {
-                    linkCounts.put(message.chatId, linkCounts.getOrDefault(message.chatId, 0) + 1);
+                    String domain = matcher.group(1); // Extract the domain (e.g., www.ozon.ru)
+                    Map<String, Integer> userLinkCounts = linkCounts.getOrDefault(message.chatId, new HashMap<>());
+                    userLinkCounts.put(domain, userLinkCounts.getOrDefault(domain, 0) + 1);
+                    linkCounts.put(message.chatId, userLinkCounts);
                 }
             }
 
