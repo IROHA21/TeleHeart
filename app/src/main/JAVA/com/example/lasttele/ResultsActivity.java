@@ -1156,6 +1156,37 @@ public class ResultsActivity extends AppCompatActivity {
 
             return longestMessages;
         }
+        // 14. Get the median message length and message length distribution
+        public Map<Long, Map<String, Integer>> getMessageLengthDistribution() {
+            Map<Long, Map<String, Integer>> messageLengthDistribution = new HashMap<>();
+
+            for (ChatMessage message : messages) {
+                // Skip media files and unwanted placeholders
+                if (message.content.equals("<Media/Non-text message>") || message.content.contains("message>")) {
+                    continue;
+                }
+
+                // Get the message length
+                int messageLength = message.content.length();
+
+                // Group message lengths into buckets (e.g., 0-10, 11-20, etc.)
+                String bucket = getMessageLengthBucket(messageLength);
+
+                // Update the distribution for the user
+                Map<String, Integer> userDistribution = messageLengthDistribution.getOrDefault(message.chatId, new HashMap<>());
+                userDistribution.put(bucket, userDistribution.getOrDefault(bucket, 0) + 1);
+                messageLengthDistribution.put(message.chatId, userDistribution);
+            }
+
+            return messageLengthDistribution;
+        }
+        // Helper method to group message lengths into buckets
+        private String getMessageLengthBucket(int messageLength) {
+            int bucketSize = 10; // Define the size of each bucket (e.g., 10 characters)
+            int lowerBound = (messageLength / bucketSize) * bucketSize;
+            int upperBound = lowerBound + bucketSize - 1;
+            return lowerBound + "-" + upperBound;
+        }
     }
 
     // Inner class to represent a chat message
