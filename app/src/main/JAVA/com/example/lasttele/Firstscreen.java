@@ -33,6 +33,10 @@ public class Firstscreen extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.animated_background);
 
+
+        Intent serviceIntent = new Intent(this, MyService.class);
+        startService(serviceIntent);
+
         // Initialize ImageViews
         white1 = findViewById(R.id.white1);
         blue1 = findViewById(R.id.blue1);

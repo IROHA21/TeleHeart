@@ -82,7 +82,9 @@ async def get_convo(selectedContactId, quantity):
         if client is None:
             client = TelegramClient(SESSION_FILE, API_ID, API_HASH, loop=loop)
 
-        await client.connect()
+        # Ensure the client is connected
+        if not client.is_connected():
+            await client.connect()
 
         if not await client.is_user_authorized():
             return {"error": "Client not authorized. Please log in first."}
@@ -91,10 +93,8 @@ async def get_convo(selectedContactId, quantity):
         intquna = int(quantity)
         messages = await client.get_messages(target, limit=intquna)
 
-
         me = await client.get_me()
         user_id = me.id
-
 
         messagess.clear()
 
@@ -108,8 +108,6 @@ async def get_convo(selectedContactId, quantity):
 
     except Exception as e:
         return {"error": f"Error: {str(e)}"}
-
-
 
 # Function to disconnect all sessions
 
@@ -133,6 +131,31 @@ async def terminate_and_disconnect_async():
 
     except Exception as e:
         print(f"Error: {str(e)}")
+
+
+
+def get_user_id_sync():
+    global user_id, client
+
+    try:
+        if client is None:
+            client = TelegramClient(SESSION_FILE, API_ID, API_HASH, loop=loop)
+
+        # Ensure the client is connected
+        if not client.is_connected():
+            loop.run_until_complete(client.connect())
+
+        if not loop.run_until_complete(client.is_user_authorized()):
+            return None
+
+        me = loop.run_until_complete(client.get_me())
+        user_id = me.id
+        print(f"get_user_id_sync: user_id = {user_id}")
+        return user_id
+
+    except Exception as e:
+        print(f"Error in get_user_id_sync: {str(e)}")
+        return None
 
 def phoneNumber(phone):
     return loop.run_until_complete(send_otp_async(phone))
@@ -163,10 +186,7 @@ async def disconnect_client_async():
 def disconnect_client():
     loop.run_until_complete(disconnect_client_async())
 
-def get_user_id_sync():
-    global user_id
-    print(f"get_user_id_sync: user_id = {user_id}")
-    return user_id
+
 
 def terminate_and_disconnect():
     return loop.run_until_complete(terminate_and_disconnect_async())

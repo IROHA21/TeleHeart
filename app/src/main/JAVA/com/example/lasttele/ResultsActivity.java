@@ -121,10 +121,10 @@ public class ResultsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.results_screen);
 
-        Intent intent3 = getIntent();
-        switcher = intent3.getBooleanExtra("switcher", false);
 
-        System.out.println("switcher check inside of result : " + switcher);
+
+
+
 
         // Initialize TextViews
         yourMessagesTextView = findViewById(R.id.yourMessagesTextView);
@@ -260,6 +260,8 @@ public class ResultsActivity extends AppCompatActivity {
                 // Assuming chatId 1 is "You" and chatId 2 is "Her"
                 Intent intent = getIntent();
                 String selectedContactId = intent.getStringExtra("selectedContactId");
+                switcher = intent.getBooleanExtra("switcher", false);
+                System.out.println("switcher check inside of result : " + switcher);
                 long selectedContactId2 = Long.parseLong(selectedContactId);
 
                 long herChatId = selectedContactId2;
@@ -1786,4 +1788,7 @@ public class ResultsActivity extends AppCompatActivity {
             handler.post(disconnectRunnable);
         }
     }
+
+
+
 }

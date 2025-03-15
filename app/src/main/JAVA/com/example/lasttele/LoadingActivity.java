@@ -85,6 +85,7 @@ public class LoadingActivity extends AppCompatActivity {
             Intent intent = new Intent(LoadingActivity.this, ResultsActivity.class);
             intent.putExtra("selectedContactId", selectedContactId); // Pass the contact ID
             intent.putExtra("user_id", userId); // Pass the user ID
+            intent.putExtra("switcher", switcher); // Pass the user ID
             startActivity(intent);
             isResultActivityStarted = true;
             finish();

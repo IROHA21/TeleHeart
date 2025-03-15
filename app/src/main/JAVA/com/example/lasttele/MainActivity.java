@@ -21,24 +21,21 @@ import com.chaquo.python.android.AndroidPlatform;
 
 public class MainActivity extends AppCompatActivity {
 
-    EditText editTextPhone2, editTextCode;
-    SwitchCompat switch1;
-
-    boolean switcher;
-
-
+    private EditText editTextPhone2, editTextCode;
+    private SwitchCompat switch1;
+    private boolean switcher;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        switcher  = false;
+
         // Initialize Python environment
         if (!Python.isStarted()) {
             Python.start(new AndroidPlatform(this));
         }
 
-
+        // Initialize views
         editTextPhone2 = findViewById(R.id.editTextPhone2);
         switch1 = findViewById(R.id.switch1);
         editTextCode = findViewById(R.id.codeid);
@@ -49,10 +46,8 @@ public class MainActivity extends AppCompatActivity {
         Button verifyid = findViewById(R.id.verifyid);
         verifyid.setOnClickListener(this::onCodeClick);
 
-
-
-
-
+        // Initialize switcher
+        switcher = false;
     }
 
     public void onBtnClick(View view) {
@@ -62,174 +57,135 @@ public class MainActivity extends AppCompatActivity {
 
         if (phone.isEmpty()) {
             Toast.makeText(this, "Please enter a phone number!", Toast.LENGTH_SHORT).show();
-            progressBar.setVisibility(View.INVISIBLE); // Hide progress bar if phone is empty
+            progressBar.setVisibility(View.INVISIBLE);
             return;
         }
 
-        if (switch1.isChecked()) {
-            // If the switch is on, save the current phone number to SharedPreferences
-            switcher = true;
-        }
+        // Update switcher based on switch state
+        switcher = switch1.isChecked();
 
-        // Create and start a HandlerThread for background work
+        // Save switcher to SharedPreferences
+        SharedPreferences sharedPreferences = getSharedPreferences("MyAppPrefs", MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putBoolean("switcher", switcher);
+        editor.apply();
+
+        // Start the service with the switcher value
+        Intent serviceIntent = new Intent(this, MyService.class);
+        serviceIntent.putExtra("switcher", switcher);
+        startService(serviceIntent);
+
+        // Background task to handle session and OTP
         HandlerThread handlerThread = new HandlerThread("BackgroundThread");
         handlerThread.start();
-
-        // Create a Handler associated with the HandlerThread's Looper
         Handler backgroundHandler = new Handler(handlerThread.getLooper());
 
-        // Post the background work to the HandlerThread
         backgroundHandler.post(() -> {
             Python py = Python.getInstance();
             PyObject pyObj = py.getModule("helloworld");
 
-            // Get the internal storage path
+            // Set session path
             String internalStoragePath = getFilesDir().getAbsolutePath();
-
-            // Set the session file path based on the phone number
             String sessionFilePath = internalStoragePath + "/session_" + phone;
             pyObj.callAttr("set_session_path", sessionFilePath);
 
-            // Retrieve the previous phone number from SharedPreferences
-            SharedPreferences sharedPreferences = getSharedPreferences("MyAppPrefs", MODE_PRIVATE);
+            // Restore session if phone number matches
             String previousPhoneNumber = sharedPreferences.getString("last_phone_number", "");
-
-            // Check if the entered phone number matches the previous phone number
             if (phone.equals(previousPhoneNumber)) {
-                // If the phone numbers match, restore the session
                 PyObject restoreResult = pyObj.callAttr("restoreSession");
 
-                // Post UI updates to the main thread
                 new Handler(Looper.getMainLooper()).post(() -> {
-                    System.out.println("check in : " + "Session Restore Result: " + restoreResult);
                     if (!restoreResult.toString().equals("Error: The key is not registered in the system (caused by GetDialogsRequest)")) {
-                        Toast.makeText(MainActivity.this, "Session Restore Result: " + restoreResult.toString(), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(this, "Session Restore Result: " + restoreResult.toString(), Toast.LENGTH_SHORT).show();
                     }
 
-
-                    // If the session is already authorized, skip OTP and go to ContactsActivity
                     if (restoreResult.toString().equals("Session restored. Already authorized.")) {
-                        System.out.println("switcher check : " + switcher);
                         Intent intent = new Intent(MainActivity.this, ContactsActivity.class);
-                        intent.putExtra("switcher", switcher); // Pass the user ID
+                        intent.putExtra("switcher", switcher);
                         startActivity(intent);
-                        finish(); // Optional: Closes the current activity so user can't go back with back button
-                        handlerThread.quit(); // Quit the HandlerThread
-                        return; // Exit the method to avoid sending OTP unnecessarily
+                        finish();
+                        handlerThread.quit();
+                        return;
                     }
                 });
-            } else {
-                // If the phone numbers don't match, inform the user
-                new Handler(Looper.getMainLooper()).post(() -> {
-                    System.out.println("Phone number does not match the previous one. Sending OTP to the new number.");
-
-                });
             }
 
-            // Check the state of the switch
-            if (switch1.isChecked()) {
-                // If the switch is on, save the current phone number to SharedPreferences
-                SharedPreferences.Editor editor = sharedPreferences.edit();
+            // Save or clear phone number based on switch state
+            if (switcher) {
                 editor.putString("last_phone_number", phone);
-                editor.apply();
             } else {
-                // If the switch is off, clear the saved phone number (optional)
-                SharedPreferences.Editor editor = sharedPreferences.edit();
                 editor.remove("last_phone_number");
-                editor.apply();
             }
+            editor.apply();
 
-            // Call the Python function to send OTP
+            // Send OTP
             PyObject result = pyObj.callAttr("phoneNumber", phone);
 
-            // Post the result to the main thread
             new Handler(Looper.getMainLooper()).post(() -> {
-                Toast.makeText(MainActivity.this, "OTP Result: " + result.toString(), Toast.LENGTH_SHORT).show();
-                System.out.println("check in 2 : " + "OTP Result: " + result);
-                String resultString = result.toString();
-                System.out.println("before" + resultString);
-                String check = "Code sent check your telegram";
+                Toast.makeText(this, "OTP Result: " + result.toString(), Toast.LENGTH_SHORT).show();
 
-                if (resultString.equals(check)) {
-                    progressBar.setVisibility(View.INVISIBLE);
-                }
-
-                if (resultString.equals("Already authorized. No need for OTP.")) {
-                    System.out.println("switcher check no need: " + switcher);
+                if (result.toString().equals("Already authorized. No need for OTP.")) {
                     Intent intent = new Intent(MainActivity.this, ContactsActivity.class);
-                    intent.putExtra("switcher", switcher); // Pass the user ID
+                    intent.putExtra("switcher", switcher);
                     startActivity(intent);
-                    finish(); // Optional: Closes the current activity so user can't go back with back button
+                    finish();
                 }
 
-                handlerThread.quit(); // Quit the HandlerThread after all work is done
+                handlerThread.quit();
             });
         });
     }
 
     public void onCodeClick(View view) {
         ProgressBar progressBar = findViewById(R.id.progressBar2);
-        progressBar.setVisibility(View.VISIBLE); // Show the progress bar
-
-        if (switch1.isChecked()) {
-            // If the switch is on, save the current phone number to SharedPreferences
-            switcher = true;
-        }
+        progressBar.setVisibility(View.VISIBLE);
 
         String phone = editTextPhone2.getText().toString().trim();
         String code = editTextCode.getText().toString().trim();
 
         if (code.isEmpty()) {
             Toast.makeText(this, "Please enter the code you received.", Toast.LENGTH_SHORT).show();
-            progressBar.setVisibility(View.INVISIBLE); // Hide progress bar if code is empty
+            progressBar.setVisibility(View.INVISIBLE);
             return;
         }
 
-        // Create and start a HandlerThread for background work
+        // Update switcher based on switch state
+        switcher = switch1.isChecked();
+
+        // Save switcher to SharedPreferences
+        SharedPreferences sharedPreferences = getSharedPreferences("MyAppPrefs", MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putBoolean("switcher", switcher);
+        editor.apply();
+
+        // Start the service with the switcher value
+        Intent serviceIntent = new Intent(this, MyService.class);
+        serviceIntent.putExtra("switcher", switcher);
+        startService(serviceIntent);
+
+        // Background task to verify OTP
         HandlerThread handlerThread = new HandlerThread("BackgroundThread");
         handlerThread.start();
-
-        // Create a Handler associated with the HandlerThread's Looper
         Handler backgroundHandler = new Handler(handlerThread.getLooper());
 
-        // Post the background work to the HandlerThread
         backgroundHandler.post(() -> {
             Python py = Python.getInstance();
             PyObject pyObj = py.getModule("helloworld");
 
-            // Call the Python function to verify the OTP
             PyObject result = pyObj.callAttr("otpCode", code, phone);
-            String resultString = result.toString();
 
-            // Post the result to the main thread
             new Handler(Looper.getMainLooper()).post(() -> {
-                Toast.makeText(MainActivity.this,  resultString, Toast.LENGTH_SHORT).show();
-                System.out.println("check in 3 : " + "Result: " + resultString);
+                Toast.makeText(this, result.toString(), Toast.LENGTH_SHORT).show();
 
-                // If login is successful, switch to ContactsActivity
-                if (resultString.equals("Logged in successfully.")) {
-                    System.out.println("switcher value in before sending " + switcher);
+                if (result.toString().equals("Logged in successfully.")) {
                     Intent intent = new Intent(MainActivity.this, ContactsActivity.class);
-                    intent.putExtra("switcher", switcher); // Pass the user ID
-
-                    // Optional: Start other activities if needed
-                    Intent intent2 = new Intent(MainActivity.this, LoadingActivity.class);
-                    intent2.putExtra("switcher", switcher); // Pass the user ID
-
-                    Intent intent3 = new Intent(MainActivity.this, ResultsActivity.class);
-                    intent3.putExtra("switcher", switcher); // Pass the user ID
-
+                    intent.putExtra("switcher", switcher);
                     startActivity(intent);
                 }
 
-                progressBar.setVisibility(View.INVISIBLE); // Hide the progress bar
-                handlerThread.quit(); // Quit the HandlerThread after all work is done
+                progressBar.setVisibility(View.INVISIBLE);
+                handlerThread.quit();
             });
         });
     }
-
-
-
-
-
 }

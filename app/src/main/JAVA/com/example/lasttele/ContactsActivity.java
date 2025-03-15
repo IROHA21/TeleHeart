@@ -1,5 +1,6 @@
 package com.example.lasttele;
 
+import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -31,10 +32,23 @@ public class ContactsActivity extends AppCompatActivity {
     private Handler mainHandler = new Handler(Looper.getMainLooper());
     private boolean switcher;
 
+
+    private Dialog instructionsDialog;
+    private int currentPage = 0;
+    private String[] instructions = {
+            "Welcome to the app! Here's how to use it...",
+            "Step 1: Select a contact from the list.",
+            "Step 2: Choose the number of messages.",
+            "Step 3: Click the button to proceed."
+    };
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.contact_main);
+
+
+      
 
 
 
@@ -123,6 +137,8 @@ public class ContactsActivity extends AppCompatActivity {
 
                 intent2.putExtra("selectedContactId", selectedContactId);
                 intent2.putExtra("quantity", String.valueOf(quantityInt)); // Store it as a String
+                intent2.putExtra("switcher", switcher); // Pass the user ID
+
 
                 startActivity(intent2);
             } else {
@@ -160,4 +176,6 @@ public class ContactsActivity extends AppCompatActivity {
     }
 
 
+
 }
+
