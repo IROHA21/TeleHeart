@@ -45,6 +45,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -104,6 +105,16 @@ public class ResultsActivity extends AppCompatActivity {
     private TextView yourUnrepliedChatsTextView;
     private TextView herUnrepliedChatsTextView;
 
+    // TextViews for Longest Conversations
+    private TextView yourLongestConversationTextView;
+    private TextView yourLargestCommunicationStreakTextView;
+    private TextView yourLargestCommunicationStreakDatesTextView;
+
+    // TextViews for most used phrases
+    private TextView yourMostUsedPhrasesTextView;
+    private TextView herMostUsedPhrasesTextView;
+
+    private TextView yourAverageMessageLengthTextView,herAverageMessageLengthTextView,yourMedianMessageLengthTextView,herMedianMessageLengthTextView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -165,12 +176,29 @@ public class ResultsActivity extends AppCompatActivity {
         herMedianAnsweringTimeTextView = findViewById(R.id.herMedianAnsweringTimeTextView);
        // largest no conv days
         yourLargestNoConversationDaysTextView = findViewById(R.id.yourLargestNoConversationDaysTextView);
+        TextView yourLargestNoConversationDatesTextView = findViewById(R.id.yourLargestNoConversationDatesTextView);
        // who starts convs
         yourConversationStartsTextView = findViewById(R.id.yourConversationStartsTextView);
         herConversationStartsTextView = findViewById(R.id.herConversationStartsTextView);
 
         yourUnrepliedChatsTextView = findViewById(R.id.yourUnrepliedChatsTextView);
         herUnrepliedChatsTextView = findViewById(R.id.herUnrepliedChatsTextView);
+
+        yourLongestConversationTextView = findViewById(R.id.yourLongestConversationTextView);
+
+        // largest conv streak
+        // Initialize TextViews for largest communication streak
+        TextView yourLargestCommunicationStreakTextView = findViewById(R.id.yourLargestCommunicationStreakTextView);
+        TextView yourLargestCommunicationStreakDatesTextView = findViewById(R.id.yourLargestCommunicationStreakDatesTextView);
+
+        // Initialize most used phrases TextViews
+        yourMostUsedPhrasesTextView = findViewById(R.id.yourMostUsedPhrasesTextView);
+        herMostUsedPhrasesTextView = findViewById(R.id.herMostUsedPhrasesTextView);
+
+        TextView yourAverageMessageLengthTextView = findViewById(R.id.yourAverageMessageLengthTextView);
+        TextView herAverageMessageLengthTextView = findViewById(R.id.herAverageMessageLengthTextView);
+        TextView yourMedianMessageLengthTextView = findViewById(R.id.yourMedianMessageLengthTextView);
+        TextView herMedianMessageLengthTextView = findViewById(R.id.herMedianMessageLengthTextView);
 
 
 
@@ -197,9 +225,16 @@ public class ResultsActivity extends AppCompatActivity {
             Map<Long, Map<String, Integer>> mostUsedEmojis = analyzer.getMostUsedEmojis();
             Map<Long, String> longestMessages = analyzer.getLongestMessagePerUser();
             Map<Long, Long> medianTimes = analyzer.getMedianAnsweringTime();
-            Map<Long, Integer> largestGaps = analyzer.getLargestNoConversationDays();
+            Map<Long, Map.Entry<Integer, Map.Entry<Date, Date>>> largestGaps = analyzer.getLargestNoConversationDays();
             Map<Long, Integer> conversationStarts = analyzer.getConversationStarts();
             Map<Long, Integer> unrepliedChats = analyzer.getUnrepliedChats();
+            Map<Long, Long> longestConversations = analyzer.getLongestConversations();
+            Map<Long, Map.Entry<String, Integer>> mostUsedPhrase = analyzer.getMostUsedPhrase(5);
+            Map<Long, Double> averageMessageLengths = analyzer.getAverageMessageLength();
+            Map<Long, Integer> medianMessageLengths = analyzer.getMedianMessageLength();
+
+            // Largest Streak of Days with Communications
+            Map<Long, Map.Entry<Integer, Map.Entry<Date, Date>>> largestStreaks = analyzer.getLargestCommunicationStreak();
             // Debugging outputs
             System.out.println("Message Counts: " + messageCounts);
             System.out.println("Average Times: " + averageTimes);
@@ -215,8 +250,10 @@ public class ResultsActivity extends AppCompatActivity {
             System.out.println("Most Used Emojis: " + mostUsedEmojis);
             System.out.println("Longest message: " + longestMessages);
             System.out.println("Median Answering Times: " + medianTimes);
+            System.out.println("largestGapss: " + largestGaps);
             System.out.println("Conversation Starts: " + conversationStarts);
             System.out.println("Unreplied Chats: " + unrepliedChats);
+            System.out.println("Longest Conversations: " + longestConversations);
 
             // Update the UI on the main thread
             new Handler(Looper.getMainLooper()).post(() -> {
@@ -297,7 +334,12 @@ public class ResultsActivity extends AppCompatActivity {
                 setupMedianAnsweringTimeTextView(yourMedianAnsweringTimeTextView, medianTimes.getOrDefault(yourChatId, 0L), "You");
                 setupMedianAnsweringTimeTextView(herMedianAnsweringTimeTextView, medianTimes.getOrDefault(herChatId, 0L), "Them");
                 //LargestNoConversationDays
-                setupLargestNoConversationDaysTextView(yourLargestNoConversationDaysTextView, largestGaps.getOrDefault(yourChatId, 0), "You");
+                setupLargestNoConversationDaysTextView(
+                        yourLargestNoConversationDaysTextView,
+                        yourLargestNoConversationDatesTextView,
+                        largestGaps.getOrDefault(yourChatId, null),
+                        "You"
+                );
                // conv started
                 setupConversationStartsTextView(yourConversationStartsTextView, conversationStarts.getOrDefault(yourChatId, 0), "You");
                 setupConversationStartsTextView(herConversationStartsTextView, conversationStarts.getOrDefault(herChatId, 0), "Them");
@@ -305,8 +347,61 @@ public class ResultsActivity extends AppCompatActivity {
                 setupUnrepliedChatsTextView(yourUnrepliedChatsTextView, unrepliedChats.getOrDefault(yourChatId, 0), "You");
                 setupUnrepliedChatsTextView(herUnrepliedChatsTextView, unrepliedChats.getOrDefault(herChatId, 0), "Them");
 
+                setupLongestConversationsTextView(yourLongestConversationTextView, longestConversations.getOrDefault(yourChatId, 0L), "You");
+
+                setupLargestCommunicationStreakTextView(
+                        yourLargestCommunicationStreakTextView,
+                        yourLargestCommunicationStreakDatesTextView,
+                        largestStreaks.getOrDefault(yourChatId, null),
+                        "You"
+                );
+                yourMostUsedPhrasesTextView.setText("You: " + formatPhrase(mostUsedPhrase.getOrDefault(yourChatId, null)));
+                herMostUsedPhrasesTextView.setText("Them: " + formatPhrase(mostUsedPhrase.getOrDefault(herChatId, null)));
+
+                yourAverageMessageLengthTextView.setText("You: " + String.format("%.2f", averageMessageLengths.getOrDefault(yourChatId, 0.0)) + " characters");
+                herAverageMessageLengthTextView.setText("Them: " + String.format("%.2f", averageMessageLengths.getOrDefault(herChatId, 0.0)) + " characters");
+                yourMedianMessageLengthTextView.setText("You: " + medianMessageLengths.getOrDefault(yourChatId, 0) + " characters");
+                herMedianMessageLengthTextView.setText("Them: " + medianMessageLengths.getOrDefault(herChatId, 0) + " characters");
+
             });
         }).start();
+    }
+    // Helper method to format the phrase list
+    private String formatPhrase(Map.Entry<String, Integer> phraseEntry) {
+        if (phraseEntry == null) {
+            return "No phrases found";
+        }
+        return phraseEntry.getKey() + " (" + phraseEntry.getValue() + " times)";
+    }
+
+    // Helper method to set up the Largest Communication Streak TextView
+    private void setupLargestCommunicationStreakTextView(TextView daysTextView, TextView datesTextView, Map.Entry<Integer, Map.Entry<Date, Date>> streakInfo, String label) {
+        if (streakInfo != null) {
+            int days = streakInfo.getKey();
+            Date startDate = streakInfo.getValue().getKey();
+            Date endDate = streakInfo.getValue().getValue();
+
+            // Format the dates
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
+            String startDateStr = dateFormat.format(startDate);
+            String endDateStr = dateFormat.format(endDate);
+
+            // Display the number of days
+            daysTextView.setText("time " + ": " + days + " days");
+
+            // Display the date range
+            datesTextView.setText("Dates: " + startDateStr + " to " + endDateStr);
+        } else {
+            daysTextView.setText("time " + ": No streak found");
+            datesTextView.setText("Dates: N/A");
+        }
+    }
+    // Helper method to set up the Longest Conversations TextView
+    private void setupLongestConversationsTextView(TextView textView, long duration, String label) {
+        long hours = TimeUnit.MILLISECONDS.toHours(duration);
+        long minutes = TimeUnit.MILLISECONDS.toMinutes(duration) % 60;
+        String durationText = String.format("%d hours %d minutes", hours, minutes);
+        textView.setText("Total" + ": " + durationText);
     }
     // Helper method to set up the Unreplied Chats TextView
     private void setupUnrepliedChatsTextView(TextView textView, int unreplied, String label) {
@@ -318,8 +413,27 @@ public class ResultsActivity extends AppCompatActivity {
     }
 
     // Helper method to set up the Largest No Conversation Days TextView
-    private void setupLargestNoConversationDaysTextView(TextView textView, int days, String label) {
-        textView.setText("maximum" + ": " + days + " days");
+    // Helper method to set up the Largest No Conversation Days TextView
+    private void setupLargestNoConversationDaysTextView(TextView daysTextView, TextView datesTextView, Map.Entry<Integer, Map.Entry<Date, Date>> gapInfo, String label) {
+        if (gapInfo != null) {
+            int days = gapInfo.getKey();
+            Date startDate = gapInfo.getValue().getKey();
+            Date endDate = gapInfo.getValue().getValue();
+
+            // Format the dates
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
+            String startDateStr = dateFormat.format(startDate);
+            String endDateStr = dateFormat.format(endDate);
+
+            // Display the number of days
+            daysTextView.setText("time "  + ": " + days + " days");
+
+            // Display the date range
+            datesTextView.setText("Dates: " + startDateStr + " to " + endDateStr);
+        } else {
+            daysTextView.setText("time " + ": No gaps found");
+            datesTextView.setText("Dates: N/A");
+        }
     }
 
     // Helper method to set up the Median Answering Time TextView
@@ -1257,12 +1371,12 @@ public class ResultsActivity extends AppCompatActivity {
         }
 
 
-        // 15. Calculate the largest number of days with no conversation
-        public Map<Long, Integer> getLargestNoConversationDays() {
+        // 15. Calculate the largest number of days with no conversation and the start/end dates
+        public Map<Long, Map.Entry<Integer, Map.Entry<Date, Date>>> getLargestNoConversationDays() {
             // Sort messages by date
             messages.sort((m1, m2) -> m1.date.compareTo(m2.date));
 
-            Map<Long, Integer> largestGaps = new HashMap<>();
+            Map<Long, Map.Entry<Integer, Map.Entry<Date, Date>>> largestGaps = new HashMap<>();
             Map<Long, Date> lastMessageTimes = new HashMap<>();
 
             for (ChatMessage message : messages) {
@@ -1270,8 +1384,15 @@ public class ResultsActivity extends AppCompatActivity {
                     long timeDiff = message.date.getTime() - lastMessageTimes.get(message.chatId).getTime();
                     int daysDiff = (int) (timeDiff / (1000 * 60 * 60 * 24));
 
-                    if (daysDiff > largestGaps.getOrDefault(message.chatId, 0)) {
-                        largestGaps.put(message.chatId, daysDiff);
+                    // Get the current largest gap for this user
+                    Map.Entry<Integer, Map.Entry<Date, Date>> currentLargestGap = largestGaps.getOrDefault(message.chatId, null);
+
+                    // If the current gap is larger than the stored one, update it
+                    if (currentLargestGap == null || daysDiff > currentLargestGap.getKey()) {
+                        // Create a new entry with the gap size and the start/end dates
+                        Map.Entry<Date, Date> startEndDates = new AbstractMap.SimpleEntry<>(lastMessageTimes.get(message.chatId), message.date);
+                        Map.Entry<Integer, Map.Entry<Date, Date>> newGap = new AbstractMap.SimpleEntry<>(daysDiff, startEndDates);
+                        largestGaps.put(message.chatId, newGap);
                     }
                 }
                 lastMessageTimes.put(message.chatId, message.date);
@@ -1313,27 +1434,279 @@ public class ResultsActivity extends AppCompatActivity {
             Map<Long, Integer> unrepliedChats = new HashMap<>();
             long maxConversationGap = 3 * 60 * 60 * 1000; // 3 hours in milliseconds
 
-            for (int i = 0; i < messages.size(); i++) {
+            int i = 0;
+            while (i < messages.size()) {
                 ChatMessage currentMessage = messages.get(i);
-                long currentUserId = currentMessage.chatId;
+                long currentChatId = currentMessage.chatId; // Assuming chatId represents the user ID
+                long lastMessageTime = currentMessage.date.getTime();
+                long lastMessageUserId = currentChatId; // Using chatId as user ID
 
-                // Check if there is a next message
-                if (i < messages.size() - 1) {
-                    ChatMessage nextMessage = messages.get(i + 1);
-                    long nextUserId = nextMessage.chatId;
-                    long timeDiff = nextMessage.date.getTime() - currentMessage.date.getTime();
+                // Find the end of the conversation
+                int j = i + 1;
+                while (j < messages.size()) {
+                    ChatMessage nextMessage = messages.get(j);
+                    long nextMessageTime = nextMessage.date.getTime();
 
-                    // If the next message is from the other user and within 3 hours, the chat continues
-                    if (nextUserId != currentUserId && timeDiff <= maxConversationGap) {
-                        continue; // Chat is ongoing, no unreplied chat yet
+                    // If the next message is within 3 hours, continue the conversation
+                    if (nextMessageTime - lastMessageTime <= maxConversationGap) {
+                        lastMessageTime = nextMessageTime;
+                        lastMessageUserId = nextMessage.chatId; // Using chatId as user ID
+                        j++;
+                    } else {
+                        // Conversation ends
+                        break;
                     }
                 }
 
-                // If no reply within 3 hours, mark the current message as unreplied
-                unrepliedChats.put(currentUserId, unrepliedChats.getOrDefault(currentUserId, 0) + 1);
+                // Determine who the last message is from
+                if (lastMessageUserId != currentChatId) {
+                    // Last message is from the other user: unreplied chat for the other user
+                    unrepliedChats.put(lastMessageUserId, unrepliedChats.getOrDefault(lastMessageUserId, 0) + 1);
+                } else {
+                    // Last message is from you: unreplied chat for you
+                    unrepliedChats.put(currentChatId, unrepliedChats.getOrDefault(currentChatId, 0) + 1);
+                }
+
+                // Move to the next conversation
+                i = j;
             }
 
             return unrepliedChats;
+        }
+        // 18. Calculate the longest conversations (time)
+        // 18. Calculate the longest conversations (time)
+        public Map<Long, Long> getLongestConversations() {
+            // Sort messages by date
+            messages.sort((m1, m2) -> m1.date.compareTo(m2.date));
+
+            Map<Long, Long> longestConversations = new HashMap<>();
+            Map<Long, Date> conversationStartTimes = new HashMap<>();
+            Map<Long, Date> lastMessageTimes = new HashMap<>();
+
+            // Define the maximum time difference for a conversation (3 hours in milliseconds)
+            long maxConversationGap = 3 * 60 * 60 * 1000; // 3 hours in milliseconds
+
+            for (ChatMessage message : messages) {
+                long chatId = message.chatId;
+
+                // If no conversation is ongoing or the gap is more than 3 hours, start a new conversation
+                if (!conversationStartTimes.containsKey(chatId) ||
+                        message.date.getTime() - lastMessageTimes.get(chatId).getTime() > maxConversationGap) {
+                    // If a conversation was ongoing, calculate its duration and update the longest duration
+                    if (conversationStartTimes.containsKey(chatId)) {
+                        long conversationDuration = lastMessageTimes.get(chatId).getTime() - conversationStartTimes.get(chatId).getTime();
+                        if (conversationDuration > longestConversations.getOrDefault(chatId, 0L)) {
+                            longestConversations.put(chatId, conversationDuration);
+                        }
+                    }
+
+                    // Start a new conversation
+                    conversationStartTimes.put(chatId, message.date);
+                }
+
+                // Update the last message time for this chat
+                lastMessageTimes.put(chatId, message.date);
+            }
+
+            // After the loop, check the last conversation for each chat
+            for (Long chatId : conversationStartTimes.keySet()) {
+                long conversationDuration = lastMessageTimes.get(chatId).getTime() - conversationStartTimes.get(chatId).getTime();
+                if (conversationDuration > longestConversations.getOrDefault(chatId, 0L)) {
+                    longestConversations.put(chatId, conversationDuration);
+                }
+            }
+
+            return longestConversations;
+        }
+
+
+        // 19. Calculate the largest streak of days with communications
+        // 19. Calculate the largest streak of days with communications
+        public Map<Long, Map.Entry<Integer, Map.Entry<Date, Date>>> getLargestCommunicationStreak() {
+            // Sort messages by date
+            messages.sort((m1, m2) -> m1.date.compareTo(m2.date));
+
+            Map<Long, Map.Entry<Integer, Map.Entry<Date, Date>>> largestStreaks = new HashMap<>();
+            Map<Long, Integer> currentStreaks = new HashMap<>();
+            Map<Long, Date> streakStartDates = new HashMap<>();
+            Map<Long, Date> lastMessageDates = new HashMap<>();
+
+            for (ChatMessage message : messages) {
+                long chatId = message.chatId;
+                Date currentDate = message.date;
+
+                // Check if the current message is on the same day as the last message
+                if (lastMessageDates.containsKey(chatId)) {
+                    Date lastDate = lastMessageDates.get(chatId);
+                    long timeDiff = currentDate.getTime() - lastDate.getTime();
+                    int daysDiff = (int) (timeDiff / (1000 * 60 * 60 * 24));
+
+                    if (daysDiff == 0) {
+                        // Same day: do not increment the streak
+                        continue;
+                    } else if (daysDiff == 1) {
+                        // Consecutive day: increment the streak
+                        currentStreaks.put(chatId, currentStreaks.getOrDefault(chatId, 0) + 1);
+                    } else if (daysDiff > 1) {
+                        // Gap of more than 1 day: reset the streak
+                        currentStreaks.put(chatId, 1);
+                        streakStartDates.put(chatId, currentDate);
+                    }
+                } else {
+                    // First message for this user: start a new streak
+                    currentStreaks.put(chatId, 1);
+                    streakStartDates.put(chatId, currentDate);
+                }
+
+                // Update the last message date for this user
+                lastMessageDates.put(chatId, currentDate);
+
+                // Check if the current streak is the largest
+                int currentStreak = currentStreaks.getOrDefault(chatId, 0);
+                Map.Entry<Integer, Map.Entry<Date, Date>> currentLargestStreak = largestStreaks.getOrDefault(chatId, null);
+
+                if (currentLargestStreak == null || currentStreak > currentLargestStreak.getKey()) {
+                    // Create a new entry with the streak size and the start/end dates
+                    Map.Entry<Date, Date> startEndDates = new AbstractMap.SimpleEntry<>(streakStartDates.get(chatId), currentDate);
+                    Map.Entry<Integer, Map.Entry<Date, Date>> newStreak = new AbstractMap.SimpleEntry<>(currentStreak, startEndDates);
+                    largestStreaks.put(chatId, newStreak);
+                }
+            }
+
+            return largestStreaks;
+        }
+        // 20. Get the most used phrases (excluding links, emoji-only phrases, and phrases with 4 or fewer words)
+
+
+        public Map<Long, Map.Entry<String, Integer>> getMostUsedPhrase(int minPhraseLength) {
+            Map<Long, Map<String, Integer>> phraseCounts = new HashMap<>();
+
+            // Regular expression to detect URLs
+            Pattern urlPattern = Pattern.compile("https?://\\S+");
+
+            for (ChatMessage message : messages) {
+                // Skip messages that contain a URL
+                Matcher matcher = urlPattern.matcher(message.content);
+                if (matcher.find()) {
+                    continue; // Skip this message if it contains a URL
+                }
+
+                // Skip messages that contain only emojis
+                if (isEmojiOnly(message.content)) {
+                    continue; // Skip this message if it contains only emojis
+                }
+
+                // Split the message into words
+                String[] words = message.content.split("\\s+");
+
+                // Only process messages with more than minPhraseLength words
+                if (words.length > minPhraseLength) {
+                    // Generate phrases with more than minPhraseLength words
+                    for (int i = 0; i <= words.length - minPhraseLength; i++) {
+                        StringBuilder phraseBuilder = new StringBuilder();
+                        for (int j = 0; j < minPhraseLength; j++) {
+                            phraseBuilder.append(words[i + j]).append(" ");
+                        }
+                        String phrase = phraseBuilder.toString().trim();
+
+                        // Update the phrase count for the user
+                        Map<String, Integer> userPhraseCounts = phraseCounts.getOrDefault(message.chatId, new HashMap<>());
+                        userPhraseCounts.put(phrase, userPhraseCounts.getOrDefault(phrase, 0) + 1);
+                        phraseCounts.put(message.chatId, userPhraseCounts);
+                    }
+                }
+            }
+
+            // Prepare the result with the top phrase for each user
+            Map<Long, Map.Entry<String, Integer>> topPhrases = new HashMap<>();
+            for (Long chatId : phraseCounts.keySet()) {
+                Map<String, Integer> userPhraseCounts = phraseCounts.get(chatId);
+
+                // Sort the phrases by frequency (descending)
+                List<Map.Entry<String, Integer>> sortedPhrases = new ArrayList<>(userPhraseCounts.entrySet());
+                sortedPhrases.sort((e1, e2) -> e2.getValue().compareTo(e1.getValue()));
+
+                // Take the top phrase
+                if (!sortedPhrases.isEmpty()) {
+                    topPhrases.put(chatId, sortedPhrases.get(0));
+                }
+            }
+
+            return topPhrases;
+        }
+        // Helper method to check if a message contains only emojis
+        private boolean isEmojiOnly(String input) {
+            if (input == null || input.isEmpty()) {
+                return false; // Empty input is not considered emoji-only
+            }
+
+            int length = input.codePointCount(0, input.length());
+            for (int i = 0; i < length; i++) {
+                int codePoint = input.codePointAt(i);
+                if (!isEmoji(codePoint) && !Character.isWhitespace(codePoint)) {
+                    return false; // Found a non-emoji character
+                }
+            }
+            return true; // Only emojis and whitespace
+        }
+        // 21. Calculate the average message length for each user
+        public Map<Long, Double> getAverageMessageLength() {
+            Map<Long, Double> averageLengths = new HashMap<>();
+            Map<Long, Integer> totalLengths = new HashMap<>();
+            Map<Long, Integer> messageCounts = new HashMap<>();
+
+            for (ChatMessage message : messages) {
+                // Skip media files and unwanted placeholders
+                if (message.content.equals("<Media/Non-text message>") || message.content.contains("message>")) {
+                    continue;
+                }
+
+                // Update the total length and message count for the user
+                totalLengths.put(message.chatId, totalLengths.getOrDefault(message.chatId, 0) + message.content.length());
+                messageCounts.put(message.chatId, messageCounts.getOrDefault(message.chatId, 0) + 1);
+            }
+
+            // Calculate the average length for each user
+            for (Long chatId : totalLengths.keySet()) {
+                int totalLength = totalLengths.get(chatId);
+                int count = messageCounts.get(chatId);
+                averageLengths.put(chatId, (double) totalLength / count);
+            }
+
+            return averageLengths;
+        }
+        // 22. Calculate the median message length for each user
+        public Map<Long, Integer> getMedianMessageLength() {
+            Map<Long, List<Integer>> messageLengths = new HashMap<>();
+
+            for (ChatMessage message : messages) {
+                // Skip media files and unwanted placeholders
+                if (message.content.equals("<Media/Non-text message>") || message.content.contains("message>")) {
+                    continue;
+                }
+
+                // Add the message length to the user's list
+                messageLengths.computeIfAbsent(message.chatId, k -> new ArrayList<>()).add(message.content.length());
+            }
+
+            // Calculate the median length for each user
+            Map<Long, Integer> medianLengths = new HashMap<>();
+            for (Long chatId : messageLengths.keySet()) {
+                List<Integer> lengths = messageLengths.get(chatId);
+                Collections.sort(lengths);
+
+                int median;
+                int size = lengths.size();
+                if (size % 2 == 0) {
+                    median = (lengths.get(size / 2 - 1) + lengths.get(size / 2)) / 2;
+                } else {
+                    median = lengths.get(size / 2);
+                }
+
+                medianLengths.put(chatId, median);
+            }
+
+            return medianLengths;
         }
 
 
