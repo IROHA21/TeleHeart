@@ -121,30 +121,43 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_columnWeight="1"
-                android:layout_margin="4dp"
-                app:cardCornerRadius="8dp"
-                app:cardElevation="4dp">
+                android:layout_margin="8dp"
+                app:cardCornerRadius="16dp"
+                app:cardElevation="8dp"
+                app:cardBackgroundColor="@android:color/transparent">
 
+                <!-- Gradient Background -->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:padding="12dp">
+                    android:padding="16dp"
+                    android:background="@drawable/gradient_background_card"
+                    android:foreground="?attr/selectableItemBackgroundBorderless"
+                    android:clickable="true"
+                    android:focusable="true">
 
+                    <!-- Title -->
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Number of Messages"
-                        android:textSize="14sp"
-                        android:textStyle="bold" />
+                        android:text="Your Messages"
+                        android:textSize="16sp"
+                        android:textStyle="bold"
+                        android:textColor="#FFFFFF"
+                        android:letterSpacing="0.02"
+                        android:paddingBottom="8dp" />
 
-
+                    <!-- Value -->
                     <TextView
                         android:id="@+id/yourMessagesTextView"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="you : N/A"
-                        android:textSize="12sp" />
+                        android:text="N/A"
+                        android:textSize="24sp"
+                        android:textColor="#FFFFFF"
+                        android:textStyle="bold"
+                        android:letterSpacing="0.02" />
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
 
@@ -152,63 +165,88 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_columnWeight="1"
-                android:layout_margin="4dp"
-                app:cardCornerRadius="8dp"
-                app:cardElevation="4dp">
+                android:layout_margin="8dp"
+                app:cardCornerRadius="16dp"
+                app:cardElevation="8dp"
+                app:cardBackgroundColor="@android:color/transparent">
 
+                <!-- Gradient Background -->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:padding="12dp">
+                    android:padding="16dp"
+                    android:background="@drawable/gradient_background_card_alt"
+                    android:foreground="?attr/selectableItemBackgroundBorderless"
+                    android:clickable="true"
+                    android:focusable="true">
 
+                    <!-- Title -->
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Number of Messages"
-                        android:textSize="14sp"
-                        android:textStyle="bold" />
+                        android:text="Their Messages"
+                        android:textSize="16sp"
+                        android:textStyle="bold"
+                        android:textColor="#FFFFFF"
+                        android:letterSpacing="0.02"
+                        android:paddingBottom="8dp" />
 
+                    <!-- Value -->
                     <TextView
                         android:id="@+id/herMessagesTextView"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="them : N/A"
-                        android:textSize="12sp" />
-
-
+                        android:text="N/A"
+                        android:textSize="24sp"
+                        android:textColor="#FFFFFF"
+                        android:textStyle="bold"
+                        android:letterSpacing="0.02" />
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
             <!-- Messages in Last 10 Days -->
+
             <androidx.cardview.widget.CardView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_columnWeight="1"
-                android:layout_margin="4dp"
-                app:cardCornerRadius="8dp"
-                app:cardElevation="4dp">
+                android:layout_margin="8dp"
+                app:cardCornerRadius="16dp"
+                app:cardElevation="8dp"
+                app:cardBackgroundColor="@android:color/transparent">
 
+                <!-- Gradient Background -->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:padding="12dp">
+                    android:padding="16dp"
+                    android:background="@drawable/gradient_background_card"
+                    android:foreground="?attr/selectableItemBackgroundBorderless"
+                    android:clickable="true"
+                    android:focusable="true">
 
+                    <!-- Title -->
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Messages in Last 10 Days"
-                        android:textSize="14sp"
-                        android:textStyle="bold" />
+                        android:text="Your Messages (Last 10 Days)"
+                        android:textSize="16sp"
+                        android:textStyle="bold"
+                        android:textColor="#FFFFFF"
+                        android:letterSpacing="0.02"
+                        android:paddingBottom="8dp" />
 
+                    <!-- Value -->
                     <TextView
                         android:id="@+id/yourLast10DaysTextView"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="you : N/A"
-                        android:textSize="12sp" />
-
-
+                        android:text="N/A"
+                        android:textSize="24sp"
+                        android:textColor="#FFFFFF"
+                        android:textStyle="bold"
+                        android:letterSpacing="0.02" />
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
 
@@ -216,30 +254,43 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_columnWeight="1"
-                android:layout_margin="4dp"
-                app:cardCornerRadius="8dp"
-                app:cardElevation="4dp">
+                android:layout_margin="8dp"
+                app:cardCornerRadius="16dp"
+                app:cardElevation="8dp"
+                app:cardBackgroundColor="@android:color/transparent">
 
+                <!-- Gradient Background -->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:padding="12dp">
+                    android:padding="16dp"
+                    android:background="@drawable/gradient_background_card_alt"
+                    android:foreground="?attr/selectableItemBackgroundBorderless"
+                    android:clickable="true"
+                    android:focusable="true">
 
+                    <!-- Title -->
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Messages in Last 10 Days"
-                        android:textSize="14sp"
-                        android:textStyle="bold" />
+                        android:text="Their Messages (Last 10 Days)"
+                        android:textSize="16sp"
+                        android:textStyle="bold"
+                        android:textColor="#FFFFFF"
+                        android:letterSpacing="0.02"
+                        android:paddingBottom="8dp" />
 
-
+                    <!-- Value -->
                     <TextView
                         android:id="@+id/herLast10DaysTextView"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="them : N/A"
-                        android:textSize="12sp" />
+                        android:text="N/A"
+                        android:textSize="24sp"
+                        android:textColor="#FFFFFF"
+                        android:textStyle="bold"
+                        android:letterSpacing="0.02" />
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
             <!-- Days with the Most Messages -->
