@@ -3,6 +3,8 @@ package com.example.lasttele;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -53,6 +55,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void onBtnClick(View view) {
+        // Get the phone number and show the progress bar
         String phone = editTextPhone2.getText().toString().trim();
         ProgressBar progressBar = findViewById(R.id.progressBar2);
         progressBar.setVisibility(View.VISIBLE);
@@ -62,82 +65,92 @@ public class MainActivity extends AppCompatActivity {
             return;
         }
 
+        // Create a new thread to handle the logic
+        Handler handler = new Handler(Looper.getMainLooper());
+        new Thread(() -> {
+            // Background thread logic
+            boolean switcher = switch1.isChecked();
 
-        if (switch1.isChecked()) {
-            // If the switch is on, save the current phone number to SharedPreferences
-            switcher = true;
-        }
+            Python py = Python.getInstance();
+            PyObject pyObj = py.getModule("helloworld");  // Ensure "helloworld.py" is in "src/main/python"
 
+            // Get the internal storage path
+            String internalStoragePath = getFilesDir().getAbsolutePath();
 
+            // Set the session file path based on the phone number
+            String sessionFilePath = internalStoragePath + "/session_" + phone;
+            pyObj.callAttr("set_session_path", sessionFilePath);
 
-        Python py = Python.getInstance();
-        PyObject pyObj = py.getModule("helloworld");  // Ensure "helloworld.py" is in "src/main/python"
+            // Retrieve the previous phone number from SharedPreferences
+            SharedPreferences sharedPreferences = getSharedPreferences("MyAppPrefs", MODE_PRIVATE);
+            String previousPhoneNumber = sharedPreferences.getString("last_phone_number", "");
 
-        // Get the internal storage path
-        String internalStoragePath = getFilesDir().getAbsolutePath();
+            // Check if the entered phone number matches the previous phone number
+            if (phone.equals(previousPhoneNumber)) {
+                // If the phone numbers match, restore the session
+                PyObject restoreResult = pyObj.callAttr("restoreSession");
+                handler.post(() -> {
+                    Toast.makeText(this, "Session Restore Result: " + restoreResult.toString(), Toast.LENGTH_SHORT).show();
+                });
 
-        // Set the session file path based on the phone number
-        String sessionFilePath = internalStoragePath + "/session_" + phone;
-        pyObj.callAttr("set_session_path", sessionFilePath);
-
-        // Retrieve the previous phone number from SharedPreferences
-        SharedPreferences sharedPreferences = getSharedPreferences("MyAppPrefs", MODE_PRIVATE);
-        String previousPhoneNumber = sharedPreferences.getString("last_phone_number", "");
-
-        // Check if the entered phone number matches the previous phone number
-        if (phone.equals(previousPhoneNumber)) {
-            // If the phone numbers match, restore the session
-            PyObject restoreResult = pyObj.callAttr("restoreSession");
-            Toast.makeText(this, "Session Restore Result: " + restoreResult.toString(), Toast.LENGTH_SHORT).show();
-
-            // If the session is already authorized, skip OTP and go to ContactsActivity
-            if (restoreResult.toString().equals("Session restored. Already authorized.")) {
-                System.out.println("switcher check : "+ switcher);
-                Intent intent = new Intent(this, ContactsActivity.class);
-                intent.putExtra("switcher", switcher); // Pass the user ID
-                startActivity(intent);
-                finish(); // Optional: Closes the current activity so user can't go back with back button
-                return; // Exit the method to avoid sending OTP unnecessarily
+                // If the session is already authorized, skip OTP and go to ContactsActivity
+                if (restoreResult.toString().equals("Session restored. Already authorized.")) {
+                    handler.post(() -> {
+                        System.out.println("switcher check : " + switcher);
+                        Intent intent = new Intent(this, ContactsActivity.class);
+                        intent.putExtra("switcher", switcher); // Pass the user ID
+                        startActivity(intent);
+                        finish(); // Optional: Closes the current activity so user can't go back with back button
+                    });
+                    return; // Exit the method to avoid sending OTP unnecessarily
+                }
+            } else {
+                // If the phone numbers don't match, inform the user
+                handler.post(() -> {
+                    Toast.makeText(this, "Phone number does not match the previous one. Sending OTP to the new number.", Toast.LENGTH_SHORT).show();
+                });
             }
-        } else {
-            // If the phone numbers don't match, inform the user
-            Toast.makeText(this, "Phone number does not match the previous one. Sending OTP to the new number.", Toast.LENGTH_SHORT).show();
-        }
 
-        // Check the state of the switch
-        if (switch1.isChecked()) {
-            // If the switch is on, save the current phone number to SharedPreferences
-            SharedPreferences.Editor editor = sharedPreferences.edit();
-            editor.putString("last_phone_number", phone);
-            editor.apply();
-        } else {
-            // If the switch is off, clear the saved phone number (optional)
-            SharedPreferences.Editor editor = sharedPreferences.edit();
-            editor.remove("last_phone_number");
-            editor.apply();
-        }
+            // Check the state of the switch
+            if (switch1.isChecked()) {
+                // If the switch is on, save the current phone number to SharedPreferences
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+                editor.putString("last_phone_number", phone);
+                editor.apply();
+            } else {
+                // If the switch is off, clear the saved phone number (optional)
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+                editor.remove("last_phone_number");
+                editor.apply();
+            }
 
-        // Call the Python function to send OTP
-        PyObject result = pyObj.callAttr("phoneNumber", phone);
+            // Call the Python function to send OTP
+            PyObject result = pyObj.callAttr("phoneNumber", phone);
 
-        // Display the result (success or error message)
-        Toast.makeText(this, "OTP Result: " + result.toString(), Toast.LENGTH_SHORT).show();
-        String resultString = result.toString();
-        System.out.println("before" + resultString);
-        String check = "Code sent check your telegram";
-        if (resultString.equals(check)) {
+            // Display the result (success or error message)
+            handler.post(() -> {
+                Toast.makeText(this, "OTP Result: " + result.toString(), Toast.LENGTH_SHORT).show();
+            });
 
+            String resultString = result.toString();
+            System.out.println("before" + resultString);
+            String check = "Code sent check your telegram";
+            if (resultString.equals(check)) {
+                handler.post(() -> {
+                    progressBar.setVisibility(View.INVISIBLE);
+                });
+            }
 
-            progressBar.setVisibility(View.INVISIBLE);
-        }
-
-        if (resultString.equals("Already authorized. No need for OTP.")) {
-            System.out.println("switcher check no need: "+ switcher);
-            Intent intent = new Intent(this, ContactsActivity.class);
-            intent.putExtra("switcher", switcher); // Pass the user ID
-            startActivity(intent);
-            finish(); // Optional: Closes the current activity so user can't go back with back button
-        }
+            if (resultString.equals("Already authorized. No need for OTP.")) {
+                handler.post(() -> {
+                    System.out.println("switcher check no need: " + switcher);
+                    Intent intent = new Intent(this, ContactsActivity.class);
+                    intent.putExtra("switcher", switcher); // Pass the user ID
+                    startActivity(intent);
+                    finish(); // Optional: Closes the current activity so user can't go back with back button
+                });
+            }
+        }).start();
     }
 
     public void onCodeClick(View view) {
