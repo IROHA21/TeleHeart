@@ -540,7 +540,7 @@ public class ResultsActivity extends AppCompatActivity {
         // Create a BarDataSet with the sorted entries
         BarDataSet barDataSet = new BarDataSet(barEntries, label);
         barDataSet.setColor(barChart == yourDaysMostMessagesChart ? Color.parseColor("#1C3B9B") : Color.parseColor("#800080")); // Set bar color based on chart
-        barDataSet.setValueTextColor(Color.BLACK); // Set text color for values
+        barDataSet.setValueTextColor(Color.WHITE); // Set text color for values (white for better contrast)
         barDataSet.setValueTextSize(12f); // Set text size for values
 
         // Create a BarData object with the BarDataSet
@@ -562,6 +562,7 @@ public class ResultsActivity extends AppCompatActivity {
         xAxis.setGranularity(1f); // Set granularity to 1 to avoid skipping labels
         xAxis.setLabelRotationAngle(-45); // Rotate labels for better visibility
         xAxis.setDrawLabels(true); // Enable date labels
+        xAxis.setTextColor(Color.WHITE); // Set X-axis label color to white
 
         // Add padding to the left axis to make space for the labels
         barChart.setExtraLeftOffset(25f);
@@ -579,14 +580,20 @@ public class ResultsActivity extends AppCompatActivity {
         // Disable the legend (if any)
         barChart.getLegend().setEnabled(false);
 
+        // Set chart background color to transparent
+        barChart.setBackgroundColor(Color.TRANSPARENT);
+
+        // Set grid and axis colors for better visibility
+        barChart.getAxisLeft().setGridColor(Color.parseColor("#50FFFFFF")); // Light grid lines
+        barChart.getXAxis().setGridColor(Color.parseColor("#50FFFFFF")); // Light grid lines
+
         // Animate the chart
         barChart.animateY(1000); // Animate the chart vertically
 
         // Refresh the chart
         barChart.invalidate();
     }
-
-    // Helper method to set up the Messages per Month line chart
+  // message per month
     private void setupMessagesPerMonthLineChart(LineChart lineChart, Map<String, Integer> monthCounts, String label, int lineColor) {
         // Create entries for the LineChart
         ArrayList<Entry> entries = new ArrayList<>();
@@ -629,9 +636,11 @@ public class ResultsActivity extends AppCompatActivity {
         LineDataSet dataSet = new LineDataSet(entries, label);
         dataSet.setColor(lineColor); // Set line color
         dataSet.setCircleColor(lineColor); // Set circle color
-        dataSet.setLineWidth(2f); // Set line width
-        dataSet.setCircleRadius(4f); // Set circle radius
-        dataSet.setValueTextSize(10f); // Set value text size
+        dataSet.setLineWidth(2.5f); // Increase line width for better visibility
+        dataSet.setCircleRadius(5f); // Increase circle radius for better visibility
+        dataSet.setValueTextSize(12f); // Increase value text size
+        dataSet.setValueTextColor(Color.WHITE); // Set value text color to white for better contrast
+        dataSet.setMode(LineDataSet.Mode.CUBIC_BEZIER); // Use smooth curves for the line
 
         // Create a LineData object with the LineDataSet
         LineData lineData = new LineData(dataSet);
@@ -652,20 +661,27 @@ public class ResultsActivity extends AppCompatActivity {
         xAxis.setValueFormatter(new IndexAxisValueFormatter(labels)); // Set month labels
         xAxis.setLabelCount(labels.size(), true); // Show all month labels
         xAxis.setDrawGridLines(false); // Disable grid lines for X-axis
+        xAxis.setTextColor(Color.WHITE); // Set X-axis label color to white
         xAxis.setLabelRotationAngle(90); // Rotate labels vertically
-        lineChart.setExtraBottomOffset(20f);
+        lineChart.setExtraBottomOffset(20f); // Add extra bottom offset for labels
 
         // Configure Y-axis
         YAxis leftAxis = lineChart.getAxisLeft();
         leftAxis.setAxisMinimum(0f); // Start Y-axis from 0
         leftAxis.setGranularity(1f); // Set granularity to 1 message
         leftAxis.setDrawGridLines(true); // Enable grid lines for Y-axis
+        leftAxis.setGridColor(Color.parseColor("#50FFFFFF")); // Light grid lines for better visibility
+        leftAxis.setTextColor(Color.WHITE); // Set Y-axis label color to white
 
         YAxis rightAxis = lineChart.getAxisRight();
         rightAxis.setEnabled(false); // Disable right Y-axis
 
         // Disable the legend (if any)
         lineChart.getLegend().setEnabled(true); // Enable legend to show the label
+        lineChart.getLegend().setTextColor(Color.WHITE); // Set legend text color to white
+
+        // Set chart background color to transparent
+        lineChart.setBackgroundColor(Color.TRANSPARENT);
 
         // Animate the chart
         lineChart.animateY(1000); // Animate the chart vertically
@@ -673,7 +689,6 @@ public class ResultsActivity extends AppCompatActivity {
         // Refresh the chart
         lineChart.invalidate();
     }
-
     // Helper method to set up the Most Used Words chart
     private void setupMostUsedWordsChart(HorizontalBarChart barChart, Map<String, Integer> wordCounts, String label) {
         // Create a list of BarEntry objects
@@ -845,7 +860,7 @@ public class ResultsActivity extends AppCompatActivity {
         // Create a BarDataSet with the sorted entries
         BarDataSet barDataSet = new BarDataSet(barEntries, label);
         barDataSet.setColor(barChart == yourBarChart ? Color.parseColor("#1C3B9B") : Color.parseColor("#800080")); // Set bar color based on chart
-        barDataSet.setValueTextColor(Color.BLACK); // Set text color for values
+        barDataSet.setValueTextColor(Color.WHITE); // Set text color for values (white for better contrast)
         barDataSet.setValueTextSize(12f); // Set text size for values
 
         // Create a BarData object with the BarDataSet
@@ -867,6 +882,7 @@ public class ResultsActivity extends AppCompatActivity {
         xAxis.setGranularity(1f); // Set granularity to 1 to avoid skipping labels
         xAxis.setLabelRotationAngle(-45); // Rotate labels for better visibility
         xAxis.setDrawLabels(true); // Enable day labels
+        xAxis.setTextColor(Color.WHITE); // Set X-axis label color to white
 
         // Add padding to the left axis to make space for the labels
         barChart.setExtraLeftOffset(25f);
@@ -883,6 +899,13 @@ public class ResultsActivity extends AppCompatActivity {
 
         // Disable the legend (if any)
         barChart.getLegend().setEnabled(false);
+
+        // Set chart background color to transparent
+        barChart.setBackgroundColor(Color.TRANSPARENT);
+
+        // Set grid and axis colors for better visibility
+        barChart.getAxisLeft().setGridColor(Color.parseColor("#50FFFFFF")); // Light grid lines
+        barChart.getXAxis().setGridColor(Color.parseColor("#50FFFFFF")); // Light grid lines
 
         // Animate the chart
         barChart.animateY(1000); // Animate the chart vertically
@@ -903,9 +926,11 @@ public class ResultsActivity extends AppCompatActivity {
         LineDataSet dataSet = new LineDataSet(entries, label);
         dataSet.setColor(lineColor); // Set line color
         dataSet.setCircleColor(lineColor); // Set circle color
-        dataSet.setLineWidth(2f); // Set line width
-        dataSet.setCircleRadius(4f); // Set circle radius
-        dataSet.setValueTextSize(10f); // Set value text size
+        dataSet.setLineWidth(2.5f); // Increase line width for better visibility
+        dataSet.setCircleRadius(5f); // Increase circle radius for better visibility
+        dataSet.setValueTextSize(12f); // Increase value text size
+        dataSet.setValueTextColor(Color.WHITE); // Set value text color to white for better contrast
+        dataSet.setMode(LineDataSet.Mode.CUBIC_BEZIER); // Use smooth curves for the line
 
         // Create a LineData object with the LineDataSet
         LineData lineData = new LineData(dataSet);
@@ -926,18 +951,27 @@ public class ResultsActivity extends AppCompatActivity {
         xAxis.setValueFormatter(new IndexAxisValueFormatter(getHourLabels())); // Set hour labels
         xAxis.setLabelCount(24, true); // Show all 24 hours
         xAxis.setDrawGridLines(false); // Disable grid lines for X-axis
+        xAxis.setTextColor(Color.WHITE); // Set X-axis label color to white
+        xAxis.setLabelRotationAngle(90); // Rotate labels vertically
+        lineChart.setExtraBottomOffset(20f); // Add extra bottom offset for labels
 
         // Configure Y-axis
         YAxis leftAxis = lineChart.getAxisLeft();
         leftAxis.setAxisMinimum(0f); // Start Y-axis from 0
         leftAxis.setGranularity(1f); // Set granularity to 1 message
         leftAxis.setDrawGridLines(true); // Enable grid lines for Y-axis
+        leftAxis.setGridColor(Color.parseColor("#50FFFFFF")); // Light grid lines for better visibility
+        leftAxis.setTextColor(Color.WHITE); // Set Y-axis label color to white
 
         YAxis rightAxis = lineChart.getAxisRight();
         rightAxis.setEnabled(false); // Disable right Y-axis
 
         // Disable the legend (if any)
         lineChart.getLegend().setEnabled(true); // Enable legend to show the label
+        lineChart.getLegend().setTextColor(Color.WHITE); // Set legend text color to white
+
+        // Set chart background color to transparent
+        lineChart.setBackgroundColor(Color.TRANSPARENT);
 
         // Animate the chart
         lineChart.animateY(1000); // Animate the chart vertically

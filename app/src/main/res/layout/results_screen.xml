@@ -298,28 +298,39 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_columnWeight="1"
-                android:layout_margin="4dp"
-                app:cardCornerRadius="8dp"
-                app:cardElevation="4dp">
+                android:layout_margin="8dp"
+                app:cardCornerRadius="16dp"
+                app:cardElevation="8dp"
+                app:cardBackgroundColor="@android:color/transparent">
 
+                <!-- Gradient Background -->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:padding="12dp">
+                    android:padding="16dp"
+                    android:background="@drawable/gradient_background_card"
+                    android:foreground="?attr/selectableItemBackgroundBorderless"
+                    android:clickable="true"
+                    android:focusable="true">
 
+                    <!-- Title -->
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Days with the Most Messages"
-                        android:textSize="14sp"
-                        android:textStyle="bold" />
+                        android:text="Your Days with Most Messages"
+                        android:textSize="16sp"
+                        android:textStyle="bold"
+                        android:textColor="#FFFFFF"
+                        android:letterSpacing="0.02"
+                        android:paddingBottom="8dp" />
 
-                    <!-- HorizontalBarChart for Days with the Most Messages -->
+                    <!-- HorizontalBarChart -->
                     <com.github.mikephil.charting.charts.HorizontalBarChart
                         android:id="@+id/yourDaysMostMessagesChart"
                         android:layout_width="match_parent"
-                        android:layout_height="200dp" /> <!-- Adjust height as needed -->
+                        android:layout_height="200dp"
+                        android:layout_marginTop="8dp" />
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
 
@@ -327,28 +338,39 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_columnWeight="1"
-                android:layout_margin="4dp"
-                app:cardCornerRadius="8dp"
-                app:cardElevation="4dp">
+                android:layout_margin="8dp"
+                app:cardCornerRadius="16dp"
+                app:cardElevation="8dp"
+                app:cardBackgroundColor="@android:color/transparent">
 
+                <!-- Gradient Background -->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:padding="12dp">
+                    android:padding="16dp"
+                    android:background="@drawable/gradient_background_card_alt"
+                    android:foreground="?attr/selectableItemBackgroundBorderless"
+                    android:clickable="true"
+                    android:focusable="true">
 
+                    <!-- Title -->
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Days with the Most Messages"
-                        android:textSize="14sp"
-                        android:textStyle="bold" />
+                        android:text="Her Days with Most Messages"
+                        android:textSize="16sp"
+                        android:textStyle="bold"
+                        android:textColor="#FFFFFF"
+                        android:letterSpacing="0.02"
+                        android:paddingBottom="8dp" />
 
-                    <!-- HorizontalBarChart for Days with the Most Messages -->
+                    <!-- HorizontalBarChart -->
                     <com.github.mikephil.charting.charts.HorizontalBarChart
                         android:id="@+id/herDaysMostMessagesChart"
                         android:layout_width="match_parent"
-                        android:layout_height="200dp" /> <!-- Adjust height as needed -->
+                        android:layout_height="200dp"
+                        android:layout_marginTop="8dp" />
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
             <!-- Messages per Month -->
@@ -358,96 +380,123 @@
                 android:layout_height="wrap_content"
                 android:layout_columnSpan="2"
                 android:layout_columnWeight="1"
-                android:layout_margin="4dp"
-                app:cardCornerRadius="8dp"
-                app:cardElevation="4dp">
+                android:layout_margin="8dp"
+                app:cardCornerRadius="16dp"
+                app:cardElevation="8dp"
+                app:cardBackgroundColor="@android:color/transparent">
 
+                <!-- Gradient Background -->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:padding="12dp">
+                    android:padding="16dp"
+                    android:background="@drawable/gradient_background_card"
+                    android:foreground="?attr/selectableItemBackgroundBorderless"
+                    android:clickable="true"
+                    android:focusable="true">
 
+                    <!-- Title -->
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_horizontal"
                         android:paddingBottom="10dp"
-                        android:text="Messages per Month"
-                        android:textSize="14sp"
-                        android:textStyle="bold" />
+                        android:text="Your Messages per Month"
+                        android:textSize="16sp"
+                        android:textStyle="bold"
+                        android:textColor="#FFFFFF"
+                        android:letterSpacing="0.02" />
 
-                    <!-- LineChart to display messages per month -->
+                    <!-- LineChart -->
                     <com.github.mikephil.charting.charts.LineChart
                         android:id="@+id/yourMessagesPerMonthLineChart"
                         android:layout_width="match_parent"
-                        android:layout_height="200dp" />
+                        android:layout_height="200dp"
+                        android:layout_marginTop="8dp" />
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
-
 
             <androidx.cardview.widget.CardView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_columnSpan="2"
                 android:layout_columnWeight="1"
-                android:layout_margin="4dp"
-                app:cardCornerRadius="8dp"
-                app:cardElevation="4dp">
+                android:layout_margin="8dp"
+                app:cardCornerRadius="16dp"
+                app:cardElevation="8dp"
+                app:cardBackgroundColor="@android:color/transparent">
 
+                <!-- Gradient Background -->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:padding="12dp">
+                    android:padding="16dp"
+                    android:background="@drawable/gradient_background_card_alt"
+                    android:foreground="?attr/selectableItemBackgroundBorderless"
+                    android:clickable="true"
+                    android:focusable="true">
 
+                    <!-- Title -->
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_horizontal"
                         android:paddingBottom="10dp"
-                        android:text="Messages per Month"
-                        android:textSize="14sp"
-                        android:textStyle="bold" />
+                        android:text="Her Messages per Month"
+                        android:textSize="16sp"
+                        android:textStyle="bold"
+                        android:textColor="#FFFFFF"
+                        android:letterSpacing="0.02" />
 
-                    <!-- LineChart to display messages per month -->
+                    <!-- LineChart -->
                     <com.github.mikephil.charting.charts.LineChart
                         android:id="@+id/herMessagesPerMonthLineChart"
                         android:layout_width="match_parent"
-                        android:layout_height="200dp" />
+                        android:layout_height="200dp"
+                        android:layout_marginTop="8dp" />
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
-
             <androidx.cardview.widget.CardView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_columnSpan="2"
-
                 android:layout_columnWeight="1"
-                android:layout_margin="4dp"
-                app:cardCornerRadius="8dp"
-                app:cardElevation="4dp">
+                android:layout_margin="8dp"
+                app:cardCornerRadius="16dp"
+                app:cardElevation="8dp"
+                app:cardBackgroundColor="@android:color/transparent">
 
+                <!-- Gradient Background -->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:padding="12dp">
+                    android:padding="16dp"
+                    android:background="@drawable/gradient_background_card"
+                    android:foreground="?attr/selectableItemBackgroundBorderless"
+                    android:clickable="true"
+                    android:focusable="true">
 
+                    <!-- Title -->
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_horizontal"
                         android:paddingBottom="10dp"
-                        android:text="Messages per Hour of the Day"
-                        android:textSize="14sp"
-                        android:textStyle="bold" />
+                        android:text="Your Messages per Hour of the Day"
+                        android:textSize="16sp"
+                        android:textStyle="bold"
+                        android:textColor="#FFFFFF"
+                        android:letterSpacing="0.02" />
 
-                    <!-- LineChart to display messages per hour of the day -->
+                    <!-- LineChart -->
                     <com.github.mikephil.charting.charts.LineChart
                         android:id="@+id/yourhourOfDayLineChart"
                         android:layout_width="match_parent"
-                        android:layout_height="400dp" />
+                        android:layout_height="400dp"
+                        android:layout_marginTop="8dp" />
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
 
@@ -455,32 +504,41 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_columnSpan="2"
-
                 android:layout_columnWeight="1"
-                android:layout_margin="4dp"
-                app:cardCornerRadius="8dp"
-                app:cardElevation="4dp">
+                android:layout_margin="8dp"
+                app:cardCornerRadius="16dp"
+                app:cardElevation="8dp"
+                app:cardBackgroundColor="@android:color/transparent">
 
+                <!-- Gradient Background -->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:padding="12dp">
+                    android:padding="16dp"
+                    android:background="@drawable/gradient_background_card_alt"
+                    android:foreground="?attr/selectableItemBackgroundBorderless"
+                    android:clickable="true"
+                    android:focusable="true">
 
+                    <!-- Title -->
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_horizontal"
                         android:paddingBottom="10dp"
-                        android:text="Messages per Hour of the Day"
-                        android:textSize="14sp"
-                        android:textStyle="bold" />
+                        android:text="Her Messages per Hour of the Day"
+                        android:textSize="16sp"
+                        android:textStyle="bold"
+                        android:textColor="#FFFFFF"
+                        android:letterSpacing="0.02" />
 
-                    <!-- LineChart to display messages per hour of the day -->
+                    <!-- LineChart -->
                     <com.github.mikephil.charting.charts.LineChart
                         android:id="@+id/herhourOfDayLineChart"
                         android:layout_width="match_parent"
-                        android:layout_height="400dp" />
+                        android:layout_height="400dp"
+                        android:layout_marginTop="8dp" />
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
             <!-- Messages per Day of the Week -->
@@ -488,28 +546,39 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_columnWeight="1"
-                android:layout_margin="4dp"
-                app:cardCornerRadius="8dp"
-                app:cardElevation="4dp">
+                android:layout_margin="8dp"
+                app:cardCornerRadius="16dp"
+                app:cardElevation="8dp"
+                app:cardBackgroundColor="@android:color/transparent">
 
+                <!-- Gradient Background -->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:padding="12dp">
+                    android:padding="16dp"
+                    android:background="@drawable/gradient_background_card"
+                    android:foreground="?attr/selectableItemBackgroundBorderless"
+                    android:clickable="true"
+                    android:focusable="true">
 
+                    <!-- Title -->
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Messages per Day of the Week"
-                        android:textSize="14sp"
-                        android:textStyle="bold" />
+                        android:text="Your Messages per Day of the Week"
+                        android:textSize="16sp"
+                        android:textStyle="bold"
+                        android:textColor="#FFFFFF"
+                        android:letterSpacing="0.02"
+                        android:paddingBottom="8dp" />
 
-                    <!-- Use HorizontalBarChart instead of BarChart -->
+                    <!-- HorizontalBarChart -->
                     <com.github.mikephil.charting.charts.HorizontalBarChart
                         android:id="@+id/yourbarcharts"
                         android:layout_width="match_parent"
-                        android:layout_height="400dp" /> <!-- Adjust height as needed -->
+                        android:layout_height="400dp"
+                        android:layout_marginTop="8dp" />
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
 
@@ -517,52 +586,74 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_columnWeight="1"
-                android:layout_margin="4dp"
-                app:cardCornerRadius="8dp"
-                app:cardElevation="4dp">
+                android:layout_margin="8dp"
+                app:cardCornerRadius="16dp"
+                app:cardElevation="8dp"
+                app:cardBackgroundColor="@android:color/transparent">
 
+                <!-- Gradient Background -->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:padding="12dp">
+                    android:padding="16dp"
+                    android:background="@drawable/gradient_background_card_alt"
+                    android:foreground="?attr/selectableItemBackgroundBorderless"
+                    android:clickable="true"
+                    android:focusable="true">
 
+                    <!-- Title -->
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Messages per Day of the Week"
-                        android:textSize="14sp"
-                        android:textStyle="bold" />
+                        android:text="Her Messages per Day of the Week"
+                        android:textSize="16sp"
+                        android:textStyle="bold"
+                        android:textColor="#FFFFFF"
+                        android:letterSpacing="0.02"
+                        android:paddingBottom="8dp" />
 
-                    <!-- Use HorizontalBarChart instead of BarChart -->
+                    <!-- HorizontalBarChart -->
                     <com.github.mikephil.charting.charts.HorizontalBarChart
                         android:id="@+id/herbarcharts"
                         android:layout_width="match_parent"
-                        android:layout_height="400dp" /> <!-- Adjust height as needed -->
+                        android:layout_height="400dp"
+                        android:layout_marginTop="8dp" />
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
             <!-- Largest Streak of Days with Communications -->
+            <!-- Largest Communication Streak -->
             <androidx.cardview.widget.CardView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_columnSpan="2"
                 android:layout_columnWeight="1"
-                android:layout_margin="4dp"
-                app:cardCornerRadius="8dp"
-                app:cardElevation="4dp">
+                android:layout_margin="8dp"
+                app:cardCornerRadius="16dp"
+                app:cardElevation="8dp"
+                app:cardBackgroundColor="@android:color/transparent">
 
+                <!-- Gradient Background -->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:padding="12dp">
+                    android:padding="16dp"
+                    android:background="@drawable/gradient_background_card"
+                    android:foreground="?attr/selectableItemBackgroundBorderless"
+                    android:clickable="true"
+                    android:focusable="true">
 
+                    <!-- Title -->
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Largest Communication Streak"
-                        android:textSize="14sp"
-                        android:textStyle="bold" />
+                        android:textSize="16sp"
+                        android:textStyle="bold"
+                        android:textColor="#FFFFFF"
+                        android:letterSpacing="0.02"
+                        android:paddingBottom="8dp" />
 
                     <!-- TextView for the number of days -->
                     <TextView
@@ -570,7 +661,10 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="You: N/A"
-                        android:textSize="12sp" />
+                        android:textSize="18sp"
+                        android:textColor="#FFFFFF"
+                        android:textStyle="bold"
+                        android:letterSpacing="0.02" />
 
                     <!-- TextView for the date range -->
                     <TextView
@@ -578,31 +672,45 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Dates: N/A"
-                        android:textSize="12sp" />
+                        android:textSize="14sp"
+                        android:textColor="#FFFFFF"
+                        android:letterSpacing="0.02"
+                        android:paddingTop="4dp" />
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
+
             <!-- Largest No Conversation Days -->
             <androidx.cardview.widget.CardView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_columnSpan="2"
                 android:layout_columnWeight="1"
-                android:layout_margin="4dp"
-                app:cardCornerRadius="8dp"
-                app:cardElevation="4dp">
+                android:layout_margin="8dp"
+                app:cardCornerRadius="16dp"
+                app:cardElevation="8dp"
+                app:cardBackgroundColor="@android:color/transparent">
 
+                <!-- Gradient Background -->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:padding="12dp">
+                    android:padding="16dp"
+                    android:background="@drawable/gradient_background_card_alt"
+                    android:foreground="?attr/selectableItemBackgroundBorderless"
+                    android:clickable="true"
+                    android:focusable="true">
 
+                    <!-- Title -->
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Largest No Conversation Days"
-                        android:textSize="14sp"
-                        android:textStyle="bold" />
+                        android:textSize="16sp"
+                        android:textStyle="bold"
+                        android:textColor="#FFFFFF"
+                        android:letterSpacing="0.02"
+                        android:paddingBottom="8dp" />
 
                     <!-- TextView for the number of days -->
                     <TextView
@@ -610,15 +718,21 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="You: N/A"
-                        android:textSize="12sp" />
+                        android:textSize="18sp"
+                        android:textColor="#FFFFFF"
+                        android:textStyle="bold"
+                        android:letterSpacing="0.02" />
 
-                    <!-- New TextView for the date range -->
+                    <!-- TextView for the date range -->
                     <TextView
                         android:id="@+id/yourLargestNoConversationDatesTextView"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Dates: N/A"
-                        android:textSize="12sp" />
+                        android:textSize="14sp"
+                        android:textColor="#FFFFFF"
+                        android:letterSpacing="0.02"
+                        android:paddingTop="4dp" />
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
 
