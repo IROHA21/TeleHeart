@@ -11,9 +11,11 @@ import android.view.View;
 import android.view.animation.LinearInterpolator;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -39,6 +41,11 @@ public class Firstscreen extends AppCompatActivity {
     private static final String PREFS_NAME = "MyAppPrefs";
     private static final String LANGUAGE_KEY = "language";
 
+    // UI elements
+    private TextView welcomeMessage;
+    private Button startButton, tutorialButton;
+    private Spinner languageSpinner;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -47,6 +54,15 @@ public class Firstscreen extends AppCompatActivity {
         setLocaleFromPreferences();
 
         setContentView(R.layout.animated_background);
+
+        // Initialize UI elements
+        welcomeMessage = findViewById(R.id.welcome_message);
+        startButton = findViewById(R.id.start_button);
+        tutorialButton = findViewById(R.id.tutorial_button);
+        languageSpinner = findViewById(R.id.language_spinner);
+
+        // Update UI texts based on the current language
+        updateUITexts();
 
         Intent serviceIntent = new Intent(this, MyService.class);
         startService(serviceIntent);
@@ -58,7 +74,6 @@ public class Firstscreen extends AppCompatActivity {
         blue2 = findViewById(R.id.blue2);
 
         // Set up the language spinner
-        Spinner languageSpinner = findViewById(R.id.language_spinner);
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(
                 this,
                 R.array.languages,
@@ -80,12 +95,13 @@ public class Firstscreen extends AppCompatActivity {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 String selectedLanguage = parent.getItemAtPosition(position).toString();
-                if (selectedLanguage.equals("Русский")) {
-                    saveLanguage("ru"); // Save Russian
-                    setLocale("ru"); // Set language to Russian
-                } else {
-                    saveLanguage("en"); // Save English
-                    setLocale("en"); // Set language to English
+                String newLanguageCode = selectedLanguage.equals("Русский") ? "ru" : "en";
+
+                // Only restart the activity if the language has changed
+                if (!newLanguageCode.equals(getSavedLanguage())) {
+                    saveLanguage(newLanguageCode); // Save the new language
+                    setLocale(newLanguageCode); // Set the new locale
+                    restartActivity(); // Restart the activity to apply the new language
                 }
             }
 
@@ -115,25 +131,21 @@ public class Firstscreen extends AppCompatActivity {
         setOnClickListeners(blue2);
     }
 
+    // Helper method to update UI texts based on the current language
+    private void updateUITexts() {
+        welcomeMessage.setText(getString(R.string.Welcome_to_TeleHeart));
+        startButton.setText(getString(R.string.Start));
+        tutorialButton.setText(getString(R.string.Tutorial));
+    }
+
     // Helper method to change the app's locale
     private void setLocale(String languageCode) {
-        // Get the current language
-        String currentLanguage = getSavedLanguage();
-
-        // Only restart the activity if the language has changed
-        if (!currentLanguage.equals(languageCode)) {
-            Locale locale = new Locale(languageCode);
-            Locale.setDefault(locale);
-            Resources resources = getResources();
-            Configuration config = resources.getConfiguration();
-            config.setLocale(locale);
-            resources.updateConfiguration(config, resources.getDisplayMetrics());
-
-            // Restart the activity to apply the new locale
-            Intent intent = getIntent();
-            finish();
-            startActivity(intent);
-        }
+        Locale locale = new Locale(languageCode);
+        Locale.setDefault(locale);
+        Resources resources = getResources();
+        Configuration config = resources.getConfiguration();
+        config.setLocale(locale);
+        resources.updateConfiguration(config, resources.getDisplayMetrics());
     }
 
     // Helper method to set the locale from SharedPreferences
@@ -159,6 +171,13 @@ public class Firstscreen extends AppCompatActivity {
     private String getSavedLanguage() {
         SharedPreferences preferences = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
         return preferences.getString(LANGUAGE_KEY, "en"); // Default to English
+    }
+
+    // Helper method to restart the activity
+    private void restartActivity() {
+        Intent intent = getIntent();
+        finish(); // Finish the current activity
+        startActivity(intent); // Start the activity again
     }
 
     // Rest of your existing methods (e.g., setOnClickListeners, startRandomMovement, etc.)

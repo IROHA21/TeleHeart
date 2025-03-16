@@ -23,7 +23,7 @@
         <activity
             android:name=".ContactsActivity"
             android:exported="false"
-            android:label="@string/title_activity_contacts"
+            android:label="ContactsActivity"
             android:theme="@style/Theme.Lasttele" />
         <activity
             android:name=".MainActivity"

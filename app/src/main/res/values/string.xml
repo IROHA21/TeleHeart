@@ -16,6 +16,8 @@
     <string name="please_enter_phone_number">Please enter a phone number!</string>
 
     //login screen (activity_main)
+    <string name="LOGIN">LOGIN</string>
+
 
 
 
