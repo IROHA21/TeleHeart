@@ -61,7 +61,7 @@ public class MainActivity extends AppCompatActivity {
         progressBar.setVisibility(View.VISIBLE);
 
         if (phone.isEmpty()) {
-            Toast.makeText(this, "Please enter a phone number!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, R.string.please_enter_phone_number, Toast.LENGTH_SHORT).show();
             return;
         }
 

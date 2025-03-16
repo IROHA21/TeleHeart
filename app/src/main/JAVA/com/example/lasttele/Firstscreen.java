@@ -2,16 +2,23 @@ package com.example.lasttele;
 
 import android.animation.ValueAnimator;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.res.Configuration;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.view.animation.LinearInterpolator;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
+import android.widget.Spinner;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Random;
 
@@ -28,11 +35,18 @@ public class Firstscreen extends AppCompatActivity {
     // Map to store ValueAnimators for each view
     private final Map<View, ValueAnimator> animatorMap = new HashMap<>();
 
+    // SharedPreferences key for saving the selected language
+    private static final String PREFS_NAME = "MyAppPrefs";
+    private static final String LANGUAGE_KEY = "language";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.animated_background);
 
+        // Set the locale based on the saved preference
+        setLocaleFromPreferences();
+
+        setContentView(R.layout.animated_background);
 
         Intent serviceIntent = new Intent(this, MyService.class);
         startService(serviceIntent);
@@ -42,6 +56,44 @@ public class Firstscreen extends AppCompatActivity {
         blue1 = findViewById(R.id.blue1);
         white2 = findViewById(R.id.white2);
         blue2 = findViewById(R.id.blue2);
+
+        // Set up the language spinner
+        Spinner languageSpinner = findViewById(R.id.language_spinner);
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(
+                this,
+                R.array.languages,
+                android.R.layout.simple_spinner_item
+        );
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        languageSpinner.setAdapter(adapter);
+
+        // Set the spinner to the current language
+        String currentLanguage = getSavedLanguage();
+        if (currentLanguage.equals("ru")) {
+            languageSpinner.setSelection(1); // Select Russian
+        } else {
+            languageSpinner.setSelection(0); // Select English
+        }
+
+        // Set the spinner listener
+        languageSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                String selectedLanguage = parent.getItemAtPosition(position).toString();
+                if (selectedLanguage.equals("Русский")) {
+                    saveLanguage("ru"); // Save Russian
+                    setLocale("ru"); // Set language to Russian
+                } else {
+                    saveLanguage("en"); // Save English
+                    setLocale("en"); // Set language to English
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+                // Do nothing
+            }
+        });
 
         // Get screen dimensions after the layout is drawn
         View rootView = findViewById(R.id.root_layout);
@@ -63,6 +115,53 @@ public class Firstscreen extends AppCompatActivity {
         setOnClickListeners(blue2);
     }
 
+    // Helper method to change the app's locale
+    private void setLocale(String languageCode) {
+        // Get the current language
+        String currentLanguage = getSavedLanguage();
+
+        // Only restart the activity if the language has changed
+        if (!currentLanguage.equals(languageCode)) {
+            Locale locale = new Locale(languageCode);
+            Locale.setDefault(locale);
+            Resources resources = getResources();
+            Configuration config = resources.getConfiguration();
+            config.setLocale(locale);
+            resources.updateConfiguration(config, resources.getDisplayMetrics());
+
+            // Restart the activity to apply the new locale
+            Intent intent = getIntent();
+            finish();
+            startActivity(intent);
+        }
+    }
+
+    // Helper method to set the locale from SharedPreferences
+    private void setLocaleFromPreferences() {
+        String languageCode = getSavedLanguage();
+        Locale locale = new Locale(languageCode);
+        Locale.setDefault(locale);
+        Resources resources = getResources();
+        Configuration config = resources.getConfiguration();
+        config.setLocale(locale);
+        resources.updateConfiguration(config, resources.getDisplayMetrics());
+    }
+
+    // Helper method to save the selected language to SharedPreferences
+    private void saveLanguage(String languageCode) {
+        SharedPreferences preferences = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putString(LANGUAGE_KEY, languageCode);
+        editor.apply();
+    }
+
+    // Helper method to get the saved language from SharedPreferences
+    private String getSavedLanguage() {
+        SharedPreferences preferences = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
+        return preferences.getString(LANGUAGE_KEY, "en"); // Default to English
+    }
+
+    // Rest of your existing methods (e.g., setOnClickListeners, startRandomMovement, etc.)
     private void setOnClickListeners(ImageView imageView) {
         imageView.setOnClickListener(v -> {
             // Check if we've reached the maximum number of images
@@ -157,10 +256,8 @@ public class Firstscreen extends AppCompatActivity {
         animatorMap.clear();
     }
 
-    public void onStartClick(View view){
+    public void onStartClick(View view) {
         Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
-
-
     }
 }

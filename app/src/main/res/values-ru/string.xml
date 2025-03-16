@@ -1,0 +1,18 @@
+<resources>
+    <!-- Language selection spinner -->
+    <string-array name="languages">
+        <item>English</item>
+        <item>Русский</item>
+    </string-array>
+
+    <!-- Start screen (animated background) -->
+    <string name="Welcome_to_TeleHeart">Добро пожаловать в TeleHeart</string>
+    <string name="Start">Начать</string>
+    <string name="Tutorial">Обучение</string>
+
+    <!-- Toast messages -->
+    <string name="please_enter_phone_number">Пожалуйста, введите номер телефона!</string>
+
+    <!-- Login screen (activity_main) -->
+    <!-- Add your login screen strings here if needed -->
+</resources>

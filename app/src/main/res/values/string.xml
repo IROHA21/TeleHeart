@@ -1,0 +1,25 @@
+<resources>
+    <string-array name="languages">
+        <item>English</item>
+        <item>Русский</item>
+    </string-array>
+
+
+
+    //start screen (animated background)
+
+    //xml
+    <string name="Welcome_to_TeleHeart">Welcome to TeleHeart</string>
+    <string name="Start">Start</string>
+    <string name="Tutorial">Tutorial</string>
+    //toast
+    <string name="please_enter_phone_number">Please enter a phone number!</string>
+
+    //login screen (activity_main)
+
+
+
+
+
+
+</resources>

@@ -13,7 +13,7 @@
         android:id="@+id/welcome_message"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Welcome to TeleHeart"
+        android:text="@string/Welcome_to_TeleHeart"
         android:textColor="@android:color/white"
         android:textSize="24sp"
         android:textStyle="bold"
@@ -35,7 +35,17 @@
     <!-- Start Button -->
 
     <!-- Tutorial Button -->
-
+    <!-- Language Selection Spinner -->
+    <Spinner
+        android:id="@+id/language_spinner"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/welcome_message"
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:background="@android:drawable/btn_dropdown"
+        android:spinnerMode="dropdown" />
     <Button
         android:id="@+id/start_button"
         android:layout_width="202dp"
@@ -51,7 +61,7 @@
         android:onClick="onStartClick"
         android:paddingHorizontal="40dp"
         android:paddingVertical="20dp"
-        android:text="Start"
+        android:text="@string/Start"
         android:textColor="@android:color/white" />
 
     <Button
@@ -65,7 +75,7 @@
         android:elevation="10dp"
         android:paddingHorizontal="40dp"
         android:paddingVertical="20dp"
-        android:text="Tutorial"
+        android:text="@string/Tutorial"
         android:textColor="@android:color/white" />
 
     <!-- White Image 1 -->
