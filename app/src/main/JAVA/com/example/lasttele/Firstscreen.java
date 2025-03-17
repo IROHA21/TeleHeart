@@ -77,9 +77,9 @@ public class Firstscreen extends AppCompatActivity {
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(
                 this,
                 R.array.languages,
-                android.R.layout.simple_spinner_item
+                R.layout.custom_spinner_item // Use custom layout for the selected item
         );
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        adapter.setDropDownViewResource(R.layout.custom_spinner_dropdown_item); // Use custom layout for dropdown items
         languageSpinner.setAdapter(adapter);
 
         // Set the spinner to the current language

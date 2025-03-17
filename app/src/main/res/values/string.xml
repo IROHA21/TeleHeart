@@ -17,6 +17,62 @@
 
     //login screen (activity_main)
     <string name="LOGIN">LOGIN</string>
+    <string name="ex_70000000000">ex 70000000000</string>
+    <string name="verify">verify</string>
+    <string name="remember_account">remember account</string>
+
+
+    //contact screen
+    <string name="select_contact">select contact</string>
+    <string name="number_of_messages">number of messages</string>
+    <string name="next">next</string>
+
+    //result screen
+    <string name="Chat_Statistics">⚡ Chat Statistics ⚡</string>
+    <string name="Volume_and_Frequency_of_chats">📊⏳ Volume and Frequency of chats ⏳📊</string>
+    <string name="YOUR_MESSAGES">YOUR MESSAGES</string>
+    <string name="THEIR_MESSAGES">THEIR MESSAGES</string>
+    <string name="Number_of_messages">Number of messages 💬</string>
+    <string name="Your_Messages_Last_10_Days">Messages (Last 10 Days) 📅</string>
+    <string name="Your_Days_with_Most_Messages">Days with Most Messages 📈</string>
+    <string name="Your_Messages_per_Month">Your Messages per Month 📉</string>
+    <string name="Your_Messages_per_Hour_of_the_Day">Messages per Hour of the Day ⏰</string>
+    <string name="Your_Messages_per_Day_of_the_Week">Messages per Day of the Week 📆</string>
+    <string name="Largest_Communication_Streak">Largest Communication Streak 🔥</string>
+    <string name="Largest_No_Conversation_Days">Largest No Conversation Days 💬</string>
+    <string name="Chats_Content_Analysis">📝🔍 Chats Content Analysis 🔍📝</string>
+    <string name="Average_Message_Length">Average Message Length ✏️</string>
+    <string name="Median_Message_Length">Median Message Length 📏</string>
+    <string name="Favorite_Emoji">Favorite Emoji ❤️</string>
+    <string name="Most_Used_Emojis">Most Used Emojis 😂</string>
+    <string name="Most_Used_Phrase">Most Used Phrase 🗣️</string>
+    <string name="Most_Used_Words">Most Used Words 🔠</string>
+    <string name="your_Number_of_Links_per_User">your Number of Links per User 🔗</string>
+    <string name="her_Number_of_Links_per_User">her Number of Links per User 🔗</string>
+    <string name="Number_of_Media_Files">Number of Media Files 📸</string>
+    <string name="Longest_Message">Longest Message 📜</string>
+    <string name="Response_and_Conversation_Dynamics">⚡💬 Response and Conversation Dynamics 💬⚡</string>
+    <string name="Average_Response_Time">Average Response Time ⏳</string>
+    <string name="Median_Response_Time">Median Response Time ⏱️</string>
+    <string name="Conversation_Starts">Conversation Starts 🚀</string>
+    <string name="Unreplied_Chats">Unreplied Chats 👻</string>
+    <string name="Longest_Conversation">Longest Conversation 🕰️</string>
+//activity
+    <string name="You">you : </string>
+    <string name="Them">Them : </string>
+    <string name="characters">char</string>
+    <string name="times">times</string>
+    <string name="Total">Total :</string>
+    <string name="time">time</string>
+    <string name="days">days</string>
+    <string name="dates">dates</string>
+    <string name="to"> to </string>
+    <string name="h">h</string>
+    <string name="m">m</string>
+    <string name="s">s</string>
+
+
+
 
 
 

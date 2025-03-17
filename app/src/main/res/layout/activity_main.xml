@@ -18,7 +18,7 @@
         android:color="#1C3B9B"
         android:onClick="onBtnClick"
         android:padding="16dp"
-        android:text="login"
+        android:text="@string/LOGIN"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -32,7 +32,7 @@
         android:layout_marginTop="256dp"
         android:background="@drawable/rounded_edittext"
         android:fontFamily="@font/inter_bold"
-        android:hint="ex_70000000000"
+        android:hint="@string/ex_70000000000"
         android:textAlignment="center"
         android:textColor="#FFFFFF"
         android:textColorHint="#636671"
@@ -63,14 +63,13 @@
 
     <Button
         android:id="@+id/verifyid"
-        android:layout_width="100dp"
+        android:layout_width="191dp"
         android:layout_height="59dp"
-        android:layout_marginTop="32dp"
+        android:layout_marginTop="16dp"
         android:backgroundTint="#1C3B9B"
         android:onClick="onCodeClick"
-        android:text="verify"
+        android:text="@string/verify"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/button123" />
 
@@ -133,7 +132,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="remember account"
+            android:text="@string/remember_account"
             android:textColor="#FAFFFFFF" />
 
         <Button

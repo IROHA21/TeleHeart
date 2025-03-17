@@ -17,7 +17,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="⚡ Chat Statistics ⚡"
+            android:text="@string/Chat_Statistics"
             android:textSize="18sp"
             android:textStyle="bold"
             android:textColor="#FFFFFF"
@@ -57,7 +57,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
-                        android:text=" 📊⏳ Volume and Frequency of chats ⏳📊"
+                        android:text="@string/Volume_and_Frequency_of_chats"
                         android:textSize="16sp"
                         android:textStyle="bold"
                         android:textColor="#FFFFFF"
@@ -87,7 +87,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
-                        android:text="YOUR MESSAGES"
+                        android:text="@string/YOUR_MESSAGES"
                         android:textAlignment="center"
                         android:textColor="#00d4ff"
                         android:textSize="14sp"
@@ -117,7 +117,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
-                        android:text="THEIR MESSAGES"
+                        android:text="@string/THEIR_MESSAGES"
                         android:textAlignment="center"
                         android:textColor="#FFD700"
                         android:textSize="14sp"
@@ -152,7 +152,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Number of messages 💬"
+                        android:text="@string/Number_of_messages"
                         android:textSize="16sp"
                         android:textStyle="bold"
                         android:textColor="#FFFFFF"
@@ -196,7 +196,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Number of messages 💬"
+                        android:text="@string/Number_of_messages"
                         android:textSize="16sp"
                         android:textStyle="bold"
                         android:textColor="#FFFFFF"
@@ -241,7 +241,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Your Messages (Last 10 Days) 📅"
+                        android:text="@string/Your_Messages_Last_10_Days"
                         android:textSize="16sp"
                         android:textStyle="bold"
                         android:textColor="#FFFFFF"
@@ -285,7 +285,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Their Messages (Last 10 Days) 📅"
+                        android:text="@string/Your_Messages_Last_10_Days"
                         android:textSize="16sp"
                         android:textStyle="bold"
                         android:textColor="#FFFFFF"
@@ -329,7 +329,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Your Days with Most Messages 📈"
+                        android:text="@string/Your_Days_with_Most_Messages"
                         android:textSize="16sp"
                         android:textStyle="bold"
                         android:textColor="#FFFFFF"
@@ -369,7 +369,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Her Days with Most Messages 📈"
+                        android:text="@string/Your_Days_with_Most_Messages"
                         android:textSize="16sp"
                         android:textStyle="bold"
                         android:textColor="#FFFFFF"
@@ -413,7 +413,7 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_horizontal"
                         android:paddingBottom="10dp"
-                        android:text="Your Messages per Month 📉"
+                        android:text="@string/Your_Messages_per_Month"
                         android:textSize="16sp"
                         android:textStyle="bold"
                         android:textColor="#FFFFFF"
@@ -455,7 +455,7 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_horizontal"
                         android:paddingBottom="10dp"
-                        android:text="Her Messages per Month 📉"
+                        android:text="@string/Your_Messages_per_Month"
                         android:textSize="16sp"
                         android:textStyle="bold"
                         android:textColor="#FFFFFF"
@@ -496,7 +496,7 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_horizontal"
                         android:paddingBottom="10dp"
-                        android:text="Your Messages per Hour of the Day ⏰"
+                        android:text="@string/Your_Messages_per_Hour_of_the_Day"
                         android:textSize="16sp"
                         android:textStyle="bold"
                         android:textColor="#FFFFFF"
@@ -538,7 +538,7 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_horizontal"
                         android:paddingBottom="10dp"
-                        android:text="Her Messages per Hour of the Day ⏰"
+                        android:text="@string/Your_Messages_per_Hour_of_the_Day"
                         android:textSize="16sp"
                         android:textStyle="bold"
                         android:textColor="#FFFFFF"
@@ -577,7 +577,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Your Messages per Day of the Week 📆"
+                        android:text="@string/Your_Messages_per_Day_of_the_Week"
                         android:textSize="16sp"
                         android:textStyle="bold"
                         android:textColor="#FFFFFF"
@@ -617,7 +617,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Her Messages per Day of the Week 📆"
+                        android:text="@string/Your_Messages_per_Day_of_the_Week"
                         android:textSize="16sp"
                         android:textStyle="bold"
                         android:textColor="#FFFFFF"
@@ -659,7 +659,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Largest Communication Streak 🔥"
+                        android:text="@string/Largest_Communication_Streak"
                         android:textSize="16sp"
                         android:textStyle="bold"
                         android:textColor="#FFFFFF"
@@ -716,7 +716,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Largest No Conversation Days 💬"
+                        android:text="@string/Largest_No_Conversation_Days"
                         android:textSize="16sp"
                         android:textStyle="bold"
                         android:textColor="#FFFFFF"
@@ -770,7 +770,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
-                        android:text=" 📝🔍 Chats Content Analysis 🔍📝 "
+                        android:text="@string/Chats_Content_Analysis"
                         android:textSize="16sp"
                         android:textStyle="bold"
                         android:textColor="#FFFFFF"
@@ -804,7 +804,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Average Message Length ✏️"
+                        android:text="@string/Average_Message_Length"
                         android:textSize="16sp"
                         android:textStyle="bold"
                         android:textColor="#FFFFFF"
@@ -817,7 +817,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="You: N/A"
-                        android:textSize="24sp"
+                        android:textSize="16sp"
                         android:textColor="#FFFFFF"
                         android:textStyle="bold"
                         android:letterSpacing="0.02" />
@@ -848,7 +848,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Average Message Length ✏️"
+                        android:text="@string/Average_Message_Length"
                         android:textSize="16sp"
                         android:textStyle="bold"
                         android:textColor="#FFFFFF"
@@ -861,7 +861,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Them: N/A"
-                        android:textSize="24sp"
+                        android:textSize="16sp"
                         android:textColor="#FFFFFF"
                         android:textStyle="bold"
                         android:letterSpacing="0.02" />
@@ -892,7 +892,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Median Message Length 📏"
+                        android:text="@string/Median_Message_Length"
                         android:textSize="16sp"
                         android:textStyle="bold"
                         android:textColor="#FFFFFF"
@@ -905,7 +905,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="You: N/A"
-                        android:textSize="24sp"
+                        android:textSize="16sp"
                         android:textColor="#FFFFFF"
                         android:textStyle="bold"
                         android:letterSpacing="0.02" />
@@ -936,7 +936,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Median Message Length 📏"
+                        android:text="@string/Median_Message_Length"
                         android:textSize="16sp"
                         android:textStyle="bold"
                         android:textColor="#FFFFFF"
@@ -949,7 +949,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Them: N/A"
-                        android:textSize="24sp"
+                        android:textSize="16sp"
                         android:textColor="#FFFFFF"
                         android:textStyle="bold"
                         android:letterSpacing="0.02" />
@@ -980,7 +980,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Favorite Emoji ❤️"
+                        android:text="@string/Favorite_Emoji"
                         android:textSize="16sp"
                         android:textStyle="bold"
                         android:textColor="#FFFFFF"
@@ -1024,7 +1024,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Favorite Emoji ❤️"
+                        android:text="@string/Favorite_Emoji"
                         android:textSize="16sp"
                         android:textStyle="bold"
                         android:textColor="#FFFFFF"
@@ -1067,7 +1067,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Most Used Emojis 😂"
+                        android:text="@string/Most_Used_Emojis"
                         android:textSize="18sp"
                         android:textStyle="bold"
                         android:textColor="#FFFFFF"
@@ -1106,7 +1106,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Most Used Emojis 😂"
+                        android:text="@string/Most_Used_Emojis"
                         android:textSize="18sp"
                         android:textStyle="bold"
                         android:textColor="#FFFFFF"
@@ -1143,7 +1143,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Most Used Phrase 🗣️"
+                        android:text="@string/Most_Used_Phrase"
                         android:textSize="18sp"
                         android:textStyle="bold"
                         android:textColor="#FFFFFF"
@@ -1185,7 +1185,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Most Used Phrase 🗣️"
+                        android:text="@string/Most_Used_Phrase"
                         android:textSize="18sp"
                         android:textStyle="bold"
                         android:textColor="#FFFFFF"
@@ -1226,7 +1226,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Most Used Words 🔠"
+                        android:text="@string/Most_Used_Words"
                         android:textSize="16sp"
                         android:textStyle="bold"
                         android:textColor="#FFFFFF"
@@ -1264,7 +1264,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Most Used Words 🔠"
+                        android:text="@string/Most_Used_Words"
                         android:textSize="16sp"
                         android:textStyle="bold"
                         android:textColor="#FFFFFF"
@@ -1303,7 +1303,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Number of Links per User 🔗"
+                        android:text="@string/your_Number_of_Links_per_User"
                         android:textSize="16sp"
                         android:textStyle="bold"
                         android:textColor="#FFFFFF"
@@ -1342,7 +1342,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Number of Links per User 🔗"
+                        android:text="@string/her_Number_of_Links_per_User"
                         android:textSize="16sp"
                         android:textStyle="bold"
                         android:textColor="#FFFFFF"
@@ -1385,7 +1385,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Number of Media Files 📸"
+                        android:text="@string/Number_of_Media_Files"
                         android:textSize="16sp"
                         android:textStyle="bold"
                         android:textColor="#FFFFFF"
@@ -1432,7 +1432,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Number of Media Files 📸"
+                        android:text="@string/Number_of_Media_Files"
                         android:textSize="16sp"
                         android:textStyle="bold"
                         android:textColor="#FFFFFF"
@@ -1480,7 +1480,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Longest Message"
+                            android:text="@string/Longest_Message"
                             android:textSize="14sp"
                             android:textStyle="bold"
                             android:textColor="#FFFFFF"
@@ -1536,7 +1536,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Longest Message"
+                            android:text="@string/Longest_Message"
                             android:textSize="14sp"
                             android:textStyle="bold"
                             android:textColor="#FFFFFF"
@@ -1585,7 +1585,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
-                        android:text="⚡💬 Response and Conversation Dynamics 💬⚡"
+                        android:text="@string/Response_and_Conversation_Dynamics"
                         android:textSize="16sp"
                         android:textStyle="bold"
                         android:textColor="#FFFFFF"
@@ -1617,7 +1617,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Average Response Time ⏳ "
+                        android:text="@string/Average_Response_Time"
                         android:textSize="16sp"
                         android:textStyle="bold"
                         android:textColor="#FFFFFF"
@@ -1660,7 +1660,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Average Response Time ⏳ "
+                        android:text="@string/Average_Response_Time"
                         android:textSize="16sp"
                         android:textStyle="bold"
                         android:textColor="#FFFFFF"
@@ -1717,7 +1717,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Median Response Time ⏱️"
+                        android:text="@string/Median_Response_Time"
                         android:textSize="16sp"
                         android:textStyle="bold"
                         android:textColor="#FFFFFF"
@@ -1760,7 +1760,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Median Response Time ⏱️"
+                        android:text="@string/Median_Response_Time"
                         android:textSize="16sp"
                         android:textStyle="bold"
                         android:textColor="#FFFFFF"
@@ -1805,7 +1805,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Conversation Starts 🚀"
+                        android:text="@string/Conversation_Starts"
                         android:textSize="16sp"
                         android:textStyle="bold"
                         android:textColor="#FFFFFF"
@@ -1846,7 +1846,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Conversation Starts 🚀"
+                        android:text="@string/Conversation_Starts"
                         android:textSize="16sp"
                         android:textStyle="bold"
                         android:textColor="#FFFFFF"
@@ -1888,7 +1888,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Unreplied Chats 👻"
+                        android:text="@string/Unreplied_Chats"
                         android:textSize="16sp"
                         android:textStyle="bold"
                         android:textColor="#FFFFFF"
@@ -1929,7 +1929,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Unreplied Chats 👻"
+                        android:text="@string/Unreplied_Chats"
                         android:textSize="16sp"
                         android:textStyle="bold"
                         android:textColor="#FFFFFF"
@@ -1971,7 +1971,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Longest Conversation 🕰️"
+                        android:text="@string/Longest_Conversation"
                         android:textSize="16sp"
                         android:textStyle="bold"
                         android:textColor="#FFFFFF"

@@ -272,20 +272,20 @@ public class ResultsActivity extends AppCompatActivity {
                 long yourChatId = longid;
 
                 // Number of Messages
-                yourMessagesTextView.setText("You: " + messageCounts.getOrDefault(yourChatId, 0));
-                herMessagesTextView.setText("Them: " + messageCounts.getOrDefault(herChatId, 0));
+                yourMessagesTextView.setText( getString(R.string.You)  + messageCounts.getOrDefault(yourChatId, 0));
+                herMessagesTextView.setText(getString(R.string.Them) + messageCounts.getOrDefault(herChatId, 0));
 
                 // Average Time to Answer
-                yourAverageTimeTextView.setText("You: " + (averageTimes.getOrDefault(yourChatId, 0L) / 1000) + "s");
-                herAverageTimeTextView.setText("Them: " + (averageTimes.getOrDefault(herChatId, 0L) / 1000) + "s");
+                yourAverageTimeTextView.setText(getString(R.string.You)+ (averageTimes.getOrDefault(yourChatId, 0L) / 1000) + "s");
+                herAverageTimeTextView.setText(getString(R.string.Them)+ (averageTimes.getOrDefault(herChatId, 0L) / 1000) + "s");
 
                 // Favorite Emoji
-                yourFavoriteEmojiTextView.setText("You: " + favoriteEmojis.getOrDefault(yourChatId, ""));
-                herFavoriteEmojiTextView.setText("Them: " + favoriteEmojis.getOrDefault(herChatId, ""));
+                yourFavoriteEmojiTextView.setText(getString(R.string.You) + favoriteEmojis.getOrDefault(yourChatId, ""));
+                herFavoriteEmojiTextView.setText(getString(R.string.Them) + favoriteEmojis.getOrDefault(herChatId, ""));
 
                 // Number of Media Files
-                yourMediaFilesTextView.setText("You: " + mediaCounts.getOrDefault(yourChatId, 0));
-                herMediaFilesTextView.setText("Them: " + mediaCounts.getOrDefault(herChatId, 0));
+                yourMediaFilesTextView.setText(getString(R.string.You) + mediaCounts.getOrDefault(yourChatId, 0));
+                herMediaFilesTextView.setText(getString(R.string.Them) + mediaCounts.getOrDefault(herChatId, 0));
 
                 // Set up Number of Links per User pie charts
                 setupLinksPieChart(yourLinksPieChart, linkCounts.getOrDefault(yourChatId, new HashMap<>()), "You");
@@ -308,8 +308,8 @@ public class ResultsActivity extends AppCompatActivity {
                 setupDaysMostMessagesChart(herDaysMostMessagesChart, daysWithMostMessages.getOrDefault(herChatId, new ArrayList<>()), "Them");
 
                 // Messages in Last 10 Days
-                yourLast10DaysTextView.setText("You: " + last10DaysCounts.getOrDefault(yourChatId, 0));
-                herLast10DaysTextView.setText("Them: " + last10DaysCounts.getOrDefault(herChatId, 0));
+                yourLast10DaysTextView.setText(getString(R.string.You) + last10DaysCounts.getOrDefault(yourChatId, 0));
+                herLast10DaysTextView.setText(getString(R.string.Them) + last10DaysCounts.getOrDefault(herChatId, 0));
 
                 // Set up Most Used Words charts
                 setupMostUsedWordsChart(yourMostUsedWordsChart, mostUsedWords.getOrDefault(yourChatId, new HashMap<>()), "You");
@@ -317,10 +317,10 @@ public class ResultsActivity extends AppCompatActivity {
 
                 // Longest message
                 String yourLongestMessage = longestMessages.getOrDefault(yourChatId, "N/A");
-                yourlongestmesssage.setText("You: " + yourLongestMessage.length() + " characters");
+                yourlongestmesssage.setText(getString(R.string.You) + yourLongestMessage.length() + getString(R.string.characters));
 
                 String herLongestMessage = longestMessages.getOrDefault(herChatId, "N/A");
-                herlongestmesssage.setText("Them: " + herLongestMessage.length() + " characters");
+                herlongestmesssage.setText(getString(R.string.Them) + herLongestMessage.length() + getString(R.string.characters));
 
                 // Set up Most Used Emojis charts
                 setupMostUsedEmojisChart(yourMostUsedEmojisChart, mostUsedEmojis.getOrDefault(yourChatId, new HashMap<>()), "You");
@@ -361,10 +361,10 @@ public class ResultsActivity extends AppCompatActivity {
                 yourMostUsedPhrasesTextView.setText( formatPhrase(mostUsedPhrase.getOrDefault(yourChatId, null)));
                 herMostUsedPhrasesTextView.setText( formatPhrase(mostUsedPhrase.getOrDefault(herChatId, null)));
 
-                yourAverageMessageLengthTextView.setText("You: " + String.format("%.2f", averageMessageLengths.getOrDefault(yourChatId, 0.0)) + " characters");
-                herAverageMessageLengthTextView.setText("Them: " + String.format("%.2f", averageMessageLengths.getOrDefault(herChatId, 0.0)) + " characters");
-                yourMedianMessageLengthTextView.setText("You: " + medianMessageLengths.getOrDefault(yourChatId, 0) + " characters");
-                herMedianMessageLengthTextView.setText("Them: " + medianMessageLengths.getOrDefault(herChatId, 0) + " characters");
+                yourAverageMessageLengthTextView.setText(getString(R.string.You) + String.format("%.2f", averageMessageLengths.getOrDefault(yourChatId, 0.0)) + getString(R.string.characters));
+                herAverageMessageLengthTextView.setText(getString(R.string.Them)  + String.format("%.2f", averageMessageLengths.getOrDefault(herChatId, 0.0)) + getString(R.string.characters));
+                yourMedianMessageLengthTextView.setText(getString(R.string.You) + medianMessageLengths.getOrDefault(yourChatId, 0) + getString(R.string.characters));
+                herMedianMessageLengthTextView.setText(getString(R.string.Them)+ medianMessageLengths.getOrDefault(herChatId, 0) + getString(R.string.characters));
 
             });
         }).start();
@@ -374,7 +374,7 @@ public class ResultsActivity extends AppCompatActivity {
         if (phraseEntry == null) {
             return "No phrases found";
         }
-        return phraseEntry.getKey() + " (" + phraseEntry.getValue() + " times)";
+        return phraseEntry.getKey() + " (" + phraseEntry.getValue() +" "+ getString(R.string.times)+ ")";
     }
 
     // Helper method to set up the Largest Communication Streak TextView
@@ -390,29 +390,34 @@ public class ResultsActivity extends AppCompatActivity {
             String endDateStr = dateFormat.format(endDate);
 
             // Display the number of days
-            daysTextView.setText("time " + ": " + days + " days");
+            daysTextView.setText(getString(R.string.time)+ ": " + days + getString(R.string.days));
 
             // Display the date range
-            datesTextView.setText("Dates: " + startDateStr + " to " + endDateStr);
+            datesTextView.setText(getString(R.string.dates) + startDateStr + getString(R.string.to) + endDateStr);
         } else {
-            daysTextView.setText("time " + ": No streak found");
-            datesTextView.setText("Dates: N/A");
+            daysTextView.setText(getString(R.string.time) + ": No streak found");
+            datesTextView.setText(getString(R.string.dates)+" : N/A");
         }
     }
     // Helper method to set up the Longest Conversations TextView
     private void setupLongestConversationsTextView(TextView textView, long duration, String label) {
         long hours = TimeUnit.MILLISECONDS.toHours(duration);
         long minutes = TimeUnit.MILLISECONDS.toMinutes(duration) % 60;
-        String durationText = String.format("%d hours %d minutes", hours, minutes);
-        textView.setText("Total" + ": " + durationText);
+        String durationText = String.format("%d h %d m", hours, minutes);
+        if (getString(R.string.Total).equals("Total :")) {
+            durationText = String.format("%d h %d m", hours, minutes);
+        }else {
+            durationText = String.format("%d ч %d m", hours, minutes);
+        }
+        textView.setText(getString(R.string.Total)  + durationText);
     }
     // Helper method to set up the Unreplied Chats TextView
     private void setupUnrepliedChatsTextView(TextView textView, int unreplied, String label) {
-        textView.setText(label + ": " + unreplied + " times");
+        textView.setText( unreplied+ " " + getString(R.string.times));
     }
     // Helper method to set up the Conversation Starts TextView
     private void setupConversationStartsTextView(TextView textView, int starts, String label) {
-        textView.setText(label + ": " + starts + " times");
+        textView.setText(starts+" "+getString(R.string.times));
     }
 
     // Helper method to set up the Largest No Conversation Days TextView
@@ -429,20 +434,20 @@ public class ResultsActivity extends AppCompatActivity {
             String endDateStr = dateFormat.format(endDate);
 
             // Display the number of days
-            daysTextView.setText("time "  + ": " + days + " days");
+            daysTextView.setText(getString(R.string.time)  + ": " + days + getString(R.string.days));
 
             // Display the date range
-            datesTextView.setText("Dates: " + startDateStr + " to " + endDateStr);
+            datesTextView.setText(getString(R.string.dates) + startDateStr + getString(R.string.to) + endDateStr);
         } else {
-            daysTextView.setText("time " + ": No gaps found");
-            datesTextView.setText("Dates: N/A");
+            daysTextView.setText(getString(R.string.time)+ ": No gaps found");
+            datesTextView.setText( getString(R.string.dates)+"N/A");
         }
     }
 
     // Helper method to set up the Median Answering Time TextView
     private void setupMedianAnsweringTimeTextView(TextView textView, long medianTime, String label) {
         long medianTimeSeconds = medianTime / 1000; // Convert milliseconds to seconds
-        textView.setText(label + ": " + medianTimeSeconds + "s");
+        textView.setText(getString(R.string.time) + ": " + medianTimeSeconds + getString(R.string.s));
     }
 
     // Helper method to set up the Number of Links per User pie chart

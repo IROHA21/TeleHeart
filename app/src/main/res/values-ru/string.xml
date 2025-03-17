@@ -6,7 +6,7 @@
     </string-array>
 
     //start screen (animated background)
-    <string name="Welcome_to_TeleHeart">Добро пожаловать в TeleHeart</string>
+    <string name="Welcome_to_TeleHeart">TeleHeart</string>
     <string name="Start">Начать</string>
     <string name="Tutorial">Обучение</string>
 
@@ -15,6 +15,64 @@
 
     //login screen (activity_main)
     <string name="LOGIN">Bойти</string>
+    <string name="ex_70000000000">пр 70000000000</string>
+    <string name="verify">проверить</string>
+    <string name="remember_account">запомнить аккаунт</string>
+
+
+    //contact
+    <string name="select_contact">выбрать контакт</string>
+    <string name="number_of_messages">количество сообщений</string>
+    <string name="next">далее</string>
+
+
+    //result screen
+    <string name="Chat_Statistics">⚡ Статистика чатов ⚡</string>
+    <string name="Volume_and_Frequency_of_chats">📊⏳ Объем и частота чатов ⏳📊</string>
+    <string name="YOUR_MESSAGES">ВАШИ СООБЩЕНИЯ</string>
+    <string name="THEIR_MESSAGES">ИХ СООБЩЕНИЯ</string>
+    <string name="Number_of_messages">Количество сообщений 💬</string>
+    <string name="Your_Messages_Last_10_Days">Сообщения (последние 10 дней) 📅</string>
+    <string name="Your_Days_with_Most_Messages">Дни с наибольшим количеством сообщений 📈</string>
+    <string name="Your_Messages_per_Month">сообщения по месяцам 📉</string>
+    <string name="Your_Messages_per_Hour_of_the_Day">сообщения по часам дня ⏰</string>
+    <string name="Your_Messages_per_Day_of_the_Week">сообщения по дням недели 📆</string>
+    <string name="Largest_Communication_Streak">Самая длинная серия общения 🔥</string>
+    <string name="Largest_No_Conversation_Days">Самые длинные дни без общения 💬</string>
+    <string name="Chats_Content_Analysis">📝🔍 Анализ содержания чатов 🔍📝</string>
+    <string name="Average_Message_Length">Средняя длина сообщения ✏️</string>
+    <string name="Median_Message_Length">Медианная длина сообщения 📏</string>
+    <string name="Favorite_Emoji">Любимый эмодзи ❤️</string>
+    <string name="Most_Used_Emojis">Самые используемые эмодзи 😂</string>
+    <string name="Most_Used_Phrase">Самая используемая фраза 🗣️</string>
+    <string name="Most_Used_Words">Самые используемые слова 🔠</string>
+    <string name="your_Number_of_Links_per_User">Количество ссылок у вас 🔗</string>
+    <string name="her_Number_of_Links_per_User">Количество ссылок у нее 🔗</string>
+    <string name="Number_of_Media_Files">Количество медиафайлов 📸</string>
+    <string name="Longest_Message">Самое длинное сообщение 📜</string>
+    <string name="Response_and_Conversation_Dynamics">⚡💬 Динамика ответов и бесед 💬⚡</string>
+    <string name="Average_Response_Time">Среднее время ответа ⏳</string>
+    <string name="Median_Response_Time">Медианное время ответа ⏱️</string>
+    <string name="Conversation_Starts">Начало бесед 🚀</string>
+    <string name="Unreplied_Chats">Неотвеченные чаты 👻</string>
+    <string name="Longest_Conversation">Самая длинная беседа 🕰️</string>
+    //activiy
+    <string name="You">Вы : </string>
+    <string name="Them">Они : </string>
+    <string name="characters">симв</string>
+    <string name="times"> раз</string>
+    <string name="Total"></string>
+    <string name="time">время</string>
+    <string name="days">дней</string>
+    <string name="dates">даты</string>
+    <string name="to"> до </string>
+    <string name="h"></string>
+    <string name="m">ч</string>
+    <string name="s">c</string>
+
+
+
+
 
 </resources>
 

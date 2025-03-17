@@ -9,19 +9,25 @@
     android:clipToPadding="false">
 
     <!-- Welcome Message -->
+
+    <!-- Heart Image -->
+
     <TextView
         android:id="@+id/welcome_message"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="272dp"
+        android:layout_height="57dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginStart="70dp"
+        android:layout_marginTop="96dp"
+        android:layout_marginEnd="69dp"
+        android:elevation="10dp"
         android:text="@string/Welcome_to_TeleHeart"
         android:textColor="@android:color/white"
         android:textSize="24sp"
-        android:textStyle="bold"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="50dp"
-        android:elevation="10dp" />
+        android:textStyle="bold" />
 
-    <!-- Heart Image -->
     <ImageView
         android:id="@+id/heart_image"
         android:layout_width="320dp"
@@ -36,16 +42,19 @@
 
     <!-- Tutorial Button -->
     <!-- Language Selection Spinner -->
+
     <Spinner
         android:id="@+id/language_spinner"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/welcome_message"
         android:layout_alignParentStart="true"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
-        android:background="@android:drawable/btn_dropdown"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/rounded_spinner_background"
+        android:popupBackground="@drawable/dropdown_background"
         android:spinnerMode="dropdown" />
+
     <Button
         android:id="@+id/start_button"
         android:layout_width="202dp"
