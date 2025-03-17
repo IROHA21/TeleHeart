@@ -31,6 +31,7 @@ import com.github.mikephil.charting.data.PieData;
 import com.github.mikephil.charting.data.PieDataSet;
 import com.github.mikephil.charting.data.PieEntry;
 import com.github.mikephil.charting.formatter.IndexAxisValueFormatter;
+import com.github.mikephil.charting.formatter.ValueFormatter;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 
 import java.text.ParseException;
@@ -295,12 +296,12 @@ public class ResultsActivity extends AppCompatActivity {
                 setupBarChart(herBarChart, dayOfWeekCounts.getOrDefault(herChatId, new HashMap<>()), "Them");
 
                 // Messages per Hour of the Day
-                setupHourOfDayLineChart(yourHourOfDayLineChart, hourOfDayCounts.getOrDefault(yourChatId, new HashMap<>()), "You", Color.BLUE);
-                setupHourOfDayLineChart(herHourOfDayLineChart, hourOfDayCounts.getOrDefault(herChatId, new HashMap<>()), "Them", Color.parseColor("#800080"));
+                setupHourOfDayLineChart(yourHourOfDayLineChart, hourOfDayCounts.getOrDefault(yourChatId, new HashMap<>()), "You", Color.parseColor("#00d4ff"));
+                setupHourOfDayLineChart(herHourOfDayLineChart, hourOfDayCounts.getOrDefault(herChatId, new HashMap<>()), "Them", Color.parseColor("#FFD700"));
 
                 // Set up Messages per Month line charts
-                setupMessagesPerMonthLineChart(yourMessagesPerMonthLineChart, monthCounts.getOrDefault(yourChatId, new HashMap<>()), "You", Color.BLUE);
-                setupMessagesPerMonthLineChart(herMessagesPerMonthLineChart, monthCounts.getOrDefault(herChatId, new HashMap<>()), "Them", Color.parseColor("#800080"));
+                setupMessagesPerMonthLineChart(yourMessagesPerMonthLineChart, monthCounts.getOrDefault(yourChatId, new HashMap<>()), "You",  Color.parseColor("#00d4ff"));
+                setupMessagesPerMonthLineChart(herMessagesPerMonthLineChart, monthCounts.getOrDefault(herChatId, new HashMap<>()), "Them", Color.parseColor("#FFD700"));
 
                 // Days with Most Messages
                 setupDaysMostMessagesChart(yourDaysMostMessagesChart, daysWithMostMessages.getOrDefault(yourChatId, new ArrayList<>()), "You");
@@ -357,8 +358,8 @@ public class ResultsActivity extends AppCompatActivity {
                         largestStreaks.getOrDefault(yourChatId, null),
                         "You"
                 );
-                yourMostUsedPhrasesTextView.setText("You: " + formatPhrase(mostUsedPhrase.getOrDefault(yourChatId, null)));
-                herMostUsedPhrasesTextView.setText("Them: " + formatPhrase(mostUsedPhrase.getOrDefault(herChatId, null)));
+                yourMostUsedPhrasesTextView.setText( formatPhrase(mostUsedPhrase.getOrDefault(yourChatId, null)));
+                herMostUsedPhrasesTextView.setText( formatPhrase(mostUsedPhrase.getOrDefault(herChatId, null)));
 
                 yourAverageMessageLengthTextView.setText("You: " + String.format("%.2f", averageMessageLengths.getOrDefault(yourChatId, 0.0)) + " characters");
                 herAverageMessageLengthTextView.setText("Them: " + String.format("%.2f", averageMessageLengths.getOrDefault(herChatId, 0.0)) + " characters");
@@ -464,20 +465,18 @@ public class ResultsActivity extends AppCompatActivity {
 
         // Define a custom color array with more unique colors
         int[] customColors = {
-                Color.rgb(255, 102, 102), // Light red
-                Color.rgb(102, 178, 255), // Light blue
-                Color.rgb(255, 178, 102), // Light orange
-                Color.rgb(102, 255, 178), // Light green
-                Color.rgb(178, 102, 255), // Light purple
-                Color.rgb(255, 255, 102), // Light yellow
-                Color.rgb(102, 255, 255), // Light cyan
-                Color.rgb(255, 102, 255)  // Light magenta
+                Color.parseColor("#FFD700"), // Light red
+                Color.parseColor("#FF6B6B"), // Light blue
+                Color.parseColor("#00D4FF"), // Light orange
+                Color.parseColor("#FF00FF"), // Light green
+                Color.parseColor("#008080"), // Light purple
+
         };
 
         // Use the custom colors for the PieDataSet
         pieDataSet.setColors(customColors);
 
-        pieDataSet.setValueTextColor(Color.BLACK); // Set text color for values
+        pieDataSet.setValueTextColor(Color.WHITE); // Set text color for values
         pieDataSet.setValueTextSize(12f); // Set text size for values
 
         // Create a PieData object with the PieDataSet
@@ -489,7 +488,7 @@ public class ResultsActivity extends AppCompatActivity {
         pieChart.setDrawHoleEnabled(true); // Enable a hole in the center of the pie chart
         pieChart.setHoleRadius(30f); // Set the radius of the hole
         pieChart.setTransparentCircleRadius(35f); // Set the radius of the transparent circle
-        pieChart.setEntryLabelColor(Color.BLACK); // Set the color of the entry labels
+        pieChart.setEntryLabelColor(Color.WHITE); // Set the color of the entry labels
         pieChart.setEntryLabelTextSize(12f); // Set the size of the entry labels
 
         // Configure the legend
@@ -501,6 +500,7 @@ public class ResultsActivity extends AppCompatActivity {
         legend.setXEntrySpace(7f); // Set the space between legend entries
         legend.setYEntrySpace(0f); // Set the space between legend rows
         legend.setYOffset(10f); // Set the vertical offset of the legend
+        legend.setTextColor(Color.WHITE); // Set X-axis label color to white
 
         // Animate the chart
         pieChart.animateY(1000); // Animate the chart vertically
@@ -539,7 +539,7 @@ public class ResultsActivity extends AppCompatActivity {
 
         // Create a BarDataSet with the sorted entries
         BarDataSet barDataSet = new BarDataSet(barEntries, label);
-        barDataSet.setColor(barChart == yourDaysMostMessagesChart ? Color.parseColor("#1C3B9B") : Color.parseColor("#800080")); // Set bar color based on chart
+        barDataSet.setColor(barChart == yourDaysMostMessagesChart ? Color.parseColor("#00d4ff") : Color.parseColor("#FFD700")); // Set bar color based on chart
         barDataSet.setValueTextColor(Color.WHITE); // Set text color for values (white for better contrast)
         barDataSet.setValueTextSize(12f); // Set text size for values
 
@@ -594,101 +594,109 @@ public class ResultsActivity extends AppCompatActivity {
         barChart.invalidate();
     }
   // message per month
-    private void setupMessagesPerMonthLineChart(LineChart lineChart, Map<String, Integer> monthCounts, String label, int lineColor) {
-        // Create entries for the LineChart
-        ArrayList<Entry> entries = new ArrayList<>();
-        List<String> labels = new ArrayList<>();
+  private void setupMessagesPerMonthLineChart(LineChart lineChart, Map<String, Integer> monthCounts, String label, int lineColor) {
+      // Create entries for the LineChart
+      ArrayList<Entry> entries = new ArrayList<>();
+      List<String> labels = new ArrayList<>();
 
-        // Get the last 12 months (or fewer if the conversation is shorter)
-        Calendar calendar = Calendar.getInstance();
-        SimpleDateFormat monthFormat = new SimpleDateFormat("MMM yyyy", Locale.US); // Use "MMM" for short month names
+      // Get the last 12 months (or fewer if the conversation is shorter)
+      Calendar calendar = Calendar.getInstance();
+      SimpleDateFormat monthFormat = new SimpleDateFormat("MMM yyyy", Locale.US); // Use "MMM" for short month names
 
-        // Create a list of the last 12 months
-        List<String> last12Months = new ArrayList<>();
-        for (int i = 0; i < 12; i++) {
-            last12Months.add(monthFormat.format(calendar.getTime()));
-            calendar.add(Calendar.MONTH, -1); // Move to the previous month
-        }
+      // Create a list of the last 12 months
+      List<String> last12Months = new ArrayList<>();
+      for (int i = 0; i < 12; i++) {
+          last12Months.add(monthFormat.format(calendar.getTime()));
+          calendar.add(Calendar.MONTH, -1); // Move to the previous month
+      }
 
-        // Reverse the list to show the oldest month first
-        Collections.reverse(last12Months);
+      // Reverse the list to show the oldest month first
+      Collections.reverse(last12Months);
 
-        // Add data to entries and labels
-        for (int i = 0; i < last12Months.size(); i++) {
-            String month = last12Months.get(i);
-            // Convert the month label to the format used in monthCounts (e.g., "January 2023")
-            SimpleDateFormat fullMonthFormat = new SimpleDateFormat("MMMM yyyy", Locale.US);
-            try {
-                Date date = monthFormat.parse(month);
-                String fullMonth = fullMonthFormat.format(date);
+      // Add data to entries and labels
+      for (int i = 0; i < last12Months.size(); i++) {
+          String month = last12Months.get(i);
+          // Convert the month label to the format used in monthCounts (e.g., "January 2023")
+          SimpleDateFormat fullMonthFormat = new SimpleDateFormat("MMMM yyyy", Locale.US);
+          try {
+              Date date = monthFormat.parse(month);
+              String fullMonth = fullMonthFormat.format(date);
 
-                // Get the count for the month
-                int count = monthCounts.getOrDefault(fullMonth, 0);
-                entries.add(new Entry(i, count));
-                labels.add(month.substring(0, 3)); // Use only the first 3 letters of the month
-            } catch (ParseException e) {
-                e.printStackTrace();
-                // Handle the exception (e.g., log it or skip this month)
-            }
-        }
+              // Get the count for the month
+              int count = monthCounts.getOrDefault(fullMonth, 0);
+              entries.add(new Entry(i, count));
+              labels.add(month.substring(0, 3)); // Use only the first 3 letters of the month
+          } catch (ParseException e) {
+              e.printStackTrace();
+              // Handle the exception (e.g., log it or skip this month)
+          }
+      }
 
-        // Create a LineDataSet with the entries
-        LineDataSet dataSet = new LineDataSet(entries, label);
-        dataSet.setColor(lineColor); // Set line color
-        dataSet.setCircleColor(lineColor); // Set circle color
-        dataSet.setLineWidth(2.5f); // Increase line width for better visibility
-        dataSet.setCircleRadius(5f); // Increase circle radius for better visibility
-        dataSet.setValueTextSize(12f); // Increase value text size
-        dataSet.setValueTextColor(Color.WHITE); // Set value text color to white for better contrast
-        dataSet.setMode(LineDataSet.Mode.CUBIC_BEZIER); // Use smooth curves for the line
+      // Create a LineDataSet with the entries
+      LineDataSet dataSet = new LineDataSet(entries, label);
+      dataSet.setColor(lineColor); // Set line color
+      dataSet.setCircleColor(lineColor); // Set circle color
+      dataSet.setLineWidth(2.5f); // Increase line width for better visibility
+      dataSet.setCircleRadius(5f); // Increase circle radius for better visibility
+      dataSet.setValueTextSize(12f); // Increase value text size
+      dataSet.setValueTextColor(Color.WHITE); // Set value text color to white for better contrast
+      dataSet.setMode(LineDataSet.Mode.CUBIC_BEZIER); // Use smooth curves for the line
 
-        // Create a LineData object with the LineDataSet
-        LineData lineData = new LineData(dataSet);
-        lineChart.setData(lineData);
+      // Add ValueFormatter to display values as integers (e.g., 0 instead of 0.0)
+      dataSet.setValueFormatter(new ValueFormatter() {
+          @Override
+          public String getFormattedValue(float value) {
+              return String.valueOf((int) value); // Convert float to integer
+          }
+      });
 
-        // Customize the chart
-        lineChart.getDescription().setEnabled(false); // Disable description
-        lineChart.setDrawGridBackground(false); // Disable grid background
-        lineChart.setTouchEnabled(true); // Enable touch interactions
-        lineChart.setDragEnabled(true); // Enable dragging
-        lineChart.setScaleEnabled(true); // Enable scaling
-        lineChart.setPinchZoom(true); // Enable pinch zoom
+      // Create a LineData object with the LineDataSet
+      LineData lineData = new LineData(dataSet);
+      lineChart.setData(lineData);
 
-        // Configure X-axis
-        XAxis xAxis = lineChart.getXAxis();
-        xAxis.setPosition(XAxis.XAxisPosition.BOTTOM); // Place X-axis at the bottom
-        xAxis.setGranularity(1f); // Set granularity to 1 month
-        xAxis.setValueFormatter(new IndexAxisValueFormatter(labels)); // Set month labels
-        xAxis.setLabelCount(labels.size(), true); // Show all month labels
-        xAxis.setDrawGridLines(false); // Disable grid lines for X-axis
-        xAxis.setTextColor(Color.WHITE); // Set X-axis label color to white
-        xAxis.setLabelRotationAngle(90); // Rotate labels vertically
-        lineChart.setExtraBottomOffset(20f); // Add extra bottom offset for labels
+      // Customize the chart
+      lineChart.getDescription().setEnabled(false); // Disable description
+      lineChart.setDrawGridBackground(false); // Disable grid background
+      lineChart.setTouchEnabled(true); // Enable touch interactions
+      lineChart.setDragEnabled(true); // Enable dragging
+      lineChart.setScaleEnabled(true); // Enable scaling
+      lineChart.setPinchZoom(true); // Enable pinch zoom
 
-        // Configure Y-axis
-        YAxis leftAxis = lineChart.getAxisLeft();
-        leftAxis.setAxisMinimum(0f); // Start Y-axis from 0
-        leftAxis.setGranularity(1f); // Set granularity to 1 message
-        leftAxis.setDrawGridLines(true); // Enable grid lines for Y-axis
-        leftAxis.setGridColor(Color.parseColor("#50FFFFFF")); // Light grid lines for better visibility
-        leftAxis.setTextColor(Color.WHITE); // Set Y-axis label color to white
+      // Configure X-axis
+      XAxis xAxis = lineChart.getXAxis();
+      xAxis.setPosition(XAxis.XAxisPosition.BOTTOM); // Place X-axis at the bottom
+      xAxis.setGranularity(1f); // Set granularity to 1 month
+      xAxis.setValueFormatter(new IndexAxisValueFormatter(labels)); // Set month labels
+      xAxis.setLabelCount(labels.size(), true); // Show all month labels
+      xAxis.setDrawGridLines(false); // Disable grid lines for X-axis
+      xAxis.setTextColor(Color.WHITE); // Set X-axis label color to white
+      xAxis.setLabelRotationAngle(90); // Rotate labels vertically
+      lineChart.setExtraBottomOffset(20f); // Add extra bottom offset for labels
 
-        YAxis rightAxis = lineChart.getAxisRight();
-        rightAxis.setEnabled(false); // Disable right Y-axis
+      // Configure Y-axis
+      YAxis leftAxis = lineChart.getAxisLeft();
+      leftAxis.setAxisMinimum(0f); // Start Y-axis from 0
+      leftAxis.setGranularity(1f); // Set granularity to 1 message
+      leftAxis.setDrawGridLines(true); // Enable grid lines for Y-axis
+      leftAxis.setGridColor(Color.parseColor("#50FFFFFF")); // Light grid lines for better visibility
+      leftAxis.setTextColor(Color.WHITE); // Set Y-axis label color to white
 
-        // Disable the legend (if any)
-        lineChart.getLegend().setEnabled(true); // Enable legend to show the label
-        lineChart.getLegend().setTextColor(Color.WHITE); // Set legend text color to white
+      YAxis rightAxis = lineChart.getAxisRight();
+      rightAxis.setEnabled(false); // Disable right Y-axis
 
-        // Set chart background color to transparent
-        lineChart.setBackgroundColor(Color.TRANSPARENT);
+      // Disable the legend (if any)
+      lineChart.getLegend().setEnabled(true); // Enable legend to show the label
+      lineChart.getLegend().setTextColor(Color.WHITE); // Set legend text color to white
 
-        // Animate the chart
-        lineChart.animateY(1000); // Animate the chart vertically
+      // Set chart background color to transparent
+      lineChart.setBackgroundColor(Color.TRANSPARENT);
 
-        // Refresh the chart
-        lineChart.invalidate();
-    }
+      // Animate the chart
+      lineChart.animateY(1000); // Animate the chart vertically
+
+      // Refresh the chart
+      lineChart.invalidate();
+  }
     // Helper method to set up the Most Used Words chart
     private void setupMostUsedWordsChart(HorizontalBarChart barChart, Map<String, Integer> wordCounts, String label) {
         // Create a list of BarEntry objects
@@ -707,8 +715,8 @@ public class ResultsActivity extends AppCompatActivity {
 
         // Create a BarDataSet with the sorted entries
         BarDataSet barDataSet = new BarDataSet(barEntries, label);
-        barDataSet.setColor(barChart == yourMostUsedWordsChart ? Color.parseColor("#1C3B9B") : Color.parseColor("#800080")); // Set bar color based on chart
-        barDataSet.setValueTextColor(Color.BLACK); // Set text color for values
+        barDataSet.setColor(barChart == yourMostUsedWordsChart ? Color.parseColor("#00d4ff") : Color.parseColor("#FFD700")); // Set bar color based on chart
+        barDataSet.setValueTextColor(Color.WHITE); // Set text color for values
         barDataSet.setValueTextSize(12f); // Set text size for values
 
         // Create a BarData object with the BarDataSet
@@ -730,6 +738,7 @@ public class ResultsActivity extends AppCompatActivity {
         xAxis.setGranularity(1f); // Set granularity to 1 to avoid skipping labels
         xAxis.setLabelRotationAngle(-45); // Rotate labels for better visibility
         xAxis.setDrawLabels(true); // Enable word labels
+        xAxis.setTextColor(Color.WHITE); // Set X-axis label color to white
 
         // Add padding to the left axis to make space for the labels
         barChart.setExtraLeftOffset(25f);
@@ -772,8 +781,8 @@ public class ResultsActivity extends AppCompatActivity {
 
         // Create a BarDataSet with the sorted entries
         BarDataSet barDataSet = new BarDataSet(barEntries, label);
-        barDataSet.setColor(barChart == yourMostUsedEmojisChart ? Color.parseColor("#1C3B9B") : Color.parseColor("#800080")); // Set bar color based on chart
-        barDataSet.setValueTextColor(Color.BLACK); // Set text color for values
+        barDataSet.setColor(barChart == yourMostUsedEmojisChart ? Color.parseColor("#00d4ff") : Color.parseColor("#FFD700")); // Set bar color based on chart
+        barDataSet.setValueTextColor(Color.WHITE); // Set text color for values
         barDataSet.setValueTextSize(12f); // Set text size for values
 
         // Create a BarData object with the BarDataSet
@@ -859,7 +868,7 @@ public class ResultsActivity extends AppCompatActivity {
 
         // Create a BarDataSet with the sorted entries
         BarDataSet barDataSet = new BarDataSet(barEntries, label);
-        barDataSet.setColor(barChart == yourBarChart ? Color.parseColor("#1C3B9B") : Color.parseColor("#800080")); // Set bar color based on chart
+        barDataSet.setColor(barChart == yourBarChart ? Color.parseColor("#00d4ff") : Color.parseColor("#FFD700")); // Set bar color based on chart
         barDataSet.setValueTextColor(Color.WHITE); // Set text color for values (white for better contrast)
         barDataSet.setValueTextSize(12f); // Set text size for values
 
@@ -931,6 +940,14 @@ public class ResultsActivity extends AppCompatActivity {
         dataSet.setValueTextSize(12f); // Increase value text size
         dataSet.setValueTextColor(Color.WHITE); // Set value text color to white for better contrast
         dataSet.setMode(LineDataSet.Mode.CUBIC_BEZIER); // Use smooth curves for the line
+
+        // Add ValueFormatter to display values as integers (e.g., 0 instead of 0.0)
+        dataSet.setValueFormatter(new ValueFormatter() {
+            @Override
+            public String getFormattedValue(float value) {
+                return String.valueOf((int) value); // Convert float to integer
+            }
+        });
 
         // Create a LineData object with the LineDataSet
         LineData lineData = new LineData(dataSet);
