@@ -282,8 +282,8 @@ public class ResultsActivity extends AppCompatActivity {
                 herMessagesTextView.setText(getString(R.string.Them) +" "+ messageCounts.getOrDefault(herChatId, 0));
 
                 // Average Time to Answer
-                yourAverageTimeTextView.setText(getString(R.string.You)+ " "+ (averageTimes.getOrDefault(yourChatId, 0L) / 1000) + "s");
-                herAverageTimeTextView.setText(getString(R.string.Them)+" "+ (averageTimes.getOrDefault(herChatId, 0L) / 1000) + "s");
+                yourAverageTimeTextView.setText(getString(R.string.You)+ " "+ (averageTimes.getOrDefault(yourChatId, 0L) / 1000) + getString(R.string.s));
+                herAverageTimeTextView.setText(getString(R.string.Them)+" "+ (averageTimes.getOrDefault(herChatId, 0L) / 1000) + getString(R.string.s));
 
                 // Favorite Emoji
                 yourFavoriteEmojiTextView.setText(getString(R.string.You) +" " +favoriteEmojis.getOrDefault(yourChatId, ""));
@@ -440,7 +440,7 @@ public class ResultsActivity extends AppCompatActivity {
             String endDateStr = dateFormat.format(endDate);
 
             // Display the number of days
-            daysTextView.setText(getString(R.string.time)  + ": " + days + getString(R.string.days));
+            daysTextView.setText(getString(R.string.time)  + ": " + days +" "+ getString(R.string.days));
 
             // Display the date range
             datesTextView.setText(getString(R.string.dates) + " "+ startDateStr +" "+ getString(R.string.to)+" " + endDateStr);
@@ -453,7 +453,7 @@ public class ResultsActivity extends AppCompatActivity {
     // Helper method to set up the Median Answering Time TextView
     private void setupMedianAnsweringTimeTextView(TextView textView, long medianTime, String label) {
         long medianTimeSeconds = medianTime / 1000; // Convert milliseconds to seconds
-        textView.setText(getString(R.string.time) + ": " + medianTimeSeconds + " "+  getString(R.string.s));
+        textView.setText(getString(R.string.time) + ": " + medianTimeSeconds +   getString(R.string.s));
     }
 
     // Helper method to set up the Number of Links per User pie chart

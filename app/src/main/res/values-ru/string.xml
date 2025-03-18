@@ -15,7 +15,7 @@
 
     //login screen (activity_main)
     <string name="LOGIN">Bойти</string>
-    <string name="ex_70000000000">пр 70000000000</string>
+    <string name="ex_70000000000">пр +70000000000</string>
     <string name="verify">проверить</string>
     <string name="remember_account">запомнить аккаунт</string>
 

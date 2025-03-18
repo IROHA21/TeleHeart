@@ -3,12 +3,15 @@ package com.example.lasttele;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.os.Handler;
 import android.os.Looper;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -24,13 +27,22 @@ public class MainActivity extends AppCompatActivity {
     SwitchCompat switch1;
     Button verifyid;
     Button button123;
+    ImageButton resendButton;
 
     boolean switcher;
+    private int clicks = 0;
+    private final int MAX_CLICKS = 2;
+
+    private TextView timerTextView; // Declare the TextView
+
+
+    private long currentCooldownDuration = 10000; // Initial cooldown duration (10 seconds)
 
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         switcher = false;
@@ -52,20 +64,39 @@ public class MainActivity extends AppCompatActivity {
         verifyid = findViewById(R.id.verifyid);
         verifyid.setOnClickListener(this::onCodeClick);
 
+        timerTextView = findViewById(R.id.timerTextView); // Initialize the TextView
+
+        resendButton = findViewById(R.id.resend);
+        resendButton.setOnClickListener(this::onBtnClick);
+
 
 
 
     }
 
     public void onBtnClick(View view) {
+        int buttonId = view.getId();
 
-        // Get the phone number and show the progress bar
+        if (buttonId == R.id.button123) {
+            // Specific logic for button123
+            clicks++;
+            if (clicks >= MAX_CLICKS) {
+                button123.setEnabled(false);
+                resendButton.setEnabled(false);
+                startCooldownTimer();
+            }
+        } else if (buttonId == R.id.resend) {
+            clicks++;
+            if (clicks >= MAX_CLICKS) {
+                resendButton.setEnabled(false);
+                startCooldownTimer();
+            }
+        }
+
+        // Common logic for both buttons
         String phone = editTextPhone2.getText().toString().trim();
         ProgressBar progressBar = findViewById(R.id.progressBar2);
-
-
         progressBar.setVisibility(View.VISIBLE);
-
 
         if (phone.isEmpty()) {
             Toast.makeText(this, R.string.please_enter_phone_number, Toast.LENGTH_SHORT).show();
@@ -118,6 +149,8 @@ public class MainActivity extends AppCompatActivity {
                     codeid.setVisibility(View.VISIBLE);
                     verifyid.setVisibility(View.VISIBLE);
                     button123.setVisibility(View.INVISIBLE);
+                    resendButton.setVisibility(View.VISIBLE);
+                    progressBar.setVisibility(View.INVISIBLE);
 
 
                 });
@@ -153,6 +186,7 @@ public class MainActivity extends AppCompatActivity {
                     codeid.setVisibility(View.VISIBLE);
                     verifyid.setVisibility(View.VISIBLE);
                     button123.setVisibility(View.INVISIBLE);
+                    resendButton.setVisibility(View.VISIBLE);
 
                 });
             }
@@ -212,6 +246,39 @@ public class MainActivity extends AppCompatActivity {
         }
 
 
+    }
+    private void startCooldownTimer() {
+        timerTextView.setVisibility(View.VISIBLE); // Make the TextView visible
+
+        new CountDownTimer(currentCooldownDuration, 1000) {
+            @Override
+            public void onTick(long millisUntilFinished) {
+                // Convert milliseconds to minutes and seconds
+                long minutes = (millisUntilFinished / 1000) / 60;
+                long seconds = (millisUntilFinished / 1000) % 60;
+
+                // Format the time as "MM:SS"
+                String timeRemaining = String.format("%02d:%02d", minutes, seconds);
+
+                // Update the TextView
+                timerTextView.setText("Time remaining: " + timeRemaining);
+            }
+
+            @Override
+            public void onFinish() {
+                // Re-enable the button and reset the click count
+                button123.setEnabled(true);
+                resendButton.setEnabled(true);
+
+                clicks = clicks-1; // Reset the click count
+
+                // Double the cooldown duration for the next time
+                currentCooldownDuration *= 2;
+
+                // Hide the timer TextView
+                timerTextView.setVisibility(View.INVISIBLE);
+            }
+        }.start();
     }
 
 

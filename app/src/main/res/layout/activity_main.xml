@@ -6,26 +6,39 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/gradient_background"
-    android:orientation="vertical"
     tools:context=".MainActivity">
 
-
+    <!-- Login Button (button123) -->
     <Button
         android:id="@+id/button123"
         android:layout_width="191dp"
         android:layout_height="59dp"
         android:backgroundTint="#1C3B9B"
-        android:color="#1C3B9B"
         android:onClick="onBtnClick"
-        android:padding="16dp"
-        android:visibility="visible"
         android:text="@string/LOGIN"
+        android:visibility="visible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/codeid"
         app:layout_constraintVertical_bias="0.297" />
 
+    <!-- Verify Button (verifyid) -->
+    <Button
+        android:id="@+id/verifyid"
+        android:layout_width="191dp"
+        android:layout_height="59dp"
+        android:backgroundTint="#1C3B9B"
+        android:onClick="onCodeClick"
+        android:text="@string/LOGIN"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/codeid"
+        app:layout_constraintVertical_bias="0.297" />
+
+    <!-- Phone Number Input -->
     <EditText
         android:id="@+id/editTextPhone2"
         android:layout_width="240dp"
@@ -37,13 +50,12 @@
         android:textAlignment="center"
         android:textColor="#FFFFFF"
         android:textColorHint="#636671"
-        android:textColorLink="#2C2C45"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-
+    <!-- OTP Code Input -->
     <EditText
         android:id="@+id/codeid"
         android:layout_width="210dp"
@@ -63,19 +75,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/editTextPhone2" />
 
-    <Button
-        android:id="@+id/verifyid"
-        android:layout_width="191dp"
-        android:layout_height="59dp"
-        android:layout_marginTop="16dp"
-        android:visibility="invisible"
-        android:backgroundTint="#1C3B9B"
-        android:onClick="onCodeClick"
-        android:text="@string/verify"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/button123" />
-
+    <!-- Title Text -->
     <TextView
         android:id="@+id/textView"
         android:layout_width="112dp"
@@ -91,6 +91,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <!-- Progress Bar -->
     <ProgressBar
         android:id="@+id/progressBar2"
         style="?android:attr/progressBarStyle"
@@ -105,7 +106,7 @@
         app:layout_constraintTop_toBottomOf="@+id/verifyid"
         app:layout_constraintVertical_bias="0.0" />
 
-
+    <!-- Switch and Remember Account Layout -->
     <LinearLayout
         android:layout_width="231dp"
         android:layout_height="67dp"
@@ -119,25 +120,23 @@
         app:layout_constraintTop_toBottomOf="@+id/editTextPhone2"
         app:layout_constraintVertical_bias="0.0">
 
-        <androidx.appcompat.widget.SwitchCompat xmlns:android="http://schemas.android.com/apk/res/android"
-            xmlns:app="http://schemas.android.com/apk/res-auto"
-            xmlns:tools="http://schemas.android.com/tools"
+        <!-- SwitchCompat -->
+        <androidx.appcompat.widget.SwitchCompat
             android:id="@+id/switch1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAlignment="viewEnd"
             android:theme="@style/CustomSwitchStyle"
-            app:layout_constraintBottom_toTopOf="@+id/codeid"
-            app:layout_constraintStart_toStartOf="@+id/editTextPhone2"
-            app:layout_constraintTop_toBottomOf="@+id/editTextPhone2"
             tools:ignore="UseSwitchCompatOrMaterialXml" />
 
+        <!-- Remember Account Text -->
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/remember_account"
             android:textColor="#FAFFFFFF" />
 
+        <!-- Info Button -->
         <Button
             android:id="@+id/button"
             android:layout_width="64dp"
@@ -145,10 +144,38 @@
             android:layout_weight="1"
             android:backgroundTint="#001C3B9B"
             app:icon="@drawable/info" />
+
+
     </LinearLayout>
 
+    <TextView
+        android:id="@+id/timerTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="00:00"
+        android:textColor="#FFFFFF"
+        android:textSize="18sp"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/button123"
+        app:layout_constraintVertical_bias="0.06" />
 
-
+    <ImageButton
+        android:id="@+id/resend"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:background="@null"
+        android:rotation="2"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="@+id/codeid"
+        app:layout_constraintStart_toEndOf="@+id/codeid"
+        app:layout_constraintTop_toTopOf="@+id/codeid"
+        app:layout_constraintVertical_bias="0.481"
+        app:srcCompat="@android:drawable/ic_menu_rotate" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
