@@ -1,6 +1,5 @@
 package com.example.lasttele;
 
-import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -33,14 +32,6 @@ public class ContactsActivity extends AppCompatActivity {
     private boolean switcher;
 
 
-    private Dialog instructionsDialog;
-    private int currentPage = 0;
-    private String[] instructions = {
-            "Welcome to the app! Here's how to use it...",
-            "Step 1: Select a contact from the list.",
-            "Step 2: Choose the number of messages.",
-            "Step 3: Click the button to proceed."
-    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

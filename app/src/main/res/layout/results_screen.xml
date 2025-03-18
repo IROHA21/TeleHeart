@@ -1465,23 +1465,20 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:padding="16dp"
                     android:background="@drawable/gradient_background_card"
-                    android:foreground="?attr/selectableItemBackgroundBorderless"
-                    android:clickable="true"
-                    android:focusable="true">
+                    android:padding="12dp">
 
                     <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:gravity="center_vertical"
-                        android:orientation="horizontal">
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical">
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="@string/Longest_Message"
-                            android:textSize="14sp"
+                            android:textSize="16sp"
                             android:textStyle="bold"
                             android:textColor="#FFFFFF"
                             android:letterSpacing="0.02"
@@ -1491,8 +1488,8 @@
 
                             android:layout_width="20dp"
                             android:layout_height="20dp"
-                            android:layout_marginStart="8dp"
-                            android:src="@drawable/zoomin" />
+                            android:src="@drawable/zoomin"
+                            android:layout_marginStart="8dp" />
                     </LinearLayout>
 
                     <TextView
@@ -1523,9 +1520,7 @@
                     android:orientation="vertical"
                     android:padding="16dp"
                     android:background="@drawable/gradient_background_card"
-                    android:foreground="?attr/selectableItemBackgroundBorderless"
-                    android:clickable="true"
-                    android:focusable="true">
+                    android:foreground="?attr/selectableItemBackgroundBorderless">
 
                     <LinearLayout
                         android:layout_width="wrap_content"
@@ -1537,7 +1532,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="@string/Longest_Message"
-                            android:textSize="14sp"
+                            android:textSize="16sp"
                             android:textStyle="bold"
                             android:textColor="#FFFFFF"
                             android:letterSpacing="0.02"

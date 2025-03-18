@@ -55,10 +55,13 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void onBtnClick(View view) {
+
         // Get the phone number and show the progress bar
         String phone = editTextPhone2.getText().toString().trim();
         ProgressBar progressBar = findViewById(R.id.progressBar2);
+        editTextCode = findViewById(R.id.codeid);
         progressBar.setVisibility(View.VISIBLE);
+        codeid.setVisibility(View.VISIBLE);
 
         if (phone.isEmpty()) {
             Toast.makeText(this, R.string.please_enter_phone_number, Toast.LENGTH_SHORT).show();
