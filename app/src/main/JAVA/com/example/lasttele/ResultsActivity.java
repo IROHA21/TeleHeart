@@ -255,6 +255,12 @@ public class ResultsActivity extends AppCompatActivity {
             System.out.println("Conversation Starts: " + conversationStarts);
             System.out.println("Unreplied Chats: " + unrepliedChats);
             System.out.println("Longest Conversations: " + longestConversations);
+            System.out.println(" most used words : "+  mostUsedPhrase);
+            System.out.println("averege message length : "+ averageMessageLengths);
+            System.out.println("median message length : "+ medianMessageLengths);
+            System.out.println("largest streak : "+ largestStreaks);
+
+
 
             // Update the UI on the main thread
             new Handler(Looper.getMainLooper()).post(() -> {

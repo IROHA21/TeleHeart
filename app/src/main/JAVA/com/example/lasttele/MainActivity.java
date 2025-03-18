@@ -20,7 +20,7 @@ import com.chaquo.python.android.AndroidPlatform;
 
 public class MainActivity extends AppCompatActivity {
 
-    EditText editTextPhone2, editTextCode;
+    EditText editTextPhone2, editTextCode, codeid;
     SwitchCompat switch1;
 
     boolean switcher;
@@ -108,6 +108,8 @@ public class MainActivity extends AppCompatActivity {
                 // If the phone numbers don't match, inform the user
                 handler.post(() -> {
                     Toast.makeText(this, "Phone number does not match the previous one. Sending OTP to the new number.", Toast.LENGTH_SHORT).show();
+
+
                 });
             }
 
@@ -138,6 +140,7 @@ public class MainActivity extends AppCompatActivity {
             if (resultString.equals(check)) {
                 handler.post(() -> {
                     progressBar.setVisibility(View.INVISIBLE);
+
                 });
             }
 
