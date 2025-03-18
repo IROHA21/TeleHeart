@@ -22,6 +22,8 @@ public class MainActivity extends AppCompatActivity {
 
     EditText editTextPhone2, editTextCode, codeid;
     SwitchCompat switch1;
+    Button verifyid;
+    Button button123;
 
     boolean switcher;
 
@@ -31,23 +33,24 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        switcher  = false;
+        switcher = false;
+
         // Initialize Python environment
         if (!Python.isStarted()) {
             Python.start(new AndroidPlatform(this));
         }
 
-
+        // Initialize views
         editTextPhone2 = findViewById(R.id.editTextPhone2);
         switch1 = findViewById(R.id.switch1);
         editTextCode = findViewById(R.id.codeid);
+        codeid = findViewById(R.id.codeid); // Initialize codeid here
 
-        Button button123 = findViewById(R.id.button123);
+        button123 = findViewById(R.id.button123);
         button123.setOnClickListener(this::onBtnClick);
 
-        Button verifyid = findViewById(R.id.verifyid);
+        verifyid = findViewById(R.id.verifyid);
         verifyid.setOnClickListener(this::onCodeClick);
-
 
 
 
@@ -59,9 +62,10 @@ public class MainActivity extends AppCompatActivity {
         // Get the phone number and show the progress bar
         String phone = editTextPhone2.getText().toString().trim();
         ProgressBar progressBar = findViewById(R.id.progressBar2);
-        editTextCode = findViewById(R.id.codeid);
+
+
         progressBar.setVisibility(View.VISIBLE);
-        codeid.setVisibility(View.VISIBLE);
+
 
         if (phone.isEmpty()) {
             Toast.makeText(this, R.string.please_enter_phone_number, Toast.LENGTH_SHORT).show();
@@ -111,6 +115,9 @@ public class MainActivity extends AppCompatActivity {
                 // If the phone numbers don't match, inform the user
                 handler.post(() -> {
                     Toast.makeText(this, "Phone number does not match the previous one. Sending OTP to the new number.", Toast.LENGTH_SHORT).show();
+                    codeid.setVisibility(View.VISIBLE);
+                    verifyid.setVisibility(View.VISIBLE);
+                    button123.setVisibility(View.INVISIBLE);
 
 
                 });
@@ -143,6 +150,9 @@ public class MainActivity extends AppCompatActivity {
             if (resultString.equals(check)) {
                 handler.post(() -> {
                     progressBar.setVisibility(View.INVISIBLE);
+                    codeid.setVisibility(View.VISIBLE);
+                    verifyid.setVisibility(View.VISIBLE);
+                    button123.setVisibility(View.INVISIBLE);
 
                 });
             }
