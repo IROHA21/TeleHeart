@@ -1,6 +1,9 @@
-<resources xmlns:android="http://schemas.android.com/apk/res/android">
-    <!-- Define a custom style for the Switch -->
-    <style name="CustomSwitchStyle">
-        <item name="android:textColor">@color/switch_text_color</item> <!-- Use ColorStateList -->
+<!-- res/values/styles.xml -->
+<resources>
+    <!-- Define a custom style for your popup activity or dialog -->
+    <style name="PopupActivityTheme">
+        <item name="android:windowIsTranslucent">true</item> <!-- Make the window translucent -->
+        <item name="android:windowCloseOnTouchOutside">true</item> <!-- Close the window when touched outside -->
+        <item name="android:windowBackground">@android:color/transparent</item> <!-- Optional: Set a transparent background -->
     </style>
 </resources>

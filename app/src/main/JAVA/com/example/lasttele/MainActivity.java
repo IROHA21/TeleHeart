@@ -70,6 +70,9 @@ public class MainActivity extends AppCompatActivity {
         resendButton.setOnClickListener(this::onBtnClick);
 
 
+        Intent intent4 = new Intent(getApplicationContext(), popactivity.class);
+        startActivity(intent4);
+
 
 
     }
