@@ -16,11 +16,8 @@
         android:theme="@style/Theme.Lasttele"
         tools:targetApi="31" >
 
-        <activity
-            android:name=".popactivity"
-            android:exported="false"
-            android:label="@string/title_activity_popactivity"
-            android:theme="@style/Theme.Lasttele" />
+
+
         <activity android:name=".LoadingActivity" />
         <activity android:name=".ResultsActivity" />
         <activity
@@ -31,7 +28,12 @@
         <activity
             android:name=".MainActivity"
             android:exported="true" >
+
         </activity>
+        <activity
+            android:name=".popactivity"
+            android:theme="@style/AppTheme.CustomTheme"/>
+
         <activity
             android:name=".Firstscreen"
             android:exported="true" >
@@ -40,6 +42,7 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+
         </activity>
 
         <service android:name=".MyService" />

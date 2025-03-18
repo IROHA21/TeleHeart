@@ -1,6 +1,0 @@
-<resources xmlns:android="http://schemas.android.com/apk/res/android">
-    <!-- Define a custom style for the Switch -->
-    <style name="CustomSwitchStyle">
-        <item name="android:textColor">@color/switch_text_color</item> <!-- Use ColorStateList -->
-    </style>
-</resources>

@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Handler;
 import android.os.Looper;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -22,7 +23,7 @@ import com.chaquo.python.Python;
 import com.chaquo.python.android.AndroidPlatform;
 
 public class MainActivity extends AppCompatActivity {
-
+    private static final String TAG = "MainActivity";
     EditText editTextPhone2, editTextCode, codeid;
     SwitchCompat switch1;
     Button verifyid;
@@ -42,7 +43,7 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
+        Log.d(TAG, "onCreate: Activity created");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         switcher = false;
@@ -68,16 +69,19 @@ public class MainActivity extends AppCompatActivity {
 
         resendButton = findViewById(R.id.resend);
         resendButton.setOnClickListener(this::onBtnClick);
+        Log.d("PopActivity", "Theme: " + getTheme()); // Log the theme
 
 
-        Intent intent4 = new Intent(getApplicationContext(), popactivity.class);
-        startActivity(intent4);
 
+        Log.d(TAG, " Starting popactivity");
 
 
     }
 
     public void onBtnClick(View view) {
+        startActivity((new Intent(MainActivity.this, popactivity.class)));
+
+
         int buttonId = view.getId();
 
         if (buttonId == R.id.button123) {

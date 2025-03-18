@@ -1,9 +1,15 @@
-<!-- res/values/styles.xml -->
-<resources>
-    <!-- Define a custom style for your popup activity or dialog -->
-    <style name="PopupActivityTheme">
-        <item name="android:windowIsTranslucent">true</item> <!-- Make the window translucent -->
-        <item name="android:windowCloseOnTouchOutside">true</item> <!-- Close the window when touched outside -->
-        <item name="android:windowBackground">@android:color/transparent</item> <!-- Optional: Set a transparent background -->
+<resources xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Define the base AppTheme -->
+    <style name="AppTheme" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <!-- Add your base theme attributes here -->
     </style>
+    
+    <style name="AppTheme.CustomTheme">
+        <item name="android:windowCloseOnTouchOutside">true</item>
+        <item name="android:windowTranslucentStatus">true</item>
+        
+        
+    </style>
+
+
 </resources>
