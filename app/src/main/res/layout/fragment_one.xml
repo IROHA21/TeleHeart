@@ -30,7 +30,7 @@
         android:layout_marginStart="24dp"
         android:layout_marginEnd="24dp"
         android:layout_marginBottom="16dp"
-        android:text="Please enter your phone number starting with the +(country code), then tap Login to proceed."
+        android:text="@string/step1"
         android:textSize="18sp"
         android:textColor="@android:color/black"
         android:textAlignment="center"
@@ -53,7 +53,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintWidth_percent="0.8"
-    app:layout_constraintHeight_percent="0.6"
+        app:layout_constraintHeight_percent="0.5"
     app:cardCornerRadius="20dp"
     android:padding="20dp">
 
@@ -66,24 +66,24 @@
 </androidx.cardview.widget.CardView>
 
     <!-- Second RelativeLayout at the bottom -->
-    <RelativeLayout
-        android:id="@+id/bottomLayout"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:padding="20dp">
+<RelativeLayout
+android:id="@+id/bottomLayout"
+android:layout_width="0dp"
+android:layout_height="wrap_content"
+app:layout_constraintBottom_toBottomOf="parent"
+app:layout_constraintStart_toStartOf="parent"
+app:layout_constraintEnd_toEndOf="parent"
+android:padding="20dp">
 
-        <Button
-            android:id="@+id/nextButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:backgroundTint="#1C3B9B"
-            android:layout_centerHorizontal="true"
-            android:layout_centerVertical="true"
-            android:textColor="@color/white"
-            android:text="NEXT" /> <!-- Changed text to "Login" -->
-    </RelativeLayout>
+<Button
+    android:id="@+id/nextButton"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:backgroundTint="#1C3B9B"
+    android:layout_centerHorizontal="true"
+    android:layout_centerVertical="true"
+    android:textColor="@color/white"
+    android:text="NEXT" />
+</RelativeLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>

@@ -18,16 +18,23 @@
 
 
 
-        <activity android:name=".LoadingActivity" />
-        <activity android:name=".ResultsActivity" />
+        <activity android:name=".LoadingActivity"
+            android:screenOrientation="portrait"
+            />
+        <activity android:name=".ResultsActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".rememberaccount"
+            android:theme="@style/AppTheme.CustomTheme"/>
         <activity
             android:name=".ContactsActivity"
             android:exported="false"
             android:label="ContactsActivity"
-            android:theme="@style/Theme.Lasttele" />
+            android:theme="@style/Theme.Lasttele"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".MainActivity"
-            android:exported="true" >
+            android:exported="true"
+            android:screenOrientation="portrait">
 
         </activity>
         <activity
@@ -36,7 +43,8 @@
 
         <activity
             android:name=".Firstscreen"
-            android:exported="true" >
+            android:exported="true"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

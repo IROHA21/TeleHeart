@@ -38,11 +38,29 @@ public class MainActivity extends AppCompatActivity {
 
     private long currentCooldownDuration = 10000; // Initial cooldown duration (10 seconds)
 
+    private static final String PREFS_NAME = "MyPrefsFile";
+    private static final String PREF_FIRST_LAUNCH = "isFirstLaunch";
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        startActivity((new Intent(MainActivity.this, popactivity.class)));
+
+        startActivity(new Intent(MainActivity.this, rememberaccount.class));
+        // Initialize SharedPreferences
+        SharedPreferences settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
+
+        // Check if it's the first launch
+        boolean isFirstLaunch = settings.getBoolean(PREF_FIRST_LAUNCH, true);
+
+        if (isFirstLaunch) {
+            // Launch popactivity only if it's the first launch
+            startActivity(new Intent(MainActivity.this, popactivity.class));
+
+            // Set the flag to false so this doesn't happen again
+            SharedPreferences.Editor editor = settings.edit();
+            editor.putBoolean(PREF_FIRST_LAUNCH, false);
+            editor.apply();
+        }
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
