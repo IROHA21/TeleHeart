@@ -24,12 +24,12 @@ public class popactivity extends Activity {
         getWindow().setLayout((int) (width * 0.8), (int) (height * 0.7));
 
 
-        // Adjust window parameters
+        /* Adjust window parameters
         WindowManager.LayoutParams params = getWindow().getAttributes();
         params.gravity = Gravity.CENTER;
         params.x = 0;
         params.y = -20;
         getWindow().setAttributes(params);
-        Log.d(TAG, "onCreate: Window attributes applied");
+        Log.d(TAG, "onCreate: Window attributes applied");*/
     }
 }
