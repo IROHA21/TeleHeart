@@ -8,6 +8,7 @@ import android.os.Handler;
 import android.os.Looper;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ProgressBar;
@@ -40,17 +41,20 @@ public class MainActivity extends AppCompatActivity {
 
     private static final String PREFS_NAME = "MyPrefsFile";
     private static final String PREF_FIRST_LAUNCH = "isFirstLaunch";
+    private static final String PREF_FIRST_LAUNCH2 = "isFirstLaunch2";
+    private static final String PREFS_NAME2 = "switchon";
+
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
-        startActivity(new Intent(MainActivity.this, rememberaccount.class));
         // Initialize SharedPreferences
         SharedPreferences settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
+        SharedPreferences settings2 = getSharedPreferences(PREFS_NAME2, MODE_PRIVATE);
 
         // Check if it's the first launch
         boolean isFirstLaunch = settings.getBoolean(PREF_FIRST_LAUNCH, true);
+        boolean isFirstLaunch2 = settings2.getBoolean(PREF_FIRST_LAUNCH2, true);
 
         if (isFirstLaunch) {
             // Launch popactivity only if it's the first launch
@@ -87,13 +91,34 @@ public class MainActivity extends AppCompatActivity {
 
         resendButton = findViewById(R.id.resend);
         resendButton.setOnClickListener(this::onBtnClick);
-// Log the theme
 
+        // Add OnCheckedChangeListener to switch1
+        switch1.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                // Update the switcher variable
+                switcher = isChecked;
 
+                if (isChecked) {
+                    if (isFirstLaunch2) {
+                        // Launch popactivity only if it's the first launch
+                        Toast.makeText(MainActivity.this, "Switch is ON", Toast.LENGTH_SHORT).show();
+                        // Launch rememberaccount activity when the switch is turned ON
+                        startActivity(new Intent(MainActivity.this, rememberaccount.class));
 
+                        // Set the flag to false so this doesn't happen again
+                        SharedPreferences.Editor editor = settings2.edit();
+                        editor.putBoolean(PREF_FIRST_LAUNCH2, false);
+                        editor.apply();
+                    }
+                    // Switch is ON
 
-
-
+                } else {
+                    // Switch is OFF
+                    Toast.makeText(MainActivity.this, "Switch is OFF", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
     }
 
     public void onBtnClick(View view) {
@@ -306,6 +331,10 @@ public class MainActivity extends AppCompatActivity {
         }.start();
     }
     public void infobtn (View view){
+        startActivity(new Intent(MainActivity.this, rememberaccount.class));
+
+    }
+    public void uperleft (View view){
         startActivity((new Intent(MainActivity.this, popactivity.class)));
 
     }
