@@ -143,6 +143,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:backgroundTint="#001C3B9B"
+            android:onClick="infobtn"
             app:icon="@drawable/info" />
 
 

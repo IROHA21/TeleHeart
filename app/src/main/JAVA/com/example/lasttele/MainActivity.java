@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Handler;
 import android.os.Looper;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -43,7 +42,8 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        Log.d(TAG, "onCreate: Activity created");
+        startActivity((new Intent(MainActivity.this, popactivity.class)));
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         switcher = false;
@@ -69,17 +69,17 @@ public class MainActivity extends AppCompatActivity {
 
         resendButton = findViewById(R.id.resend);
         resendButton.setOnClickListener(this::onBtnClick);
-        Log.d("PopActivity", "Theme: " + getTheme()); // Log the theme
+// Log the theme
 
 
 
-        Log.d(TAG, " Starting popactivity");
+
 
 
     }
 
     public void onBtnClick(View view) {
-        startActivity((new Intent(MainActivity.this, popactivity.class)));
+
 
 
         int buttonId = view.getId();
@@ -286,6 +286,10 @@ public class MainActivity extends AppCompatActivity {
                 timerTextView.setVisibility(View.INVISIBLE);
             }
         }.start();
+    }
+    public void infobtn (View view){
+        startActivity((new Intent(MainActivity.this, popactivity.class)));
+
     }
 
 
