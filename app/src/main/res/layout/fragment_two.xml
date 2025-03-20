@@ -18,7 +18,7 @@
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
             android:layout_centerVertical="true"
-            android:text="STEP 2"
+            android:text="@string/step22"
             android:textSize="24sp" />
     </RelativeLayout>
 
@@ -83,7 +83,7 @@
             android:layout_centerHorizontal="true"
             android:layout_centerVertical="true"
             android:textColor="@color/white"
-            android:text="NEXT" /> <!-- Changed text to "Login" -->
+            android:text="@string/next" /> <!-- Changed text to "Login" -->
     </RelativeLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

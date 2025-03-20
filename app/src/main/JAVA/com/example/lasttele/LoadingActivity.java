@@ -6,7 +6,6 @@ import android.os.Handler;
 import android.os.Looper;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -19,11 +18,11 @@ import java.util.List;
 public class LoadingActivity extends AppCompatActivity {
     private ProgressBar progressBar;
     private TextView progressTextView;
+    private TextView messagesProgressTextView; // New TextView for messages progress
     private Handler mainHandler = new Handler(Looper.getMainLooper());
 
     private boolean switcher;
     private static boolean isResultActivityStarted = false;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,20 +30,26 @@ public class LoadingActivity extends AppCompatActivity {
         setContentView(R.layout.loading_screen);
 
         progressBar = findViewById(R.id.loadingProgressBar);
-
+        progressTextView = findViewById(R.id.progressTextView); // Assuming you have a TextView to show progress
+        messagesProgressTextView = findViewById(R.id.messagesProgressTextView); // Initialize the new TextView
 
         // Show initial progress
         Intent intent2 = getIntent();
         switcher = intent2.getBooleanExtra("switcher", false);
 
-        System.out.println("switcher check inside of loading : " + switcher );
+        System.out.println("switcher check inside of loading : " + switcher);
 
-
-        // Get the selected contact ID from the intent
+        // Get the selected contact ID and quantity from the intent
         String selectedContactId = getIntent().getStringExtra("selectedContactId");
         String quantityStr = getIntent().getStringExtra("quantity");
-        int quantity = Integer.parseInt(quantityStr); // Convert it back to an integer
+        int quantity = Integer.parseInt(quantityStr); // Convert quantity to an integer
 
+        // Calculate the total time (y) based on the equation y = 0.01067x - 0.68
+        double totalTimeSeconds = 0.01067 * quantity - 0.68;
+        int totalTimeMillis = (int) (totalTimeSeconds * 1000); // Convert seconds to milliseconds
+
+        // Start updating the ProgressBar
+        startProgressBar(totalTimeMillis, quantity);
 
         // Start the background task to fetch messages
         new Thread(() -> {
@@ -85,28 +90,37 @@ public class LoadingActivity extends AppCompatActivity {
             Intent intent = new Intent(LoadingActivity.this, ResultsActivity.class);
             intent.putExtra("selectedContactId", selectedContactId); // Pass the contact ID
             intent.putExtra("user_id", userId); // Pass the user ID
-            intent.putExtra("switcher", switcher); // Pass the user ID
+            intent.putExtra("switcher", switcher); // Pass the switcher value
             startActivity(intent);
             isResultActivityStarted = true;
-            finish();
-             // Close the LoadingActivity
+            finish(); // Close the LoadingActivity
         }).start();
-}
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-
-        // Check if the user chose "Don't remember me"
-        System.out.println("switcher destroy activated login");
-
-
-        if (!switcher && !isResultActivityStarted){
-            // Terminate the session and disconnect the client
-            Python py = Python.getInstance();
-            PyObject pyObj = py.getModule("helloworld");
-            PyObject result = pyObj.callAttr("terminate_and_disconnect");
-            Toast.makeText(this, result.toString(), Toast.LENGTH_SHORT).show();
-        }
     }
 
+    private void startProgressBar(int totalTimeMillis, int quantity) {
+        final int totalProgress = 100; // ProgressBar max value
+        final int interval = 100; // Update interval in milliseconds
+        final int steps = totalTimeMillis / interval; // Number of steps to reach 100%
+
+        // Update the ProgressBar incrementally
+        new Thread(() -> {
+            for (int i = 0; i <= steps; i++) {
+                final int progress = (i * totalProgress) / steps;
+                final int messagesProgress = (i * quantity) / steps; // Calculate the messages progress
+
+                // Update the UI on the main thread
+                mainHandler.post(() -> {
+                    progressBar.setProgress(progress);
+                    progressTextView.setText(progress + "%"); // Update the percentage TextView
+                    messagesProgressTextView.setText(messagesProgress + "/" + quantity); // Update the messages progress TextView
+                });
+
+                try {
+                    Thread.sleep(interval); // Wait for the interval
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        }).start();
+    }
 }

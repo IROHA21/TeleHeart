@@ -25,9 +25,16 @@
     <string name="step1">enter your phone number starting with the +(country code), then tap Login to proceed.</string>
     <string name="step2">You will receive a one-time use code via Telegram.</string>
     <string name="step3">Enter the code you received and tap Login to proceed.</string>
-    //contact screen
     <string name="stepaccount">When you enable the (Remember Account) feature, the application will save your session and keep you logged in. However, to disconnect, you will need to manually log out by following the three steps outlined below. Please note: Any alerts about someone accessing your account are triggered by your login activity within the app. Your login credentials are never transmitted or stored outside your device, ensuring your account remains secure.</string>
     <string name="step2account">Even if you choose not to enable the (Remember Account) feature, an unexpected or wrongful closure of the application may still result in your account remaining logged in. In such cases, you will need to manually log out to ensure your session is fully terminated. Additionally, you can delete all stored data by accessing the apps settings through the parameters menu (represented by the three dots icon) on the opening screen</string>
+    <string name="warning">warning</string>
+    <string name="addinfo">additional informations</string>
+    <string name="close">close</string>
+    <string name="step11">STEP 1</string>
+    <string name="step22">STEP 2</string>
+    <string name="step33">STEP 3</string>
+    //contact screen
+
     <string name="select_contact">select contact</string>
     <string name="number_of_messages">number of messages</string>
     <string name="next">next</string>

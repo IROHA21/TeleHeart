@@ -18,7 +18,7 @@
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
             android:layout_centerVertical="true"
-            android:text="Warning"
+            android:text="@string/warning"
             android:textSize="24sp" />
     </RelativeLayout>
 
@@ -54,37 +54,37 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintWidth_percent="0.8"
         app:layout_constraintHeight_percent="0.5"
-    app:cardCornerRadius="20dp"
-    android:padding="10dp">
+        app:cardCornerRadius="20dp"
+        android:padding="10dp">
 
-    <ImageView
-        android:id="@+id/imageView"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:src="@drawable/steps"
-        android:scaleType="fitCenter"
-    android:adjustViewBounds="true" />
-</androidx.cardview.widget.CardView>
+        <ImageView
+            android:id="@+id/imageView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:src="@drawable/steps"
+            android:scaleType="fitCenter"
+            android:adjustViewBounds="true" />
+    </androidx.cardview.widget.CardView>
 
     <!-- Bottom RelativeLayout -->
-<RelativeLayout
-android:id="@+id/bottomLayout1"
-android:layout_width="0dp"
-android:layout_height="wrap_content"
-app:layout_constraintBottom_toBottomOf="parent"
-app:layout_constraintStart_toStartOf="parent"
-app:layout_constraintEnd_toEndOf="parent"
-android:padding="20dp">
+    <RelativeLayout
+        android:id="@+id/bottomLayout1"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:padding="20dp">
 
-<Button
-    android:id="@+id/nextaccount"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:backgroundTint="#1C3B9B"
-    android:layout_centerHorizontal="true"
-    android:layout_centerVertical="true"
-    android:textColor="@color/white"
-    android:text="NEXT" />
-</RelativeLayout>
+        <Button
+            android:id="@+id/nextaccount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:backgroundTint="#1C3B9B"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:textColor="@color/white"
+            android:text="@string/next" />
+    </RelativeLayout>
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

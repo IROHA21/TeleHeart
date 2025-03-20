@@ -1,0 +1,20 @@
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Purple Progress Bar -->
+    <item android:id="@android:id/progress">
+        <clip>
+            <shape android:shape="rectangle">
+                <corners android:radius="18dp" /> <!-- Rounded corners -->
+                <solid android:color="@color/purple" /> <!-- Purple progress -->
+            </shape>
+        </clip>
+    </item>
+
+    <!-- Blue Border (Overlay) -->
+    <item>
+        <shape android:shape="rectangle">
+            <corners android:radius="18dp" /> <!-- Rounded corners -->
+            <stroke android:color="@color/blue" android:width="6dp" /> <!-- Blue border -->
+            <solid android:color="@color/transparent" /> <!-- Transparent fill -->
+        </shape>
+    </item>
+</layer-list>

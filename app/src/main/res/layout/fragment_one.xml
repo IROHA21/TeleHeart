@@ -18,7 +18,7 @@
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
             android:layout_centerVertical="true"
-            android:text="STEP 1"
+            android:text="@string/step11"
             android:textSize="24sp" />
     </RelativeLayout>
 
@@ -83,7 +83,7 @@ android:padding="20dp">
     android:layout_centerHorizontal="true"
     android:layout_centerVertical="true"
     android:textColor="@color/white"
-    android:text="NEXT" />
+    android:text="@string/next" />
 </RelativeLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
