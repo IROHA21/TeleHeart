@@ -7,6 +7,7 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 
 import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.FullScreenContentCallback;
 import com.google.android.gms.ads.LoadAdError;
 import com.google.android.gms.ads.interstitial.InterstitialAd;
 import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback;
@@ -15,6 +16,8 @@ public class AdManager {
     private static AdManager instance; // Singleton instance
     private InterstitialAd interstitialAd; // The ad instance
     private static final String TAG = "AdManager";
+
+    private AdDismissListener adDismissListener; // Listener for ad dismissal
 
     private AdManager() {
         // Private constructor to enforce singleton pattern
@@ -45,14 +48,24 @@ public class AdManager {
                 });
     }
 
-    public InterstitialAd getInterstitialAd() {
-        return interstitialAd; // Return the loaded ad
-    }
-
-    public void showInterstitialAd(Activity activity) {
+    public void showInterstitialAd(Activity activity, AdDismissListener listener) {
+        this.adDismissListener = listener; // Set the listener
         if (interstitialAd != null) {
-            interstitialAd.show(activity); // Show the ad
-            interstitialAd = null; // Clear the ad after showing it
+            interstitialAd.show(activity);
+            interstitialAd.setFullScreenContentCallback(new FullScreenContentCallback() {
+                @Override
+                public void onAdDismissedFullScreenContent() {
+                    if (adDismissListener != null) {
+                        adDismissListener.onAdDismissed(); // Notify listener
+                    }
+                    interstitialAd = null; // Clear the ad after showing it
+                }
+
+                @Override
+                public void onAdFailedToShowFullScreenContent(@NonNull com.google.android.gms.ads.AdError adError) {
+                    Log.e(TAG, "Ad failed to show: " + adError.getMessage());
+                }
+            });
         } else {
             Log.d(TAG, "Interstitial ad is not ready yet.");
         }

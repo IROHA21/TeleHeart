@@ -40,7 +40,7 @@ public class AdUtils {
     public static boolean isUserInCISOrRussia(Context context) {
         System.out.println("Starting check for CIS or Russia...");
 
-        // Step 1: Check SIM card country code
+        // Step 1: Check SIM card country code (highest priority)
         System.out.println("Checking SIM card...");
         String simCountryCode = getSimCountryCode(context);
         if (simCountryCode != null) {
@@ -50,12 +50,14 @@ public class AdUtils {
                 return true; // User is in Russia or a CIS country based on SIM card
             } else {
                 System.out.println("User is NOT in a CIS country based on SIM card.");
+                // If SIM card country code is available but not CIS, return false immediately
+                return false;
             }
         } else {
             System.out.println("Failed to fetch country code from SIM card.");
         }
 
-        // Step 2: Fall back to time zone
+        // Step 2: Fall back to time zone (medium priority) only if SIM card check is inconclusive
         System.out.println("Falling back to time zone...");
         String timeZoneID = TimeZone.getDefault().getID();
         System.out.println("User's time zone: " + timeZoneID);
@@ -66,7 +68,7 @@ public class AdUtils {
             System.out.println("User is NOT in a CIS country based on time zone.");
         }
 
-        // Step 3: Final fallback to device locale
+        // Step 3: Final fallback to device locale (lowest priority)
         System.out.println("Falling back to device locale...");
         String countryCodeFromLocale = Locale.getDefault().getCountry();
         System.out.println("Country code from locale: " + countryCodeFromLocale);

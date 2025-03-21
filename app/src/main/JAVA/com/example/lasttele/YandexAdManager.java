@@ -24,6 +24,8 @@ public class YandexAdManager {
     private static final String TAG = "YandexAdManager";
     private static final String DEMO_AD_UNIT_ID = "demo-interstitial-yandex"; // Replace with your real ad unit ID
 
+    private AdDismissListener adDismissListener; // Listener for ad dismissal
+
     private YandexAdManager() {
         // Private constructor to enforce singleton pattern
     }
@@ -59,7 +61,8 @@ public class YandexAdManager {
         });
     }
 
-    public void showInterstitialAd(Activity activity) {
+    public void showInterstitialAd(Activity activity, AdDismissListener listener) {
+        this.adDismissListener = listener; // Set the listener
         if (interstitialAd != null) {
             interstitialAd.setAdEventListener(new InterstitialAdEventListener() {
                 @Override
@@ -75,7 +78,9 @@ public class YandexAdManager {
                 @Override
                 public void onAdDismissed() {
                     Log.d(TAG, "Yandex Ad dismissed");
-                    // Clean up and reload a new ad
+                    if (adDismissListener != null) {
+                        adDismissListener.onAdDismissed(); // Notify listener
+                    }
                     interstitialAd.setAdEventListener(null);
                     interstitialAd = null;
                     loadInterstitialAd(activity); // Preload the next ad

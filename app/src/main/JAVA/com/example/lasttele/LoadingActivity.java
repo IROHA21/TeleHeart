@@ -14,7 +14,6 @@ import com.chaquo.python.Python;
 import com.google.android.gms.ads.MobileAds;
 import com.google.android.gms.ads.initialization.InitializationStatus;
 import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
-import com.google.android.gms.ads.interstitial.InterstitialAd;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,9 +21,8 @@ import java.util.List;
 public class LoadingActivity extends AppCompatActivity {
     private ProgressBar progressBar;
     private TextView progressTextView;
-    private TextView messagesProgressTextView; // New TextView for messages progress
+    private TextView messagesProgressTextView;
     private Handler mainHandler = new Handler(Looper.getMainLooper());
-    InterstitialAd mInterstitialAd;
     private boolean switcher;
     private static boolean isResultActivityStarted = false;
 
@@ -34,13 +32,22 @@ public class LoadingActivity extends AppCompatActivity {
         setContentView(R.layout.loading_screen);
 
         // Show the interstitial ad
-        // Show the interstitial ad
-        if (AdUtils.isUserInCISOrRussia(this)) { // Pass 'this' as the Context
+        if (AdUtils.isUserInCISOrRussia(this)) {
             // Use Yandex Ads for CIS countries
-            YandexAdManager.getInstance().showInterstitialAd(this);
+            YandexAdManager.getInstance().showInterstitialAd(this, new AdDismissListener() {
+                @Override
+                public void onAdDismissed() {
+                    startBackgroundTask(); // Start the background task after the ad is dismissed
+                }
+            });
         } else {
             // Use Google Ads for the rest of the world
-            AdManager.getInstance().showInterstitialAd(this);
+            AdManager.getInstance().showInterstitialAd(this, new AdDismissListener() {
+                @Override
+                public void onAdDismissed() {
+                    startBackgroundTask(); // Start the background task after the ad is dismissed
+                }
+            });
         }
 
         // Initialize Google Mobile Ads SDK
@@ -51,36 +58,32 @@ public class LoadingActivity extends AppCompatActivity {
             }
         });
 
-
+        // Initialize UI elements
         progressBar = findViewById(R.id.loadingProgressBar);
-        progressTextView = findViewById(R.id.progressTextView); // Assuming you have a TextView to show progress
-        messagesProgressTextView = findViewById(R.id.messagesProgressTextView); // Initialize the new TextView
-
-        // Show initial progress
-        Intent intent2 = getIntent();
-        switcher = intent2.getBooleanExtra("switcher", false);
-
-        System.out.println("switcher check inside of loading : " + switcher);
+        progressTextView = findViewById(R.id.progressTextView);
+        messagesProgressTextView = findViewById(R.id.messagesProgressTextView);
 
         // Get the selected contact ID and quantity from the intent
         String selectedContactId = getIntent().getStringExtra("selectedContactId");
         String quantityStr = getIntent().getStringExtra("quantity");
-        int quantity = Integer.parseInt(quantityStr); // Convert quantity to an integer
+        int quantity = Integer.parseInt(quantityStr);
 
-        // Calculate the total time (y) based on the equation y = 0.01067x - 0.68
+        // Calculate the total time
         double totalTimeSeconds = 0.01067 * quantity - 0.68;
-        int totalTimeMillis = (int) (totalTimeSeconds * 1000); // Convert seconds to milliseconds
+        int totalTimeMillis = (int) (totalTimeSeconds * 1000);
 
         // Start updating the ProgressBar
         startProgressBar(totalTimeMillis, quantity);
+    }
 
+    private void startBackgroundTask() {
         // Start the background task to fetch messages
         new Thread(() -> {
             Python py = Python.getInstance();
             PyObject pyObj = py.getModule("helloworld");
 
             // Call getconvo first to ensure user_id is set
-            PyObject con = pyObj.callAttr("getconvo", selectedContactId, quantity);
+            PyObject con = pyObj.callAttr("getconvo", getIntent().getStringExtra("selectedContactId"), Integer.parseInt(getIntent().getStringExtra("quantity")));
 
             if (con == null) {
                 System.out.println("getconvo returned null");
@@ -111,9 +114,9 @@ public class LoadingActivity extends AppCompatActivity {
 
             // Switch to ResultsActivity when done
             Intent intent = new Intent(LoadingActivity.this, ResultsActivity.class);
-            intent.putExtra("selectedContactId", selectedContactId); // Pass the contact ID
-            intent.putExtra("user_id", userId); // Pass the user ID
-            intent.putExtra("switcher", switcher); // Pass the switcher value
+            intent.putExtra("selectedContactId", getIntent().getStringExtra("selectedContactId"));
+            intent.putExtra("user_id", userId);
+            intent.putExtra("switcher", getIntent().getBooleanExtra("switcher", false));
             startActivity(intent);
             isResultActivityStarted = true;
             finish(); // Close the LoadingActivity

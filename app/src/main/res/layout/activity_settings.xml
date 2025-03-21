@@ -1,0 +1,39 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="16dp">
+
+    <!-- Title for the settings screen -->
+    <TextView
+        android:id="@+id/titleTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Settings"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="24dp"/>
+
+    <!-- Button to clear app data -->
+    <Button
+        android:id="@+id/clearCacheButton"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:text="Clear App Data"
+    android:layout_below="@id/titleTextView"
+    android:layout_marginTop="16dp"
+    android:backgroundTint="@color/purple"
+    android:textColor="@android:color/white"
+    android:padding="12dp"/>
+
+    <!-- TextView to show data size or status -->
+    <TextView
+        android:id="@+id/cacheStatusTextView"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:text="Data size: Unknown"
+    android:layout_below="@id/clearCacheButton"
+    android:layout_marginTop="16dp"
+    android:layout_centerHorizontal="true"/>
+
+</RelativeLayout>

@@ -12,6 +12,7 @@ import android.view.animation.LinearInterpolator;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
@@ -44,6 +45,8 @@ public class Firstscreen extends AppCompatActivity {
     // UI elements
     private TextView welcomeMessage;
     private Button startButton, tutorialButton;
+
+    private ImageButton settingsbtn;
     private Spinner languageSpinner;
 
     @Override
@@ -60,6 +63,9 @@ public class Firstscreen extends AppCompatActivity {
         startButton = findViewById(R.id.start_button);
         tutorialButton = findViewById(R.id.tutorial_button);
         languageSpinner = findViewById(R.id.language_spinner);
+
+        settingsbtn = findViewById(R.id.imageButton3);
+        settingsbtn.setOnClickListener(this::onsettingsclick);
 
         // Update UI texts based on the current language
         updateUITexts();
@@ -132,6 +138,8 @@ public class Firstscreen extends AppCompatActivity {
         setOnClickListeners(white2);
         setOnClickListeners(blue2);
     }
+
+
 
     // Helper method to update UI texts based on the current language
     private void updateUITexts() {
@@ -282,4 +290,11 @@ public class Firstscreen extends AppCompatActivity {
         Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
     }
+    private void onsettingsclick(View view) {
+
+        Intent intent77 = new Intent(this, SettingsActivity.class);
+        startActivity(intent77);
+    }
+
+
 }
