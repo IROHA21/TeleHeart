@@ -14,6 +14,9 @@
     <string name="Tutorial">Tutorial</string>
     //toast
     <string name="please_enter_phone_number">Please enter a phone number!</string>
+    <string name="Logged_in_successfully">Logged in successfully</string>
+    <string name="Code_sent_check_your_telegram">Code sent check your telegram</string>
+    <string name="remaining">time remaining :</string>
 
     //login screen (activity_main)
     <string name="LOGIN">LOGIN</string>

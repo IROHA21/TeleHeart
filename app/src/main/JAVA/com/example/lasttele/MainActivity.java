@@ -34,12 +34,12 @@ public class MainActivity extends AppCompatActivity {
 
     boolean switcher;
     private int clicks = 0;
-    private final int MAX_CLICKS = 2;
+    private final int MAX_CLICKS = 1;
 
     private TextView timerTextView; // Declare the TextView
 
 
-    private long currentCooldownDuration = 10000; // Initial cooldown duration (10 seconds)
+    private long currentCooldownDuration = 20000; // Initial cooldown duration (10 seconds)
 
     private static final String PREFS_NAME = "MyPrefsFile";
     private static final String PREF_FIRST_LAUNCH = "isFirstLaunch";
@@ -123,7 +123,7 @@ public class MainActivity extends AppCompatActivity {
                 if (isChecked) {
                     if (isFirstLaunch2) {
                         // Launch popactivity only if it's the first launch
-                        Toast.makeText(MainActivity.this, "Switch is ON", Toast.LENGTH_SHORT).show();
+
                         // Launch rememberaccount activity when the switch is turned ON
                         startActivity(new Intent(MainActivity.this, rememberaccount.class));
 
@@ -136,7 +136,7 @@ public class MainActivity extends AppCompatActivity {
 
                 } else {
                     // Switch is OFF
-                    Toast.makeText(MainActivity.this, "Switch is OFF", Toast.LENGTH_SHORT).show();
+
                 }
             }
         });
@@ -199,7 +199,7 @@ public class MainActivity extends AppCompatActivity {
                 // If the phone numbers match, restore the session
                 PyObject restoreResult = pyObj.callAttr("restoreSession");
                 handler.post(() -> {
-                    Toast.makeText(this, "Session Restore Result: " + restoreResult.toString(), Toast.LENGTH_SHORT).show();
+                    System.out.println("Session Restore Result: " + restoreResult);
                 });
 
                 // If the session is already authorized, skip OTP and go to ContactsActivity
@@ -216,7 +216,7 @@ public class MainActivity extends AppCompatActivity {
             } else {
                 // If the phone numbers don't match, inform the user
                 handler.post(() -> {
-                    Toast.makeText(this, "Phone number does not match the previous one. Sending OTP to the new number.", Toast.LENGTH_SHORT).show();
+                    System.out.println("Phone number does not match the previous one. S0ending OTP to the new number.");
                     codeid.setVisibility(View.VISIBLE);
                     verifyid.setVisibility(View.VISIBLE);
                     button123.setVisibility(View.INVISIBLE);
@@ -242,13 +242,19 @@ public class MainActivity extends AppCompatActivity {
 
             // Call the Python function to send OTP
             PyObject result = pyObj.callAttr("phoneNumber", phone);
-
+            String resultString = result.toString();
             // Display the result (success or error message)
             handler.post(() -> {
-                Toast.makeText(this, "OTP Result: " + result.toString(), Toast.LENGTH_SHORT).show();
+
+                if (resultString.equals("Code sent check your telegram")) {
+                    Toast.makeText(this, R.string.Code_sent_check_your_telegram, Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(this, "OTP Result: " + result.toString(), Toast.LENGTH_SHORT).show();
+                    System.out.println("OTP Result: " + result);
+                }
             });
 
-            String resultString = result.toString();
+
             System.out.println("before" + resultString);
             String check = "Code sent check your telegram";
             if (resultString.equals(check)) {
@@ -292,11 +298,23 @@ public class MainActivity extends AppCompatActivity {
         PyObject pyObj = py.getModule("helloworld");
 
         PyObject result = pyObj.callAttr("otpCode", code, phone);
-
-        Toast.makeText(this, "Result: " + result.toString(), Toast.LENGTH_SHORT).show();
-
-
         String resultString = result.toString();
+        System.out.println("resultstring : " + resultString);
+        if (resultString.equals("Error: Two-steps verification is enabled and a password is required (caused by SignInRequest)")){
+            Toast.makeText(this, "you need to disable two steps verification", Toast.LENGTH_SHORT).show();
+            startActivity(new Intent(MainActivity.this, popdisconnect.class));
+        }else {
+            if (resultString.equals("Logged in successfully.")) {
+                Toast.makeText(this,R.string.Logged_in_successfully,Toast.LENGTH_SHORT).show();
+                System.out.println(result);
+            }
+            else{
+                Toast.makeText(this, "Result: " + result.toString(), Toast.LENGTH_SHORT).show();
+                System.out.println(result);
+            }
+        }
+
+
 
         // If login is successful, switch to ContactsActivity
         if (resultString.equals("Logged in successfully.")) {
@@ -332,6 +350,7 @@ public class MainActivity extends AppCompatActivity {
                 String timeRemaining = String.format("%02d:%02d", minutes, seconds);
 
                 // Update the TextView
+
                 timerTextView.setText("Time remaining: " + timeRemaining);
             }
 
