@@ -25,6 +25,7 @@ public class YandexAdManager {
     private static final String DEMO_AD_UNIT_ID = "demo-interstitial-yandex"; // Replace with your real ad unit ID
 
     private AdDismissListener adDismissListener; // Listener for ad dismissal
+    private AdLoadFailureListener adLoadFailureListener; // Listener for ad loading failure
 
     private YandexAdManager() {
         // Private constructor to enforce singleton pattern
@@ -35,6 +36,11 @@ public class YandexAdManager {
             instance = new YandexAdManager();
         }
         return instance;
+    }
+
+    // Set the AdLoadFailureListener
+    public void setAdLoadFailureListener(AdLoadFailureListener listener) {
+        this.adLoadFailureListener = listener;
     }
 
     public void loadInterstitialAd(Context context) {
@@ -52,6 +58,11 @@ public class YandexAdManager {
                 public void onAdFailedToLoad(@NonNull AdRequestError adRequestError) {
                     interstitialAd = null; // Clear the ad if loading fails
                     Log.d(TAG, "Yandex Interstitial ad failed to load: " + adRequestError.getDescription());
+
+                    // Notify the failure listener
+                    if (adLoadFailureListener != null) {
+                        adLoadFailureListener.onAdFailedToLoad(adRequestError.getCode());
+                    }
                 }
             });
 
@@ -61,8 +72,10 @@ public class YandexAdManager {
         });
     }
 
-    public void showInterstitialAd(Activity activity, AdDismissListener listener) {
-        this.adDismissListener = listener; // Set the listener
+    public void showInterstitialAd(Activity activity, AdDismissListener dismissListener, AdLoadFailureListener loadFailureListener) {
+        this.adDismissListener = dismissListener; // Set the dismiss listener
+        this.adLoadFailureListener = loadFailureListener; // Set the load failure listener
+
         if (interstitialAd != null) {
             interstitialAd.setAdEventListener(new InterstitialAdEventListener() {
                 @Override
@@ -99,6 +112,11 @@ public class YandexAdManager {
             interstitialAd.show(activity);
         } else {
             Log.d(TAG, "Yandex Interstitial ad is not ready yet.");
+
+            // Notify the failure listener if the ad is not ready
+            if (adLoadFailureListener != null) {
+                adLoadFailureListener.onAdFailedToLoad(0); // Use 0 as a generic error code
+            }
         }
     }
 

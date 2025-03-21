@@ -23,32 +23,15 @@ public class LoadingActivity extends AppCompatActivity {
     private TextView progressTextView;
     private TextView messagesProgressTextView;
     private Handler mainHandler = new Handler(Looper.getMainLooper());
-    private boolean switcher;
     private static boolean isResultActivityStarted = false;
+    private boolean isAdDismissed = false; // Track if the ad is dismissed
+    private boolean isBackgroundTaskComplete = false; // Track if the background task is complete
+    private String userId; // Store the userId for later use
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.loading_screen);
-
-        // Show the interstitial ad
-        if (AdUtils.isUserInCISOrRussia(this)) {
-            // Use Yandex Ads for CIS countries
-            YandexAdManager.getInstance().showInterstitialAd(this, new AdDismissListener() {
-                @Override
-                public void onAdDismissed() {
-                    startBackgroundTask(); // Start the background task after the ad is dismissed
-                }
-            });
-        } else {
-            // Use Google Ads for the rest of the world
-            AdManager.getInstance().showInterstitialAd(this, new AdDismissListener() {
-                @Override
-                public void onAdDismissed() {
-                    startBackgroundTask(); // Start the background task after the ad is dismissed
-                }
-            });
-        }
 
         // Initialize Google Mobile Ads SDK
         MobileAds.initialize(this, new OnInitializationCompleteListener() {
@@ -74,6 +57,45 @@ public class LoadingActivity extends AppCompatActivity {
 
         // Start updating the ProgressBar
         startProgressBar(totalTimeMillis, quantity);
+
+        // Start the background task immediately
+        startBackgroundTask();
+
+        // Show the interstitial ad
+        if (AdUtils.isUserInCISOrRussia(this)) {
+            // Use Yandex Ads for CIS countries
+            YandexAdManager.getInstance().showInterstitialAd(this, new AdDismissListener() {
+                @Override
+                public void onAdDismissed() {
+                    isAdDismissed = true; // Mark the ad as dismissed
+                    checkAndNavigateToResults(); // Check if both ad is dismissed and background task is complete
+                }
+            }, new AdLoadFailureListener() {
+                @Override
+                public void onAdFailedToLoad(int errorCode) {
+                    // If the ad fails to load, mark the ad as dismissed
+                    isAdDismissed = true;
+                    checkAndNavigateToResults(); // Check if both ad is dismissed and background task is complete
+                }
+            });
+        } else {
+            // Use Google Ads for the rest of the world
+            AdManager.getInstance().showInterstitialAd(this, new AdDismissListener() {
+                @Override
+                public void onAdDismissed() {
+                    isAdDismissed = true; // Mark the ad as dismissed
+                    checkAndNavigateToResults(); // Check if both ad is dismissed and background task is complete
+                }
+            });
+            AdManager.getInstance().setAdLoadFailureListener(new AdLoadFailureListener() {
+                @Override
+                public void onAdFailedToLoad(int errorCode) {
+                    // If the ad fails to load, mark the ad as dismissed
+                    isAdDismissed = true;
+                    checkAndNavigateToResults(); // Check if both ad is dismissed and background task is complete
+                }
+            });
+        }
     }
 
     private void startBackgroundTask() {
@@ -99,7 +121,7 @@ public class LoadingActivity extends AppCompatActivity {
             }
 
             // Convert PyObject to String directly
-            String userId = idu.toString();  // No need to call .get("user_id")
+            userId = idu.toString();  // Store the userId for later use
 
             // Convert PyObject elements to String
             List<String> messages = new ArrayList<>();
@@ -112,15 +134,23 @@ public class LoadingActivity extends AppCompatActivity {
             dbHelper.deleteAllMessages(); // Clear old data before saving new messages
             dbHelper.saveMessages(messages); // Save new messages
 
-            // Switch to ResultsActivity when done
+            // Mark the background task as complete
+            isBackgroundTaskComplete = true;
+            checkAndNavigateToResults(); // Check if both ad is dismissed and background task is complete
+        }).start();
+    }
+
+    private void checkAndNavigateToResults() {
+        // Navigate to ResultsActivity only if both the ad is dismissed (or failed) and the background task is complete
+        if (isAdDismissed && isBackgroundTaskComplete && !isResultActivityStarted) {
             Intent intent = new Intent(LoadingActivity.this, ResultsActivity.class);
             intent.putExtra("selectedContactId", getIntent().getStringExtra("selectedContactId"));
-            intent.putExtra("user_id", userId);
+            intent.putExtra("user_id", userId); // Use the stored userId
             intent.putExtra("switcher", getIntent().getBooleanExtra("switcher", false));
             startActivity(intent);
             isResultActivityStarted = true;
             finish(); // Close the LoadingActivity
-        }).start();
+        }
     }
 
     private void startProgressBar(int totalTimeMillis, int quantity) {
@@ -137,8 +167,8 @@ public class LoadingActivity extends AppCompatActivity {
                 // Update the UI on the main thread
                 mainHandler.post(() -> {
                     progressBar.setProgress(progress);
-                    progressTextView.setText(progress + "%"); // Update the percentage TextView
-                    messagesProgressTextView.setText(messagesProgress + "/" + quantity); // Update the messages progress TextView
+                    progressTextView.setText(progress-1 + "%"); // Update the percentage TextView
+                    messagesProgressTextView.setText(messagesProgress-1 + "/" + quantity); // Update the messages progress TextView
                 });
 
                 try {

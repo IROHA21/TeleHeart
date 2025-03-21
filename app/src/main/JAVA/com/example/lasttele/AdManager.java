@@ -18,6 +18,7 @@ public class AdManager {
     private static final String TAG = "AdManager";
 
     private AdDismissListener adDismissListener; // Listener for ad dismissal
+    private AdLoadFailureListener adLoadFailureListener; // Listener for ad loading failure
 
     private AdManager() {
         // Private constructor to enforce singleton pattern
@@ -28,6 +29,11 @@ public class AdManager {
             instance = new AdManager();
         }
         return instance;
+    }
+
+    // Set the AdLoadFailureListener
+    public void setAdLoadFailureListener(AdLoadFailureListener listener) {
+        this.adLoadFailureListener = listener;
     }
 
     public void loadInterstitialAd(Context context) {
@@ -44,6 +50,11 @@ public class AdManager {
                     public void onAdFailedToLoad(@NonNull LoadAdError loadAdError) {
                         interstitialAd = null; // Clear the ad if loading fails
                         Log.d(TAG, "Interstitial ad failed to load: " + loadAdError.getMessage());
+
+                        // Notify the failure listener
+                        if (adLoadFailureListener != null) {
+                            adLoadFailureListener.onAdFailedToLoad(loadAdError.getCode());
+                        }
                     }
                 });
     }
@@ -68,6 +79,11 @@ public class AdManager {
             });
         } else {
             Log.d(TAG, "Interstitial ad is not ready yet.");
+
+            // Notify the failure listener if the ad is not ready
+            if (adLoadFailureListener != null) {
+                adLoadFailureListener.onAdFailedToLoad(0); // Use 0 as a generic error code
+            }
         }
     }
 }
