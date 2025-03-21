@@ -70,6 +70,7 @@ dependencies {
     implementation(libs.ui.graphics)
     implementation(libs.ui.tooling.preview)
     implementation(libs.material3)
+    implementation(libs.geoip2)
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)
@@ -80,5 +81,9 @@ dependencies {
     implementation("androidx.appcompat:appcompat:1.6.1")
     implementation ("androidx.lifecycle:lifecycle-process:2.6.2")
     implementation ("com.github.PhilJay:MPAndroidChart:v3.1.0")
+    implementation("com.google.android.gms:play-services-ads:24.1.0")
+    implementation ("com.yandex.android:mobileads:7.11.0")
+
+
 
 }

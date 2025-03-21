@@ -11,6 +11,10 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.chaquo.python.PyObject;
 import com.chaquo.python.Python;
+import com.google.android.gms.ads.MobileAds;
+import com.google.android.gms.ads.initialization.InitializationStatus;
+import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
+import com.google.android.gms.ads.interstitial.InterstitialAd;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,7 +24,7 @@ public class LoadingActivity extends AppCompatActivity {
     private TextView progressTextView;
     private TextView messagesProgressTextView; // New TextView for messages progress
     private Handler mainHandler = new Handler(Looper.getMainLooper());
-
+    InterstitialAd mInterstitialAd;
     private boolean switcher;
     private static boolean isResultActivityStarted = false;
 
@@ -28,6 +32,25 @@ public class LoadingActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.loading_screen);
+
+        // Show the interstitial ad
+        // Show the interstitial ad
+        if (AdUtils.isUserInCISOrRussia(this)) { // Pass 'this' as the Context
+            // Use Yandex Ads for CIS countries
+            YandexAdManager.getInstance().showInterstitialAd(this);
+        } else {
+            // Use Google Ads for the rest of the world
+            AdManager.getInstance().showInterstitialAd(this);
+        }
+
+        // Initialize Google Mobile Ads SDK
+        MobileAds.initialize(this, new OnInitializationCompleteListener() {
+            @Override
+            public void onInitializationComplete(InitializationStatus initializationStatus) {
+                // SDK initialized, ready to load ads
+            }
+        });
+
 
         progressBar = findViewById(R.id.loadingProgressBar);
         progressTextView = findViewById(R.id.progressTextView); // Assuming you have a TextView to show progress

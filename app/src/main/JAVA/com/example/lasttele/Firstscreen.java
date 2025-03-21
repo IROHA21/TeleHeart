@@ -96,6 +96,7 @@ public class Firstscreen extends AppCompatActivity {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 String selectedLanguage = parent.getItemAtPosition(position).toString();
                 String newLanguageCode = selectedLanguage.equals("Русский") ? "ru" : "en";
+                System.out.println("the language code is :" + newLanguageCode);
 
                 // Only restart the activity if the language has changed
                 if (!newLanguageCode.equals(getSavedLanguage())) {
@@ -104,6 +105,7 @@ public class Firstscreen extends AppCompatActivity {
                     restartActivity(); // Restart the activity to apply the new language
                 }
             }
+
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
@@ -142,6 +144,7 @@ public class Firstscreen extends AppCompatActivity {
     private void setLocale(String languageCode) {
         Locale locale = new Locale(languageCode);
         Locale.setDefault(locale);
+
         Resources resources = getResources();
         Configuration config = resources.getConfiguration();
         config.setLocale(locale);
