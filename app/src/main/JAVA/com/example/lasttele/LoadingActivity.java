@@ -23,7 +23,7 @@ public class LoadingActivity extends AppCompatActivity {
     private TextView progressTextView;
     private TextView messagesProgressTextView;
     private Handler mainHandler = new Handler(Looper.getMainLooper());
-    private static boolean isResultActivityStarted = false;
+    private boolean isResultActivityStarted = false; // Non-static variable
     private boolean isAdDismissed = false; // Track if the ad is dismissed
     private boolean isBackgroundTaskComplete = false; // Track if the background task is complete
     private String userId; // Store the userId for later use
@@ -144,16 +144,18 @@ public class LoadingActivity extends AppCompatActivity {
     }
 
     private void checkAndNavigateToResults() {
+        System.out.println("dismissed status" + isAdDismissed);
 
-        System.out.println("dismissed status"  + isAdDismissed);
         // Navigate to ResultsActivity only if both the ad is dismissed (or failed) and the background task is complete
-        if (isAdDismissed && isBackgroundTaskComplete && !isResultActivityStarted) {
+        if (isAdDismissed && isBackgroundTaskComplete) {
             Intent intent = new Intent(LoadingActivity.this, ResultsActivity.class);
             intent.putExtra("selectedContactId", getIntent().getStringExtra("selectedContactId"));
-            intent.putExtra("user_id", userId); // Use the stored userId
+            intent.putExtra("user_id", userId);
             intent.putExtra("switcher", getIntent().getBooleanExtra("switcher", false));
-            startActivity(intent);
 
+            // Clear the back stack and start a new instance of ResultsActivity
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(intent);
             finish(); // Close the LoadingActivity
         }
     }
