@@ -18,6 +18,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.chaquo.python.PyObject;
 import com.chaquo.python.Python;
 import com.chaquo.python.android.AndroidPlatform;
+import com.google.android.gms.ads.MobileAds;
+import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -41,7 +43,22 @@ public class ContactsActivity extends AppCompatActivity {
         setContentView(R.layout.contact_main);
 
 
-      
+        // Initialize Google Mobile Ads SDK
+        MobileAds.initialize(this, new OnInitializationCompleteListener() {
+            @Override
+            public void onInitializationComplete(com.google.android.gms.ads.initialization.InitializationStatus initializationStatus) {
+                // SDK initialized, ready to load ads
+            }
+        });
+
+        // Load the interstitial ad in advance
+        if (AdUtils.isUserInCISOrRussia(this)) { // Pass 'this' as the Context
+            // Use Yandex Ads for CIS countries
+            YandexAdManager.getInstance().loadInterstitialAd(this);
+        } else {
+            // Use Google Ads for the rest of the world
+            AdManager.getInstance().loadInterstitialAd(this);
+        }
 
 
 

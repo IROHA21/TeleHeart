@@ -92,7 +92,10 @@ public class LoadingActivity extends AppCompatActivity {
                 public void onAdFailedToLoad(int errorCode) {
                     // If the ad fails to load, mark the ad as dismissed
                     isAdDismissed = true;
-                    checkAndNavigateToResults(); // Check if both ad is dismissed and background task is complete
+                    checkAndNavigateToResults();// Check if both ad is dismissed and background task is complete
+
+
+
                 }
             });
         }
@@ -141,6 +144,8 @@ public class LoadingActivity extends AppCompatActivity {
     }
 
     private void checkAndNavigateToResults() {
+
+        System.out.println("dismissed status"  + isAdDismissed);
         // Navigate to ResultsActivity only if both the ad is dismissed (or failed) and the background task is complete
         if (isAdDismissed && isBackgroundTaskComplete && !isResultActivityStarted) {
             Intent intent = new Intent(LoadingActivity.this, ResultsActivity.class);
@@ -148,7 +153,7 @@ public class LoadingActivity extends AppCompatActivity {
             intent.putExtra("user_id", userId); // Use the stored userId
             intent.putExtra("switcher", getIntent().getBooleanExtra("switcher", false));
             startActivity(intent);
-            isResultActivityStarted = true;
+
             finish(); // Close the LoadingActivity
         }
     }
