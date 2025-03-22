@@ -184,6 +184,29 @@ public class ContactsActivity extends AppCompatActivity {
             Toast.makeText(this, result.toString(), Toast.LENGTH_SHORT).show();
         }
     }
+    @Override
+    protected void onResume() {
+        super.onResume();
+        MobileAds.initialize(this, new OnInitializationCompleteListener() {
+            @Override
+            public void onInitializationComplete(com.google.android.gms.ads.initialization.InitializationStatus initializationStatus) {
+                // SDK initialized, ready to load ads
+            }
+        });
+
+        // Load the interstitial ad in advance
+        if (AdUtils.isUserInCISOrRussia(this)) { // Pass 'this' as the Context
+            // Use Yandex Ads for CIS countries
+            YandexAdManager.getInstance().loadInterstitialAd(this);
+        } else {
+            // Use Google Ads for the rest of the world
+            AdManager.getInstance().loadInterstitialAd(this);
+        }
+
+
+
+
+    }
 
 
 

@@ -152,11 +152,11 @@ public class LoadingActivity extends AppCompatActivity {
             intent.putExtra("quantity", String.valueOf(quantity));
 
             // Clear the back stack and start a new instance of ResultsActivity
-            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+
             startActivity(intent);
 
             // Ensure proper cleanup
-            finishAndRemoveTask();
+            finish();
         }
     }
 
