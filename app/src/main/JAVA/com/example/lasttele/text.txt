@@ -39,3 +39,26 @@
                     });
                 }
             }
+
+
+
+            private void checkAndNavigateToResults() {
+                    System.out.println("dismissed status: " + isAdDismissed);
+                    System.out.println("background task complete: " + isBackgroundTaskComplete);
+
+                    // Navigate to ResultsActivity only if both the ad is dismissed (or failed) and the background task is complete
+                    if (isAdDismissed && isBackgroundTaskComplete && !isFinishing()) {
+                        Intent intent = new Intent(LoadingActivity.this, ResultsActivity.class);
+                        intent.putExtra("selectedContactId", selectedContactId);
+                        intent.putExtra("user_id", userId);
+                        intent.putExtra("switcher", getIntent().getBooleanExtra("switcher", false));
+                        intent.putExtra("quantity", String.valueOf(quantity));
+
+                        // Clear the back stack and start a new instance of ResultsActivity
+                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                        startActivity(intent);
+
+                        // Ensure proper cleanup
+                        finishAndRemoveTask();
+                    }
+                }
