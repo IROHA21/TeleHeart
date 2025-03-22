@@ -23,10 +23,11 @@ public class LoadingActivity extends AppCompatActivity {
     private TextView progressTextView;
     private TextView messagesProgressTextView;
     private Handler mainHandler = new Handler(Looper.getMainLooper());
-    private boolean isResultActivityStarted = false; // Non-static variable
-    private boolean isAdDismissed = false; // Track if the ad is dismissed
-    private boolean isBackgroundTaskComplete = false; // Track if the background task is complete
-    private String userId; // Store the userId for later use
+    private boolean isAdDismissed = false;
+    private boolean isBackgroundTaskComplete = false;
+    private String userId;
+    private String selectedContactId;
+    private int quantity;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,9 +48,9 @@ public class LoadingActivity extends AppCompatActivity {
         messagesProgressTextView = findViewById(R.id.messagesProgressTextView);
 
         // Get the selected contact ID and quantity from the intent
-        String selectedContactId = getIntent().getStringExtra("selectedContactId");
+        selectedContactId = getIntent().getStringExtra("selectedContactId");
         String quantityStr = getIntent().getStringExtra("quantity");
-        int quantity = Integer.parseInt(quantityStr);
+        quantity = Integer.parseInt(quantityStr);
 
         // Calculate the total time
         double totalTimeSeconds = 0.01067 * quantity - 0.68;
@@ -62,20 +63,23 @@ public class LoadingActivity extends AppCompatActivity {
         startBackgroundTask();
 
         // Show the interstitial ad
+        showInterstitialAd();
+    }
+
+    private void showInterstitialAd() {
         if (AdUtils.isUserInCISOrRussia(this)) {
             // Use Yandex Ads for CIS countries
             YandexAdManager.getInstance().showInterstitialAd(this, new AdDismissListener() {
                 @Override
                 public void onAdDismissed() {
-                    isAdDismissed = true; // Mark the ad as dismissed
-                    checkAndNavigateToResults(); // Check if both ad is dismissed and background task is complete
+                    isAdDismissed = true;
+                    checkAndNavigateToResults();
                 }
             }, new AdLoadFailureListener() {
                 @Override
                 public void onAdFailedToLoad(int errorCode) {
-                    // If the ad fails to load, mark the ad as dismissed
                     isAdDismissed = true;
-                    checkAndNavigateToResults(); // Check if both ad is dismissed and background task is complete
+                    checkAndNavigateToResults();
                 }
             });
         } else {
@@ -83,32 +87,24 @@ public class LoadingActivity extends AppCompatActivity {
             AdManager.getInstance().showInterstitialAd(this, new AdDismissListener() {
                 @Override
                 public void onAdDismissed() {
-                    isAdDismissed = true; // Mark the ad as dismissed
-                    checkAndNavigateToResults(); // Check if both ad is dismissed and background task is complete
+                    isAdDismissed = true;
+                    checkAndNavigateToResults();
                 }
             });
-            AdManager.getInstance().setAdLoadFailureListener(new AdLoadFailureListener() {
-                @Override
-                public void onAdFailedToLoad(int errorCode) {
-                    // If the ad fails to load, mark the ad as dismissed
-                    isAdDismissed = true;
-                    checkAndNavigateToResults();// Check if both ad is dismissed and background task is complete
-
-
-
-                }
+            AdManager.getInstance().setAdLoadFailureListener(errorCode -> {
+                isAdDismissed = true;
+                checkAndNavigateToResults();
             });
         }
     }
 
     private void startBackgroundTask() {
-        // Start the background task to fetch messages
         new Thread(() -> {
             Python py = Python.getInstance();
             PyObject pyObj = py.getModule("helloworld");
 
             // Call getconvo first to ensure user_id is set
-            PyObject con = pyObj.callAttr("getconvo", getIntent().getStringExtra("selectedContactId"), Integer.parseInt(getIntent().getStringExtra("quantity")));
+            PyObject con = pyObj.callAttr("getconvo", selectedContactId, quantity);
 
             if (con == null) {
                 System.out.println("getconvo returned null");
@@ -124,7 +120,7 @@ public class LoadingActivity extends AppCompatActivity {
             }
 
             // Convert PyObject to String directly
-            userId = idu.toString();  // Store the userId for later use
+            userId = idu.toString();
 
             // Convert PyObject elements to String
             List<String> messages = new ArrayList<>();
@@ -139,24 +135,28 @@ public class LoadingActivity extends AppCompatActivity {
 
             // Mark the background task as complete
             isBackgroundTaskComplete = true;
-            checkAndNavigateToResults(); // Check if both ad is dismissed and background task is complete
+            checkAndNavigateToResults();
         }).start();
     }
 
     private void checkAndNavigateToResults() {
-        System.out.println("dismissed status" + isAdDismissed);
+        System.out.println("dismissed status: " + isAdDismissed);
+        System.out.println("background task complete: " + isBackgroundTaskComplete);
 
         // Navigate to ResultsActivity only if both the ad is dismissed (or failed) and the background task is complete
-        if (isAdDismissed && isBackgroundTaskComplete) {
+        if (isAdDismissed && isBackgroundTaskComplete && !isFinishing()) {
             Intent intent = new Intent(LoadingActivity.this, ResultsActivity.class);
-            intent.putExtra("selectedContactId", getIntent().getStringExtra("selectedContactId"));
+            intent.putExtra("selectedContactId", selectedContactId);
             intent.putExtra("user_id", userId);
             intent.putExtra("switcher", getIntent().getBooleanExtra("switcher", false));
+            intent.putExtra("quantity", String.valueOf(quantity));
 
             // Clear the back stack and start a new instance of ResultsActivity
-            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(intent);
-            finish(); // Close the LoadingActivity
+
+            // Ensure proper cleanup
+            finishAndRemoveTask();
         }
     }
 
@@ -174,8 +174,8 @@ public class LoadingActivity extends AppCompatActivity {
                 // Update the UI on the main thread
                 mainHandler.post(() -> {
                     progressBar.setProgress(progress);
-                    progressTextView.setText(progress-1 + "%"); // Update the percentage TextView
-                    messagesProgressTextView.setText(messagesProgress-1 + "/" + quantity); // Update the messages progress TextView
+                    progressTextView.setText(progress + "%"); // Update the percentage TextView
+                    messagesProgressTextView.setText(messagesProgress + "/" + quantity); // Update the messages progress TextView
                 });
 
                 try {
@@ -185,5 +185,13 @@ public class LoadingActivity extends AppCompatActivity {
                 }
             }
         }).start();
+    }
+
+    @Override
+    protected void onDestroy() {
+        // Cleanup any remaining references
+        isAdDismissed = false;
+        isBackgroundTaskComplete = false;
+        super.onDestroy();
     }
 }

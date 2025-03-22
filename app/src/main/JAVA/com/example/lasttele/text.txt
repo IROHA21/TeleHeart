@@ -1,0 +1,41 @@
+ // Initialize Google Mobile Ads SDK
+        MobileAds.initialize(this, new OnInitializationCompleteListener() {
+            @Override
+            public void onInitializationComplete(InitializationStatus initializationStatus) {
+                // SDK initialized, ready to load ads
+            }
+        });
+
+
+
+         private void showInterstitialAd() {
+                if (AdUtils.isUserInCISOrRussia(this)) {
+                    // Use Yandex Ads for CIS countries
+                    YandexAdManager.getInstance().showInterstitialAd(this, new AdDismissListener() {
+                        @Override
+                        public void onAdDismissed() {
+                            isAdDismissed = true;
+                            checkAndNavigateToResults();
+                        }
+                    }, new AdLoadFailureListener() {
+                        @Override
+                        public void onAdFailedToLoad(int errorCode) {
+                            isAdDismissed = true;
+                            checkAndNavigateToResults();
+                        }
+                    });
+                } else {
+                    // Use Google Ads for the rest of the world
+                    AdManager.getInstance().showInterstitialAd(this, new AdDismissListener() {
+                        @Override
+                        public void onAdDismissed() {
+                            isAdDismissed = true;
+                            checkAndNavigateToResults();
+                        }
+                    });
+                    AdManager.getInstance().setAdLoadFailureListener(errorCode -> {
+                        isAdDismissed = true;
+                        checkAndNavigateToResults();
+                    });
+                }
+            }
