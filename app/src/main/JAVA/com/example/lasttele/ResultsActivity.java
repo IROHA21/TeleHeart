@@ -132,9 +132,6 @@ public class ResultsActivity extends AppCompatActivity {
 
 
 
-        // Find the ScrollView in the layout
-
-        // Initialize the button
         // Initialize the button
         Button shareButton = findViewById(R.id.shareButton);
 
@@ -143,8 +140,8 @@ public class ResultsActivity extends AppCompatActivity {
 
         // Set the click listener
         shareButton.setOnClickListener(v -> {
-            ScrollView scrollView = findViewById(R.id.scrollView); // Replace with your ScrollView's ID
-            scrollViewHandler.handleShareButtonClick(scrollView);
+            ScrollView scrollView = findViewById(R.id.scrollView);
+            scrollViewHandler.handleShareButtonClick(scrollView, shareButton);
         });
 
 
