@@ -164,7 +164,7 @@ public class ContactsActivity extends AppCompatActivity {
     }
 
     public void onbuttonclick(View view) {
-        Intent intent = new Intent(this, MainActivity.class);
+        Intent intent = new Intent(this, Firstscreen.class);
         startActivity(intent);
     }
 

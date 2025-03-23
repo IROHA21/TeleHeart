@@ -48,10 +48,27 @@ public class Firstscreen extends AppCompatActivity {
 
     private ImageButton settingsbtn;
     private Spinner languageSpinner;
+    private static final String PREF_FIRST_LAUNCH3 = "isFirstLaunch3";
+    private static final String PREFS_NAME3 = "switchon";
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        SharedPreferences settings3 = getSharedPreferences(PREFS_NAME3, MODE_PRIVATE);
+        boolean isFirstLaunch3 = settings3.getBoolean(PREF_FIRST_LAUNCH3, true);
+
+        if (isFirstLaunch3) {
+            // Launch popactivity only if it's the first launch
+            startActivity(new Intent(Firstscreen.this, popag.class));
+
+            // Set the flag to false so this doesn't happen again
+            SharedPreferences.Editor editor = settings3.edit();
+            editor.putBoolean(PREF_FIRST_LAUNCH3, false);
+            editor.apply();
+        }
+
+
 
         // Set the locale based on the saved preference
         setLocaleFromPreferences();

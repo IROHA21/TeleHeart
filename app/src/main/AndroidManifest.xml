@@ -50,6 +50,9 @@
             android:name=".popactivity"
             android:theme="@style/AppTheme.CustomTheme"/>
         <activity
+            android:name=".popag"
+            android:theme="@style/AppTheme.CustomTheme"/>
+        <activity
             android:name=".popdisconnect"
             android:theme="@style/AppTheme.CustomTheme"/>
 

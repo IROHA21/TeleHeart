@@ -18,8 +18,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:text="@string/addinfo"
-            android:textSize="24sp"/>
+            android:gravity="center"
+        android:text="@string/useragg"
+        android:textSize="24sp"/>
     </RelativeLayout>
 
     <!-- Bottom Button -->
@@ -33,34 +34,39 @@
         android:padding="20dp">
 
         <Button
-            android:id="@+id/close2"
+            android:id="@+id/close4"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             android:backgroundTint="#1C3B9B"
             android:textColor="@color/white"
-            android:text="@string/close"/>
+            android:text="@string/ac"/>
     </RelativeLayout>
 
-    <!-- Middle Text Content -->
-    <TextView
-        android:id="@+id/tutorialText2"
+    <!-- Scrollable Middle Text Content -->
+    <ScrollView
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginHorizontal="24dp"
         android:layout_marginTop="16dp"
         android:layout_marginBottom="16dp"
-        android:text="@string/step2account"
-        android:textSize="15sp"
-        android:textColor="@android:color/black"
-        android:textAlignment="center"
-        android:lineSpacingMultiplier="1.2"
-        android:padding="8dp"
-        android:fontFamily="sans-serif"
-        android:gravity="center"
         app:layout_constraintTop_toBottomOf="@id/topLayout"
         app:layout_constraintBottom_toTopOf="@id/bottomLayout2"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"/>
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <TextView
+            android:id="@+id/tutorialText2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/agg"
+            android:textSize="15sp"
+            android:textColor="@android:color/black"
+            android:textAlignment="textStart"
+            android:gravity="start"
+            android:lineSpacingMultiplier="1.2"
+            android:padding="8dp"
+            android:fontFamily="sans-serif"/>
+    </ScrollView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

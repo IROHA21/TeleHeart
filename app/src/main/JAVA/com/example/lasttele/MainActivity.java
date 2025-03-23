@@ -358,7 +358,7 @@ public class MainActivity extends AppCompatActivity {
 
                 // Update the TextView
 
-                timerTextView.setText("Time remaining: " + timeRemaining);
+                timerTextView.setText(getString(R.string.tries)+ timeRemaining);
             }
 
             @Override

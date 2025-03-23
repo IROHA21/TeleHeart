@@ -18,12 +18,30 @@
     <string name="Code_sent_check_your_telegram">Code sent check your telegram</string>
     <string name="remaining">time remaining :</string>
     <string name="try_again">try again :</string>
+    <string name="agg">
+📜 User Agreement &amp; Privacy Policy\n\n
+By using TeleHeart, you agree to the following terms:\n\n
+1. Data Privacy\n
+   - All data processed by the app remains on your device and is never uploaded to external servers.\n
+   - The app reads your Telegram messages only for generating statistics and insights.\n\n
+2. Permissions &amp; Usage\n
+   - The app requires access to your Telegram session to analyze your chats.\n
+   - You can choose whether to stay logged in or disconnect upon closing the app.\n\n
+3. Advertisements\n
+   - The app displays ads to remain free. You may remove them via an in-app purchase.\n\n
+4. No Liability\n
+   - The app is provided as is, and we are not responsible for any loss, misuse, or unintended consequences.\n\n
+By tapping "Agree &amp; Continue", you confirm that you understand and accept these terms.
+</string>
+    <string name="useragg">User Agreement</string>
+    <string name="ac">Agree &amp; Continue</string>
 
     //login screen (activity_main)
     <string name="LOGIN">LOGIN</string>
     <string name="ex_70000000000">ex +70000000000</string>
     <string name="verify">verify</string>
     <string name="remember_account">remember account</string>
+    <string name="tries">Time remaining to try again :</string>
 
     //fragments
     <string name="step1">enter your phone number starting with the +(country code), then tap Login to proceed.</string>
@@ -37,6 +55,9 @@
     <string name="step11">STEP 1</string>
     <string name="step22">STEP 2</string>
     <string name="step33">STEP 3</string>
+    <string name="dual">to use the app, you have to disable the two-step verification</string>
+
+
     //contact screen
 
     <string name="select_contact">select contact</string>
