@@ -115,6 +115,9 @@ public class ResultsActivity extends AppCompatActivity {
     private TextView yourMostUsedPhrasesTextView;
     private TextView herMostUsedPhrasesTextView;
 
+    // Pie chart for the interest meter
+    private PieChart interestMeterChart; // Add this line
+
     private TextView yourAverageMessageLengthTextView,herAverageMessageLengthTextView,yourMedianMessageLengthTextView,herMedianMessageLengthTextView;
 
     @Override
@@ -137,6 +140,9 @@ public class ResultsActivity extends AppCompatActivity {
         // Initialize number of links pie charts
         yourLinksPieChart = findViewById(R.id.yourLinksPieChart);
         herLinksPieChart = findViewById(R.id.herLinksPieChart);
+
+        // Initialize the interest meter chart
+        interestMeterChart = findViewById(R.id.interestMeterChart); // Add this line
 
         // Initialize bar charts
         yourBarChart = findViewById(R.id.yourbarcharts);
@@ -369,6 +375,31 @@ public class ResultsActivity extends AppCompatActivity {
                 yourMedianMessageLengthTextView.setText(getString(R.string.You) +" "+ medianMessageLengths.getOrDefault(yourChatId, 0) +" "+ getString(R.string.characters));
                 herMedianMessageLengthTextView.setText(getString(R.string.Them)+" "+ medianMessageLengths.getOrDefault(herChatId, 0) +" "+ getString(R.string.characters));
 
+                // Calculate max values dynamically
+                Map<String, Float> maxValues = calculateMaxValues(
+                        messageCounts, averageTimes, mediaCounts, conversationStarts, unrepliedChats,
+                        last10DaysCounts, medianTimes, medianMessageLengths
+                );
+
+// Calculate scores for both users
+                // Calculate scores for both users
+                float yourScore = calculateUserScore(
+                        messageCounts.get(yourChatId), averageTimes.get(yourChatId), mediaCounts.get(yourChatId),
+                        conversationStarts.get(yourChatId), unrepliedChats.get(yourChatId),
+                        last10DaysCounts.get(yourChatId), medianTimes.get(yourChatId),
+                        medianMessageLengths.get(yourChatId), maxValues
+                );
+
+                float theirScore = calculateUserScore(
+                        messageCounts.get(herChatId), averageTimes.get(herChatId), mediaCounts.get(herChatId),
+                        conversationStarts.get(herChatId), unrepliedChats.get(herChatId),
+                        last10DaysCounts.get(herChatId), medianTimes.get(herChatId),
+                        medianMessageLengths.get(herChatId), maxValues
+                );
+
+// Set up the interest meter chart with percentages and labels
+                setupInterestMeterChart(interestMeterChart, yourScore, theirScore);
+
             });
         }).start();
     }
@@ -380,6 +411,127 @@ public class ResultsActivity extends AppCompatActivity {
         return phraseEntry.getKey() + " (" + phraseEntry.getValue() +" "+ getString(R.string.times)+ ")";
     }
 
+
+
+    // Helper method to calculate the user's interest score
+    // Helper method to calculate the user's interest score
+    private float calculateUserScore(
+            int messageCount, long averageTime, int mediaCount, int conversationStarts,
+            int unrepliedChats, int last10DaysCounts, long medianAnswerTime, int medianMessageLength,
+            Map<String, Float> maxValues
+    ) {
+        // Normalize each metric using dynamic max values
+        float normalizedMessageCount = normalize(messageCount, 0, maxValues.get("messageCount"));
+        float normalizedAverageTime = normalize(averageTime, 0, maxValues.get("averageTime"));
+        float normalizedMediaCount = normalize(mediaCount, 0, maxValues.get("mediaCount"));
+        float normalizedConversationStarts = normalize(conversationStarts, 0, maxValues.get("conversationStarts"));
+        float normalizedUnrepliedChats = normalize(unrepliedChats, 0, maxValues.get("unrepliedChats"));
+        float normalizedLast10DaysCounts = normalize(last10DaysCounts, 0, maxValues.get("last10DaysCounts"));
+        float normalizedMedianAnswerTime = normalize(medianAnswerTime, 0, maxValues.get("medianAnswerTime"));
+        float normalizedMedianMessageLength = normalize(medianMessageLength, 0, maxValues.get("medianMessageLength"));
+
+        // Assign weights (adjust as needed)
+        float weightMessageCount = 0.30f;
+        float weightAverageTime = 0.15f;
+        float weightMediaCount = 0.10f;
+        float weightConversationStarts = 0.10f;
+        float weightUnrepliedChats = 0.05f;
+        float weightLast10DaysCounts = 0.10f;
+        float weightMedianAnswerTime = 0.10f;
+        float weightMedianMessageLength = 0.10f;
+
+        // Calculate weighted score
+        return (normalizedMessageCount * weightMessageCount) +
+                (normalizedAverageTime * weightAverageTime) +
+                (normalizedMediaCount * weightMediaCount) +
+                (normalizedConversationStarts * weightConversationStarts) +
+                (normalizedUnrepliedChats * weightUnrepliedChats) +
+                (normalizedLast10DaysCounts * weightLast10DaysCounts) +
+                (normalizedMedianAnswerTime * weightMedianAnswerTime) +
+                (normalizedMedianMessageLength * weightMedianMessageLength);
+    }
+
+    // Helper method to normalize values
+    private float normalize(float value, float min, float max) {
+        return ((value - min) / (max - min)) * 100;
+    }
+    // Helper method to calculate max values for normalization
+    private Map<String, Float> calculateMaxValues(
+            Map<Long, Integer> messageCounts, Map<Long, Long> averageTimes, Map<Long, Integer> mediaCounts,
+            Map<Long, Integer> conversationStarts, Map<Long, Integer> unrepliedChats,
+            Map<Long, Integer> last10DaysCounts, Map<Long, Long> medianAnswerTimes,
+            Map<Long, Integer> medianMessageLengths
+    ) {
+        Map<String, Float> maxValues = new HashMap<>();
+
+        // Calculate max values for each metric
+        maxValues.put("messageCount", (float) Collections.max(messageCounts.values()));
+        maxValues.put("averageTime", (float) Collections.max(averageTimes.values()));
+        maxValues.put("mediaCount", (float) Collections.max(mediaCounts.values()));
+        maxValues.put("conversationStarts", (float) Collections.max(conversationStarts.values()));
+        maxValues.put("unrepliedChats", (float) Collections.max(unrepliedChats.values()));
+        maxValues.put("last10DaysCounts", (float) Collections.max(last10DaysCounts.values()));
+        maxValues.put("medianAnswerTime", (float) Collections.max(medianAnswerTimes.values()));
+        maxValues.put("medianMessageLength", (float) Collections.max(medianMessageLengths.values()));
+
+        return maxValues;
+    }
+    // Helper method to set up the interest meter chart
+    private void setupInterestMeterChart(PieChart pieChart, float yourScore, float theirScore) {
+        // Calculate percentages
+        float totalScore = yourScore + theirScore;
+        float yourPercentage = (yourScore / totalScore) * 100;
+        float theirPercentage = (theirScore / totalScore) * 100;
+
+        // Create entries with labels that include percentages
+        List<PieEntry> entries = new ArrayList<>();
+        entries.add(new PieEntry(yourPercentage, getString(R.string.You) + " " + String.format("%.1f%%", yourPercentage)));
+        entries.add(new PieEntry(theirPercentage, getString(R.string.Them) + " " + String.format("%.1f%%", theirPercentage)));
+
+        // Create a PieDataSet with the entries
+        PieDataSet dataSet = new PieDataSet(entries, "");
+        dataSet.setColors(new int[]{Color.parseColor("#00d4ff"), Color.parseColor("#FFD700")});
+        dataSet.setValueTextColor(Color.WHITE);
+        dataSet.setValueTextSize(12f);
+
+        // Use a custom ValueFormatter to display the labels correctly
+        dataSet.setValueFormatter(new ValueFormatter() {
+            @Override
+            public String getFormattedValue(float value) {
+                return String.format("%.1f%%", value); // Display percentages with one decimal place
+            }
+        });
+
+        // Create a PieData object with the PieDataSet
+        PieData pieData = new PieData(dataSet);
+        pieChart.setData(pieData);
+
+        // Customize the chart to look like a semi-circle
+        pieChart.setRotationAngle(180);
+        pieChart.setHoleRadius(50f);
+        pieChart.setTransparentCircleRadius(55f);
+        pieChart.setDrawEntryLabels(false);
+        pieChart.setDrawHoleEnabled(true);
+        pieChart.setHoleColor(Color.TRANSPARENT);
+        pieChart.setDescription(null);
+
+        // Configure the legend
+        Legend legend = pieChart.getLegend();
+        legend.setEnabled(true); // Enable the legend
+        legend.setVerticalAlignment(Legend.LegendVerticalAlignment.BOTTOM); // Place the legend at the bottom
+        legend.setHorizontalAlignment(Legend.LegendHorizontalAlignment.CENTER); // Center the legend horizontally
+        legend.setOrientation(Legend.LegendOrientation.HORIZONTAL); // Display the legend horizontally
+        legend.setDrawInside(false); // Draw the legend outside the chart
+        legend.setXEntrySpace(20f); // Increase the space between legend entries
+        legend.setYEntrySpace(0f); // Set the space between legend rows
+        legend.setYOffset(20f); // Increase the vertical offset of the legend
+        legend.setTextColor(Color.WHITE); // Set legend text color to white
+        legend.setTextSize(12f); // Set legend text size
+
+        // Animate the chart
+        pieChart.animateY(1000);
+        pieChart.invalidate();
+    }
     // Helper method to set up the Largest Communication Streak TextView
     private void setupLargestCommunicationStreakTextView(TextView daysTextView, TextView datesTextView, Map.Entry<Integer, Map.Entry<Date, Date>> streakInfo, String label) {
         if (streakInfo != null) {
@@ -1850,10 +2002,6 @@ public class ResultsActivity extends AppCompatActivity {
 
 
 
-        // Handle back navigation properly
-
-
-        // Rest of your onCreate code...
 
 
 

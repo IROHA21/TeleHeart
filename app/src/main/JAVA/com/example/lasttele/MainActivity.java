@@ -248,7 +248,9 @@ public class MainActivity extends AppCompatActivity {
 
                 if (resultString.equals("Code sent check your telegram")) {
                     Toast.makeText(this, R.string.Code_sent_check_your_telegram, Toast.LENGTH_SHORT).show();
-                } else {
+                } else if(resultString.equals("Error: database is locked")||resultString.equals("Error: Cannot send requests while disconnected")) {
+                    Toast.makeText(this, R.string.try_again, Toast.LENGTH_SHORT).show();
+                }else{
                     Toast.makeText(this, "OTP Result: " + result.toString(), Toast.LENGTH_SHORT).show();
                     System.out.println("OTP Result: " + result);
                 }
@@ -281,60 +283,65 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void onCodeClick(View view) {
+        ProgressBar progressBar = findViewById(R.id.progressBar2);
 
-        if (switch1.isChecked()) {
-            // If the switch is on, save the current phone number to SharedPreferences
-            switcher = true;
-        }
-        String phone = editTextPhone2.getText().toString().trim();
-        String code = editTextCode.getText().toString().trim();
-        if (code.isEmpty()) {
-            Toast.makeText(this, "Please enter the code you received.", Toast.LENGTH_SHORT).show();
+        progressBar.setVisibility(View.VISIBLE);
+        // Create a new thread to handle the logic
+        Handler handler = new Handler(Looper.getMainLooper());
+        new Thread(() -> {
+            // Background thread logic
+            boolean switcher = switch1.isChecked();
+            String phone = editTextPhone2.getText().toString().trim();
+            String code = editTextCode.getText().toString().trim();
 
-            return;
-        }
-
-        Python py = Python.getInstance();
-        PyObject pyObj = py.getModule("helloworld");
-
-        PyObject result = pyObj.callAttr("otpCode", code, phone);
-        String resultString = result.toString();
-        System.out.println("resultstring : " + resultString);
-        if (resultString.equals("Error: Two-steps verification is enabled and a password is required (caused by SignInRequest)")){
-            Toast.makeText(this, "you need to disable two steps verification", Toast.LENGTH_SHORT).show();
-            startActivity(new Intent(MainActivity.this, popdisconnect.class));
-        }else {
-            if (resultString.equals("Logged in successfully.")) {
-                Toast.makeText(this,R.string.Logged_in_successfully,Toast.LENGTH_SHORT).show();
-                System.out.println(result);
+            if (code.isEmpty()) {
+                handler.post(() -> {
+                    Toast.makeText(MainActivity.this, "Please enter the code you received.", Toast.LENGTH_SHORT).show();
+                    progressBar.setVisibility(View.INVISIBLE);
+                });
+                return;
             }
-            else{
-                Toast.makeText(this, "Result: " + result.toString(), Toast.LENGTH_SHORT).show();
-                System.out.println(result);
-            }
-        }
 
+            Python py = Python.getInstance();
+            PyObject pyObj = py.getModule("helloworld");
 
+            PyObject result = pyObj.callAttr("otpCode", code, phone);
+            String resultString = result.toString();
+            System.out.println("resultstring : " + resultString);
 
-        // If login is successful, switch to ContactsActivity
-        if (resultString.equals("Logged in successfully.")) {
+            handler.post(() -> {
+                if (resultString.equals("Error: Two-steps verification is enabled and a password is required (caused by SignInRequest)")) {
+                    Toast.makeText(MainActivity.this, "you need to disable two steps verification", Toast.LENGTH_SHORT).show();
+                    startActivity(new Intent(MainActivity.this, popdisconnect.class));
+                    progressBar.setVisibility(View.INVISIBLE);
+                } else {
+                    if (resultString.equals("Logged in successfully.")) {
+                        Toast.makeText(MainActivity.this, R.string.Logged_in_successfully, Toast.LENGTH_SHORT).show();
+                        System.out.println(result);
+                    } else {
+                        Toast.makeText(MainActivity.this, "Result: " + result.toString(), Toast.LENGTH_SHORT).show();
+                        System.out.println(result);
+                        progressBar.setVisibility(View.INVISIBLE);
+                    }
+                }
 
-            System.out.println("switcher value in before sending " + switcher);
-            Intent intent = new Intent(this, ContactsActivity.class);
-            intent.putExtra("switcher", switcher); // Pass the user ID
+                // If login is successful, switch to ContactsActivity
+                if (resultString.equals("Logged in successfully.")) {
+                    System.out.println("switcher value in before sending " + switcher);
+                    Intent intent = new Intent(MainActivity.this, ContactsActivity.class);
+                    intent.putExtra("switcher", switcher); // Pass the user ID
 
+                    Intent intent2 = new Intent(MainActivity.this, LoadingActivity.class);
+                    intent2.putExtra("switcher", switcher); // Pass the user ID
 
-            Intent intent2 = new Intent(this, LoadingActivity.class);
-            intent2.putExtra("switcher", switcher); // Pass the user ID
+                    Intent intent3 = new Intent(MainActivity.this, ResultsActivity.class);
+                    intent3.putExtra("switcher", switcher); // Pass the user ID
 
-            Intent intent3 = new Intent(this, ResultsActivity.class);
-            intent3.putExtra("switcher", switcher); // Pass the user ID
-
-            startActivity(intent);
-
-        }
-
-
+                    startActivity(intent);
+                    finish();
+                }
+            });
+        }).start();
     }
     private void startCooldownTimer() {
         timerTextView.setVisibility(View.VISIBLE); // Make the TextView visible

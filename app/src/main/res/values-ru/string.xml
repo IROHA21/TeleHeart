@@ -15,6 +15,7 @@
     <string name="Logged_in_successfully">Успешный вход в систему</string>
     <string name="Code_sent_check_your_telegram">Код отправлен, проверьте Telegram</string>
     <string name="remaining"> time remaining </string>
+    <string name="try_again">попробуйте еще раз:</string>
 
     //login screen (activity_main)
     <string name="LOGIN">Bойти</string>

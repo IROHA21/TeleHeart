@@ -174,8 +174,8 @@ public class LoadingActivity extends AppCompatActivity {
                 // Update the UI on the main thread
                 mainHandler.post(() -> {
                     progressBar.setProgress(progress);
-                    progressTextView.setText(progress + "%"); // Update the percentage TextView
-                    messagesProgressTextView.setText(messagesProgress + "/" + quantity); // Update the messages progress TextView
+                    progressTextView.setText(progress -1 + "%"); // Update the percentage TextView
+                    messagesProgressTextView.setText(messagesProgress-1 + "/" + quantity); // Update the messages progress TextView
                 });
 
                 try {

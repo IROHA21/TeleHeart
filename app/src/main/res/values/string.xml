@@ -17,6 +17,7 @@
     <string name="Logged_in_successfully">Logged in successfully</string>
     <string name="Code_sent_check_your_telegram">Code sent check your telegram</string>
     <string name="remaining">time remaining :</string>
+    <string name="try_again">try again :</string>
 
     //login screen (activity_main)
     <string name="LOGIN">LOGIN</string>
