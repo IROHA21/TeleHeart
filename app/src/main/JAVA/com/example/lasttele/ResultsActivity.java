@@ -7,6 +7,7 @@ import android.os.Handler;
 import android.os.Looper;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -89,6 +90,8 @@ public class ResultsActivity extends AppCompatActivity {
     private HorizontalBarChart yourMostUsedEmojisChart;
     private HorizontalBarChart herMostUsedEmojisChart;
 
+
+    private ScrollView scrollView;
     // Longest messages
     private TextView herlongestmesssage, yourlongestmesssage;
     // TextViews for Median Answering Time
@@ -118,12 +121,31 @@ public class ResultsActivity extends AppCompatActivity {
     // Pie chart for the interest meter
     private PieChart interestMeterChart; // Add this line
 
+
+
     private TextView yourAverageMessageLengthTextView,herAverageMessageLengthTextView,yourMedianMessageLengthTextView,herMedianMessageLengthTextView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.results_screen);
+
+
+
+        // Find the ScrollView in the layout
+
+        // Initialize the button
+        // Initialize the button
+        Button shareButton = findViewById(R.id.shareButton);
+
+        // Initialize the ScrollViewHandler
+        ScrollViewHandler scrollViewHandler = new ScrollViewHandler(this);
+
+        // Set the click listener
+        shareButton.setOnClickListener(v -> {
+            ScrollView scrollView = findViewById(R.id.scrollView); // Replace with your ScrollView's ID
+            scrollViewHandler.handleShareButtonClick(scrollView);
+        });
 
 
 
