@@ -5,13 +5,17 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 
@@ -34,7 +38,14 @@ import com.github.mikephil.charting.data.PieDataSet;
 import com.github.mikephil.charting.data.PieEntry;
 import com.github.mikephil.charting.formatter.IndexAxisValueFormatter;
 import com.github.mikephil.charting.formatter.ValueFormatter;
+import com.google.android.gms.ads.MobileAds;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
+import com.yandex.mobile.ads.banner.BannerAdEventListener;
+import com.yandex.mobile.ads.banner.BannerAdSize;
+import com.yandex.mobile.ads.banner.BannerAdView;
+import com.yandex.mobile.ads.common.AdRequest;
+import com.yandex.mobile.ads.common.AdRequestError;
+import com.yandex.mobile.ads.common.ImpressionData;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -62,6 +73,7 @@ public class ResultsActivity extends AppCompatActivity {
     // Pie charts for number of links per user
     private PieChart yourLinksPieChart;
     private PieChart herLinksPieChart;
+    private BannerAdView mBannerAd;
     // Line charts for messages per month
     private LineChart yourMessagesPerMonthLineChart;
     private LineChart herMessagesPerMonthLineChart;
@@ -124,12 +136,20 @@ public class ResultsActivity extends AppCompatActivity {
 
 
 
+
+
     private TextView yourAverageMessageLengthTextView,herAverageMessageLengthTextView,yourMedianMessageLengthTextView,herMedianMessageLengthTextView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.results_screen);
+
+        MobileAds.initialize(this, initializationStatus -> {
+            // SDK initialized, now you can load ads
+            loadBannerAd();
+        });
+
 
 
 
@@ -2062,6 +2082,65 @@ public class ResultsActivity extends AppCompatActivity {
             // Start the countdown
             handler.post(disconnectRunnable);
         }
+    }
+    private void loadBannerAd() {
+        FrameLayout adContainer = findViewById(R.id.adContainer);
+        BannerAdView bannerAdView = findViewById(R.id.bannerAdView);
+
+        // Calculate ad size based on container width and desired max height
+        DisplayMetrics displayMetrics = getResources().getDisplayMetrics();
+        int adWidthPixels = adContainer.getWidth();
+        if (adWidthPixels == 0) {
+            adWidthPixels = displayMetrics.widthPixels;
+        }
+        int adWidth = Math.round(adWidthPixels / displayMetrics.density);
+        int maxAdHeight = Math.round(80 / displayMetrics.density); // 80dp max height
+
+        BannerAdSize adSize = BannerAdSize.inlineSize(this, adWidth, maxAdHeight);
+        bannerAdView.setAdSize(adSize);
+
+        // Set your actual ad unit ID here (replace with your Yandex ad unit ID)
+        bannerAdView.setAdUnitId("demo-banner-yandex"); // Use demo ID for testing
+
+        bannerAdView.setBannerAdEventListener(new BannerAdEventListener() {
+            @Override
+            public void onAdLoaded() {
+                Log.d("YandexAds", "Banner ad loaded");
+                if (isDestroyed() && bannerAdView != null) {
+                    bannerAdView.destroy();
+                }
+            }
+
+            @Override
+            public void onAdFailedToLoad(@NonNull AdRequestError adRequestError) {
+                Log.e("YandexAds", "Banner ad failed to load: " + adRequestError.getDescription());
+                // Don't try to load a new ad immediately
+            }
+
+            @Override
+            public void onAdClicked() {
+                Log.d("YandexAds", "Banner ad clicked");
+            }
+
+            @Override
+            public void onLeftApplication() {
+                Log.d("YandexAds", "Banner ad left application");
+            }
+
+            @Override
+            public void onReturnedToApplication() {
+                Log.d("YandexAds", "Banner ad returned to application");
+            }
+
+            @Override
+            public void onImpression(@Nullable ImpressionData impressionData) {
+                Log.d("YandexAds", "Banner ad impression recorded");
+            }
+        });
+
+        // Load the ad
+        AdRequest adRequest = new AdRequest.Builder().build();
+        bannerAdView.loadAd(adRequest);
     }
 
 

@@ -1,8 +1,8 @@
 <!-- res/drawable/rounded_spinner_background.xml -->
 <shape xmlns:android="http://schemas.android.com/apk/res/android">
-    <solid android:color="#673AB7" /> <!-- Solid purple color -->
+    <solid android:color="#0061ff" /> <!-- Solid purple color -->
     <corners android:radius="8dp" />
     <stroke
         android:width="1dp"
-        android:color="#512DA8" /> <!-- Darker purple border -->
+        android:color="#0061ff" /> <!-- Darker purple border -->
 </shape>

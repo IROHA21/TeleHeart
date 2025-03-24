@@ -1,5 +1,6 @@
 package com.example.lasttele;
 
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.view.View;
@@ -14,12 +15,19 @@ import java.lang.reflect.Method;
 
 public class SettingsActivity extends AppCompatActivity {
 
+
+
     private TextView cacheStatusTextView;
+    private Button manualDisconnectButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
+
+
+        manualDisconnectButton = findViewById(R.id.manualDisconnectButton);
+        manualDisconnectButton.setOnClickListener(this::ondisclick);
 
         Button clearCacheButton = findViewById(R.id.clearCacheButton);
         cacheStatusTextView = findViewById(R.id.cacheStatusTextView);
@@ -108,5 +116,8 @@ public class SettingsActivity extends AppCompatActivity {
         } else {
             return (size / (1024 * 1024)) + " MB";
         }
+    }
+    public void ondisclick(View view) {
+        startActivity(new Intent(SettingsActivity.this, rememberaccount.class));
     }
 }

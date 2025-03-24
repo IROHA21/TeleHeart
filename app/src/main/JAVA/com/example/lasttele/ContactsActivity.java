@@ -1,6 +1,7 @@
 package com.example.lasttele;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.HandlerThread;
@@ -33,6 +34,8 @@ public class ContactsActivity extends AppCompatActivity {
     private Handler mainHandler = new Handler(Looper.getMainLooper());
     private boolean switcher;
 
+    private static final String PREF_FIRST_LAUNCH4 = "isFirstLaunch4";
+    private static final String PREFS_NAME4 = "switchon";
 
 
 
@@ -41,6 +44,20 @@ public class ContactsActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.contact_main);
+
+        SharedPreferences settings4 = getSharedPreferences(PREFS_NAME4, MODE_PRIVATE);
+        boolean isFirstLaunch3 = settings4.getBoolean(PREF_FIRST_LAUNCH4, true);
+
+        if (isFirstLaunch3) {
+            // Launch popactivity only if it's the first launch
+            startActivity(new Intent(ContactsActivity.this,popnum.class));
+
+            // Set the flag to false so this doesn't happen again
+            SharedPreferences.Editor editor = settings4.edit();
+            editor.putBoolean(PREF_FIRST_LAUNCH4, false);
+            editor.apply();
+        }
+
 
 
         // Initialize Google Mobile Ads SDK
@@ -166,6 +183,10 @@ public class ContactsActivity extends AppCompatActivity {
     public void onbuttonclick(View view) {
         Intent intent = new Intent(this, Firstscreen.class);
         startActivity(intent);
+    }
+    public void uperlefts (View view){
+        startActivity((new Intent(ContactsActivity.this, popnum.class)));
+
     }
 
     @Override

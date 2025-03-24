@@ -1,10 +1,21 @@
 from telethon import TelegramClient
 import asyncio
 import os
+from dotenv import load_dotenv
 from telethon.tl.functions.account import GetAuthorizationsRequest, ResetAuthorizationRequest
 # Replace with your own API credentials
-API_ID = 25016078
-API_HASH = "6e818b2e5b0e074c403e3bb120f64736"
+
+# Load environment variables
+env_path = os.path.join(os.path.dirname(__file__), "codes.env")
+load_dotenv(env_path)
+
+API_ID = os.getenv("TELEGRAM_API_ID")
+API_HASH = os.getenv("TELEGRAM_API_HASH")
+
+if not API_ID or not API_HASH:
+    raise ValueError("Telegram API credentials not found in environment variables")
+
+
 SESSION_FILE = None  # Will be set dynamically
 user_id = None
 chat = []

@@ -56,6 +56,7 @@ By tapping "Agree &amp; Continue", you confirm that you understand and accept th
     <string name="step22">STEP 2</string>
     <string name="step33">STEP 3</string>
     <string name="dual">to use the app, you have to disable the two-step verification</string>
+    <string name="num">To scan messages, enter a number between 100-100000. You can either choose manually or check your Telegram chat: 1) Open chat 2) Tap contact name 3) Select \"Shared Media\" 4) See total count. Scanning over 20000 messages may take longer. The app will automatically adjust if your number is too high.</string>
 
 
     //contact screen

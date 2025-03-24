@@ -17,23 +17,39 @@
     <!-- Button to clear app data -->
     <Button
         android:id="@+id/clearCacheButton"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:text="Clear App Data"
-    android:layout_below="@id/titleTextView"
-    android:layout_marginTop="16dp"
-    android:backgroundTint="@color/purple"
-    android:textColor="@android:color/white"
-    android:padding="12dp"/>
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Clear App Data"
+        android:layout_below="@id/titleTextView"
+        android:layout_marginTop="16dp"
+        android:backgroundTint="@color/purple"
+        android:textColor="@android:color/white"
+        android:padding="12dp"/>
 
     <!-- TextView to show data size or status -->
     <TextView
         android:id="@+id/cacheStatusTextView"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:text="Data size: Unknown"
-    android:layout_below="@id/clearCacheButton"
-    android:layout_marginTop="16dp"
-    android:layout_centerHorizontal="true"/>
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Data size: Unknown"
+        android:layout_below="@id/clearCacheButton"
+        android:layout_marginTop="16dp"
+        android:layout_centerHorizontal="true"/>
+
+    <!-- Button to disconnect last session -->
+
+
+    <!-- Button for manual disconnect instructions -->
+    <Button
+        android:id="@+id/manualDisconnectButton"
+        android:onClick="ondisclick"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="How to Disconnect Manually"
+        android:layout_below="@id/cacheStatusTextView"
+        android:layout_marginTop="16dp"
+        android:backgroundTint="@color/purple"
+        android:textColor="@android:color/white"
+        android:padding="12dp"/>
 
 </RelativeLayout>
