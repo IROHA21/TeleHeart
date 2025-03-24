@@ -6,11 +6,11 @@ plugins {
 }
 
 android {
-    namespace = "com.example.lasttele"
+    namespace = "com.moon.TeleHeart"
     compileSdk = 35
 
     defaultConfig {
-        applicationId = "com.example.lasttele"
+        applicationId = "com.moon.TeleHeart"
         minSdk = 28
         targetSdk = 35
         versionCode = 1
