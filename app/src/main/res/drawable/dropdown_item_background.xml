@@ -1,0 +1,13 @@
+<!-- res/drawable/dropdown_item_background.xml -->
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:state_pressed="true">
+        <shape android:shape="rectangle">
+            <solid android:color="#512DA8"/> <!-- Darker purple when pressed -->
+        </shape>
+    </item>
+    <item>
+        <shape android:shape="rectangle">
+            <solid android:color="#673AB7"/> <!-- Normal state color -->
+        </shape>
+    </item>
+</selector>

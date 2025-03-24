@@ -5,6 +5,7 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ScrollView;
@@ -400,24 +401,39 @@ public class ResultsActivity extends AppCompatActivity {
                         last10DaysCounts, medianTimes, medianMessageLengths
                 );
 
-// Calculate scores for both users
-                // Calculate scores for both users
+                // Calculate scores for both users with debug logs
                 float yourScore = calculateUserScore(
-                        messageCounts.get(yourChatId), averageTimes.get(yourChatId), mediaCounts.get(yourChatId),
-                        conversationStarts.get(yourChatId), unrepliedChats.get(yourChatId),
-                        last10DaysCounts.get(yourChatId), medianTimes.get(yourChatId),
-                        medianMessageLengths.get(yourChatId), maxValues
+                        messageCounts.getOrDefault(yourChatId, 0),
+                        averageTimes.getOrDefault(yourChatId, 0L),
+                        mediaCounts.getOrDefault(yourChatId, 0),
+                        conversationStarts.getOrDefault(yourChatId, 0),
+                        unrepliedChats.getOrDefault(yourChatId, 0),
+                        last10DaysCounts.getOrDefault(yourChatId, 0),
+                        medianTimes.getOrDefault(yourChatId, 0L),
+                        medianMessageLengths.getOrDefault(yourChatId, 0),
+                        maxValues
                 );
 
                 float theirScore = calculateUserScore(
-                        messageCounts.get(herChatId), averageTimes.get(herChatId), mediaCounts.get(herChatId),
-                        conversationStarts.get(herChatId), unrepliedChats.get(herChatId),
-                        last10DaysCounts.get(herChatId), medianTimes.get(herChatId),
-                        medianMessageLengths.get(herChatId), maxValues
+                        messageCounts.getOrDefault(herChatId, 0),
+                        averageTimes.getOrDefault(herChatId, 0L),
+                        mediaCounts.getOrDefault(herChatId, 0),
+                        conversationStarts.getOrDefault(herChatId, 0),
+                        unrepliedChats.getOrDefault(herChatId, 0),
+                        last10DaysCounts.getOrDefault(herChatId, 0),
+                        medianTimes.getOrDefault(herChatId, 0L),
+                        medianMessageLengths.getOrDefault(herChatId, 0),
+                        maxValues
                 );
 
-// Set up the interest meter chart with percentages and labels
+                // Debug logs to verify values
+                Log.d("InterestMeter", "Your Score: " + yourScore);
+                Log.d("InterestMeter", "Their Score: " + theirScore);
+                Log.d("InterestMeter", "Max Values: " + maxValues);
+
+                // Update the chart with zero-score handling
                 setupInterestMeterChart(interestMeterChart, yourScore, theirScore);
+
 
             });
         }).start();
@@ -472,40 +488,69 @@ public class ResultsActivity extends AppCompatActivity {
 
     // Helper method to normalize values
     private float normalize(float value, float min, float max) {
-        return ((value - min) / (max - min)) * 100;
+        if (max - min <= 0) return 0;
+        float normalized = ((value - min) / (max - min)) * 100;
+        return Math.max(0, Math.min(100, normalized)); // Clamp between 0-100
     }
-    // Helper method to calculate max values for normalization
+
+    // Fixed max value calculation with minimum 1 protection
     private Map<String, Float> calculateMaxValues(
-            Map<Long, Integer> messageCounts, Map<Long, Long> averageTimes, Map<Long, Integer> mediaCounts,
-            Map<Long, Integer> conversationStarts, Map<Long, Integer> unrepliedChats,
-            Map<Long, Integer> last10DaysCounts, Map<Long, Long> medianAnswerTimes,
+            Map<Long, Integer> messageCounts,
+            Map<Long, Long> averageTimes,
+            Map<Long, Integer> mediaCounts,
+            Map<Long, Integer> conversationStarts,
+            Map<Long, Integer> unrepliedChats,
+            Map<Long, Integer> last10DaysCounts,
+            Map<Long, Long> medianAnswerTimes,
             Map<Long, Integer> medianMessageLengths
     ) {
         Map<String, Float> maxValues = new HashMap<>();
 
-        // Calculate max values for each metric
-        maxValues.put("messageCount", (float) Collections.max(messageCounts.values()));
-        maxValues.put("averageTime", (float) Collections.max(averageTimes.values()));
-        maxValues.put("mediaCount", (float) Collections.max(mediaCounts.values()));
-        maxValues.put("conversationStarts", (float) Collections.max(conversationStarts.values()));
-        maxValues.put("unrepliedChats", (float) Collections.max(unrepliedChats.values()));
-        maxValues.put("last10DaysCounts", (float) Collections.max(last10DaysCounts.values()));
-        maxValues.put("medianAnswerTime", (float) Collections.max(medianAnswerTimes.values()));
-        maxValues.put("medianMessageLength", (float) Collections.max(medianMessageLengths.values()));
+        maxValues.put("messageCount", Math.max(1f, (float) messageCounts.values().stream()
+                .mapToInt(Integer::intValue).max().orElse(0)));
+
+        maxValues.put("averageTime", Math.max(1f, (float) averageTimes.values().stream()
+                .mapToLong(Long::longValue).max().orElse(0L)));
+
+        maxValues.put("mediaCount", Math.max(1f, (float) mediaCounts.values().stream()
+                .mapToInt(Integer::intValue).max().orElse(0)));
+
+        maxValues.put("conversationStarts", Math.max(1f, (float) conversationStarts.values().stream()
+                .mapToInt(Integer::intValue).max().orElse(0)));
+
+        maxValues.put("unrepliedChats", Math.max(1f, (float) unrepliedChats.values().stream()
+                .mapToInt(Integer::intValue).max().orElse(0)));
+
+        maxValues.put("last10DaysCounts", Math.max(1f, (float) last10DaysCounts.values().stream()
+                .mapToInt(Integer::intValue).max().orElse(0)));
+
+        maxValues.put("medianAnswerTime", Math.max(1f, (float) medianAnswerTimes.values().stream()
+                .mapToLong(Long::longValue).max().orElse(0L)));
+
+        maxValues.put("medianMessageLength", Math.max(1f, (float) medianMessageLengths.values().stream()
+                .mapToInt(Integer::intValue).max().orElse(0)));
 
         return maxValues;
     }
+
     // Helper method to set up the interest meter chart
     private void setupInterestMeterChart(PieChart pieChart, float yourScore, float theirScore) {
-        // Calculate percentages
         float totalScore = yourScore + theirScore;
-        float yourPercentage = (yourScore / totalScore) * 100;
-        float theirPercentage = (theirScore / totalScore) * 100;
+        float yourPercentage = 50f; // Default to 50/50
+        float theirPercentage = 50f;
 
-        // Create entries with labels that include percentages
+        if (totalScore > 0) {
+            yourPercentage = (yourScore / totalScore) * 100;
+            theirPercentage = (theirScore / totalScore) * 100;
+        }
+
+        // Clamp percentages between 0-100
+        yourPercentage = Math.max(0, Math.min(100, yourPercentage));
+        theirPercentage = Math.max(0, Math.min(100, theirPercentage));
+
         List<PieEntry> entries = new ArrayList<>();
-        entries.add(new PieEntry(yourPercentage, getString(R.string.You) + " " + String.format("%.1f%%", yourPercentage)));
-        entries.add(new PieEntry(theirPercentage, getString(R.string.Them) + " " + String.format("%.1f%%", theirPercentage)));
+        entries.add(new PieEntry(yourPercentage, getString(R.string.You) + String.format(" %.1f%%", yourPercentage)));
+        entries.add(new PieEntry(theirPercentage, getString(R.string.Them) + String.format(" %.1f%%", theirPercentage)));
 
         // Create a PieDataSet with the entries
         PieDataSet dataSet = new PieDataSet(entries, "");

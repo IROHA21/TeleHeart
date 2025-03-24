@@ -41,15 +41,17 @@
 
     <Spinner
         android:id="@+id/language_spinner"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginStart="10dp"
-        android:layout_marginTop="20dp"
+        android:layout_width="160dp"
+        android:layout_height="48dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
         android:background="@drawable/rounded_spinner_background"
         android:popupBackground="@drawable/dropdown_background"
-        android:spinnerMode="dropdown" />
+        android:spinnerMode="dropdown"
+        android:dropDownVerticalOffset="-8dp"
+        android:dropDownWidth="160dp"
+        android:paddingStart="16dp"
+        android:popupElevation="4dp"/>
 
     <Button
         android:id="@+id/start_button"
