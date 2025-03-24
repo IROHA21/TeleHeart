@@ -2017,7 +2017,7 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_horizontal"
                         android:paddingBottom="10dp"
-                        android:text="Chat Interest Meter"
+                        android:text="@string/Chat_Interest_Meter"
                         android:textSize="16sp"
                         android:textStyle="bold"
                         android:textColor="#FFFFFF"

@@ -95,7 +95,8 @@ By tapping "Agree &amp; Continue", you confirm that you understand and accept th
     <string name="Conversation_Starts">Conversation Starts 🚀</string>
     <string name="Unreplied_Chats">Unreplied Chats 👻</string>
     <string name="Longest_Conversation">Longest Conversation 🕰️</string>
-//activity
+    <string name="Chat_Interest_Meter">Chat Interest Meter</string>
+    //activity
     <string name="You">you : </string>
     <string name="Them">Them : </string>
     <string name="characters">char</string>

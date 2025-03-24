@@ -92,6 +92,7 @@
     <string name="Conversation_Starts">Начало бесед 🚀</string>
     <string name="Unreplied_Chats">Неотвеченные чаты 👻</string>
     <string name="Longest_Conversation">Самая длинная беседа 🕰️</string>
+    <string name="Chat_Interest_Meter">Измеритель интереса к чату</string>
     //activiy
     <string name="You">Вы : </string>
     <string name="Them">Oн(а) : </string>
