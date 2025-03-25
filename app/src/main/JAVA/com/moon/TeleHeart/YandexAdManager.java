@@ -24,7 +24,7 @@ public class YandexAdManager {
     private InterstitialAd interstitialAd; // The ad instance
     private InterstitialAdLoader interstitialAdLoader; // The ad loader
     private static final String TAG = "YandexAdManager";
-    private static final String DEMO_AD_UNIT_ID = "demo-rewarded-yandex"; // Replace with your real ad unit ID
+    private static final String DEMO_AD_UNIT_ID = "demo-interstitial-yandex"; // Replace with your real ad unit ID
 
     private AdDismissListener adDismissListener; // Listener for ad dismissal
     private AdLoadFailureListener adLoadFailureListener; // Listener for ad loading failure
