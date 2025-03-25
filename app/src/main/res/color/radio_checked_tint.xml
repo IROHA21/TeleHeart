@@ -1,0 +1,5 @@
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Color when CHECKED (after selection) -->
+    <item android:state_checked="true" android:color="#FF0000" /> <!-- Red example -->
+    <!-- Default color (unchecked) remains default system color -->
+</selector>

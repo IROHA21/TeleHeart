@@ -2100,7 +2100,7 @@ public class ResultsActivity extends AppCompatActivity {
         bannerAdView.setAdSize(adSize);
 
         // Set your actual ad unit ID here (replace with your Yandex ad unit ID)
-        bannerAdView.setAdUnitId("R-M-14687012-2"); // Use demo ID for testing
+        bannerAdView.setAdUnitId("demo-banner-yandex"); // Use demo ID for testing
 
         bannerAdView.setBannerAdEventListener(new BannerAdEventListener() {
             @Override

@@ -38,7 +38,7 @@ public class AdManager {
 
     public void loadInterstitialAd(Context context) {
         AdRequest adRequest = new AdRequest.Builder().build();
-        InterstitialAd.load(context, "ca-app-pub-7686300731257949/4511844664", adRequest,
+        InterstitialAd.load(context, "ca-app-pub-3940256099942544/1033173712", adRequest,
                 new InterstitialAdLoadCallback() {
                     @Override
                     public void onAdLoaded(@NonNull InterstitialAd interstitialAd) {

@@ -1,20 +1,33 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <!-- Base application theme. -->
+    <!-- ==================== -->
+    <!-- Material3 Main Theme -->
+    <!-- ==================== -->
     <style name="Base.Theme.Lasttele" parent="Theme.Material3.DayNight.NoActionBar">
-        <!-- Customize your light theme here. -->
+        <!-- RadioButton/CheckBox colors for Material3 components -->
+        <item name="colorPrimary">@color/blue</item>          <!-- Checked state -->
+        <item name="colorOnSurfaceVariant">@color/black</item> <!-- Unchecked state -->
 
-        <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+        <!-- Your other Material3 customizations -->
     </style>
 
     <style name="Theme.Lasttele" parent="Base.Theme.Lasttele" />
 
+    <!-- ======================== -->
+    <!-- Legacy AppCompat Theme -->
+    <!-- ======================== -->
     <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+        <!-- RadioButton/CheckBox colors for legacy components -->
+        <item name="colorControlActivated">@color/blue</item>
+        <item name="colorControlNormal">@color/black</item>
 
+        <!-- Your legacy theme customizations -->
     </style>
 
-    <style name="AppTheme.CustomTheme">
+    <!-- ================= -->
+    <!-- Dialog Theme -->
+    <!-- ================= -->
+    <style name="AppTheme.CustomTheme" parent="Theme.AppCompat.Light.Dialog">
         <item name="android:windowCloseOnTouchOutside">true</item>
         <item name="android:windowIsTranslucent">true</item>
     </style>
-
 </resources>

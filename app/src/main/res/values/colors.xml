@@ -5,6 +5,8 @@
     <color name="blue">#0000FF</color>
     <color name="purple">#800080</color>
     <color name="transparent">#27EEECEC</color>
+    <color name="default_color">#6200EE</color> <!-- Normal color -->
+    <color name="pressed_color">#FFD700</color> <!-- Pressed color -->
 
 
 </resources>
