@@ -150,8 +150,8 @@ public class ContactsActivity extends AppCompatActivity {
                 int quantityInt;
                 try {
                     quantityInt = Integer.parseInt(quantityValue);
-                    if (quantityInt > 100000) {
-                        Toast.makeText(this, "Quantity must be 100000 or less", Toast.LENGTH_SHORT).show();
+                    if (quantityInt > 100000 || quantityInt < 100  ) {
+                        Toast.makeText(this, R.string.quantity, Toast.LENGTH_SHORT).show();
                         return; // Stop execution
                     }
                 } catch (NumberFormatException e) {

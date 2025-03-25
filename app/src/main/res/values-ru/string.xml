@@ -65,6 +65,7 @@
     <string name="select_contact">выбрать контакт</string>
     <string name="number_of_messages">количество сообщений</string>
     <string name="next">далее</string>
+    <string name="quantity">Количество должно быть больше 100 и меньше 100000</string>
 
 
     //result screen
