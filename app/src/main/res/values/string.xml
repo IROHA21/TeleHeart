@@ -43,6 +43,11 @@ By tapping "Agree &amp; Continue", you confirm that you understand and accept th
     <string name="remember_account">remember account</string>
     <string name="tries">Time remaining to try again :</string>
 
+    <string name="phone_must_start_with_plus">Phone number must start with +</string>
+    <string name="phone_must_contain_only_numbers">Phone number can only contain numbers after +</string>
+    <string name="phone_too_short">Phone number is too short</string>
+    <string name="phone_too_long">Phone number is too long</string>
+
     //fragments
     <string name="step1">enter your phone number starting with the +(country code), then tap Login to proceed.</string>
     <string name="step2">You will receive a one-time use code via Telegram.</string>

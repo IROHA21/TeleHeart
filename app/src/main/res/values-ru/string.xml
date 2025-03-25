@@ -41,6 +41,11 @@
     <string name="verify">проверить</string>
     <string name="remember_account">запомнить аккаунт</string>
     <string name="tries">Время до новой попытки :</string>
+    <string name="phone_must_start_with_plus">Номер телефона должен начинаться с +</string>
+    <string name="phone_must_contain_only_numbers">После + могут быть только цифры</string>
+    <string name="phone_too_short">Номер телефона слишком короткий</string>
+    <string name="phone_too_long">Номер телефона слишком длинный</string>
+
 
     //fragments
     <string name="step1">Введите свой номер телефона, начиная с +(код страны), затем нажмите «Войти», чтобы продолжить.</string>

@@ -167,12 +167,28 @@ public class MainActivity extends AppCompatActivity {
         // Common logic for both buttons
         String phone = editTextPhone2.getText().toString().trim();
         ProgressBar progressBar = findViewById(R.id.progressBar2);
-        progressBar.setVisibility(View.VISIBLE);
+
 
         if (phone.isEmpty()) {
             Toast.makeText(this, R.string.please_enter_phone_number, Toast.LENGTH_SHORT).show();
-            return;
         }
+        else if (!phone.startsWith("+")) {
+            Toast.makeText(this, R.string.phone_must_start_with_plus, Toast.LENGTH_SHORT).show();
+        }
+        else if (!phone.substring(1).matches("[0-9]+")) {
+            Toast.makeText(this, R.string.phone_must_contain_only_numbers, Toast.LENGTH_SHORT).show();
+        }
+        else if (phone.length() < 8) {
+            Toast.makeText(this, R.string.phone_too_short, Toast.LENGTH_SHORT).show();
+        }
+        else if (phone.length() > 15) {
+            Toast.makeText(this, R.string.phone_too_long, Toast.LENGTH_SHORT).show();
+        }
+        else {
+            // All conditions passed - show progress bar
+            progressBar.setVisibility(View.VISIBLE);
+            // Continue with your phone number processing
+
 
         // Create a new thread to handle the logic
         Handler handler = new Handler(Looper.getMainLooper());
@@ -280,6 +296,7 @@ public class MainActivity extends AppCompatActivity {
                 });
             }
         }).start();
+        }
     }
 
     public void onCodeClick(View view) {
