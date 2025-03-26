@@ -104,6 +104,7 @@ By tapping "Agree &amp; Continue", you confirm that you understand and accept th
     <string name="Chat_Interest_Meter">Chat Interest Meter</string>
     <string name="shareimage">Share as Image</string>
     <string name="disconnect">disconnect</string>
+    <string name="disconnected">disconnected</string>
     //activity
     <string name="You">you : </string>
     <string name="Them">Them : </string>

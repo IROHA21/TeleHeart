@@ -2158,8 +2158,11 @@ public class ResultsActivity extends AppCompatActivity {
         Python py = Python.getInstance();
         PyObject pyObj = py.getModule("helloworld");
         PyObject result = pyObj.callAttr("terminate_and_disconnect");
-        Toast.makeText(ResultsActivity.this, result.toString(), Toast.LENGTH_SHORT).show();
-
+        Toast.makeText(ResultsActivity.this, R.string.disconnected, Toast.LENGTH_SHORT).show();
+        Intent intent777 = new Intent(ResultsActivity.this, Firstscreen.class);
+        intent777.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(intent777);
+        finish();
 
     }
     // Add these to MainActivity.java and all other activities

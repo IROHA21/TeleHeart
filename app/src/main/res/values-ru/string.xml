@@ -101,6 +101,7 @@
     <string name="Chat_Interest_Meter">Измеритель интереса к чату</string>
     <string name="shareimage">Поделиться как изображение</string>
     <string name="disconnect">отключить</string>
+    <string name="disconnected">отключен</string>
     //activiy
     <string name="You">Вы : </string>
     <string name="Them">Oн(а) : </string>
