@@ -17,6 +17,7 @@
         android:icon="@drawable/noborder"
         android:label="TeleHeart"
         android:roundIcon="@drawable/noborder"
+
         android:supportsRtl="true"
         android:theme="@style/Theme.Lasttele"
         android:forceDarkAllowed="false"

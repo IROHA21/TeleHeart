@@ -54,7 +54,18 @@ public class Firstscreen extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
+
+
+
+        setLocaleFromPreferences();
         super.onCreate(savedInstanceState);
+
+
+        setContentView(R.layout.animated_background);
+
+
+
         SharedPreferences settings3 = getSharedPreferences(PREFS_NAME3, MODE_PRIVATE);
         boolean isFirstLaunch3 = settings3.getBoolean(PREF_FIRST_LAUNCH3, true);
 
@@ -71,9 +82,6 @@ public class Firstscreen extends AppCompatActivity {
 
 
         // Set the locale based on the saved preference
-        setLocaleFromPreferences();
-
-        setContentView(R.layout.animated_background);
 
         // Initialize UI elements
         welcomeMessage = findViewById(R.id.welcome_message);
@@ -119,13 +127,11 @@ public class Firstscreen extends AppCompatActivity {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 String selectedLanguage = parent.getItemAtPosition(position).toString();
                 String newLanguageCode = selectedLanguage.equals("Русский") ? "ru" : "en";
-                System.out.println("the language code is :" + newLanguageCode);
 
-                // Only restart the activity if the language has changed
                 if (!newLanguageCode.equals(getSavedLanguage())) {
-                    saveLanguage(newLanguageCode); // Save the new language
-                    setLocale(newLanguageCode); // Set the new locale
-                    restartActivity(); // Restart the activity to apply the new language
+                    saveLanguage(newLanguageCode);
+                    setLocale(newLanguageCode);
+                    restartActivity(); // Use modified restart
                 }
             }
 
@@ -203,9 +209,10 @@ public class Firstscreen extends AppCompatActivity {
 
     // Helper method to restart the activity
     private void restartActivity() {
-        Intent intent = getIntent();
-        finish(); // Finish the current activity
-        startActivity(intent); // Start the activity again
+        Intent intent = new Intent(this, Firstscreen.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP); // Clear activity stack
+        startActivity(intent);
+        finish(); // Close current instance
     }
 
     // Rest of your existing methods (e.g., setOnClickListeners, startRandomMovement, etc.)

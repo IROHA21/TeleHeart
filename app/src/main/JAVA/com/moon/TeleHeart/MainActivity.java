@@ -2,6 +2,8 @@ package com.moon.TeleHeart;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.Configuration;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Handler;
@@ -23,6 +25,8 @@ import com.chaquo.python.Python;
 import com.chaquo.python.android.AndroidPlatform;
 import com.google.android.gms.ads.MobileAds;
 import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
+
+import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity {
     private static final String TAG = "MainActivity";
@@ -67,7 +71,7 @@ public class MainActivity extends AppCompatActivity {
             editor.putBoolean(PREF_FIRST_LAUNCH, false);
             editor.apply();
         }
-
+        setLocaleFromPreferences();
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
@@ -403,6 +407,21 @@ public class MainActivity extends AppCompatActivity {
     public void uperleft (View view){
         startActivity((new Intent(MainActivity.this, popactivity.class)));
 
+    }
+    // Add these to MainActivity.java and all other activities
+    private void setLocaleFromPreferences() {
+        String languageCode = getSavedLanguage();
+        Locale locale = new Locale(languageCode);
+        Locale.setDefault(locale);
+        Resources resources = getResources();
+        Configuration config = resources.getConfiguration();
+        config.setLocale(locale);
+        resources.updateConfiguration(config, resources.getDisplayMetrics());
+    }
+
+    private String getSavedLanguage() {
+        SharedPreferences preferences = getSharedPreferences("MyAppPrefs", MODE_PRIVATE);
+        return preferences.getString("language", "en");
     }
 
 

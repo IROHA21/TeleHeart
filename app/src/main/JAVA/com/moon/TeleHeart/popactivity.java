@@ -1,5 +1,8 @@
 package com.moon.TeleHeart;
 
+import android.content.SharedPreferences;
+import android.content.res.Configuration;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.view.Gravity;
@@ -12,6 +15,7 @@ import androidx.viewpager2.widget.ViewPager2;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 public class popactivity extends FragmentActivity implements FragmentThree.OnCloseButtonClickListener {
 
@@ -19,6 +23,7 @@ public class popactivity extends FragmentActivity implements FragmentThree.OnClo
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
+        setLocaleFromPreferences();  // MUST BE FIRST LINE
         super.onCreate(savedInstanceState);
         setContentView(R.layout.popwin);
 
@@ -68,5 +73,20 @@ public class popactivity extends FragmentActivity implements FragmentThree.OnClo
         if (viewPager.getCurrentItem() < 2) { // 2 is the last index
             viewPager.setCurrentItem(viewPager.getCurrentItem() + 1);
         }
+    }
+    // Add these to MainActivity.java and all other activities
+    private void setLocaleFromPreferences() {
+        String languageCode = getSavedLanguage();
+        Locale locale = new Locale(languageCode);
+        Locale.setDefault(locale);
+        Resources resources = getResources();
+        Configuration config = resources.getConfiguration();
+        config.setLocale(locale);
+        resources.updateConfiguration(config, resources.getDisplayMetrics());
+    }
+
+    private String getSavedLanguage() {
+        SharedPreferences preferences = getSharedPreferences("MyAppPrefs", MODE_PRIVATE);
+        return preferences.getString("language", "en");
     }
 }

@@ -1,6 +1,9 @@
 package com.moon.TeleHeart;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.res.Configuration;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -17,6 +20,7 @@ import com.google.android.gms.ads.initialization.OnInitializationCompleteListene
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 public class LoadingActivity extends AppCompatActivity {
     private ProgressBar progressBar;
@@ -31,6 +35,7 @@ public class LoadingActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        setLocaleFromPreferences();
         super.onCreate(savedInstanceState);
         setContentView(R.layout.loading_screen);
 
@@ -193,5 +198,20 @@ public class LoadingActivity extends AppCompatActivity {
         isAdDismissed = false;
         isBackgroundTaskComplete = false;
         super.onDestroy();
+    }
+    // Add these to MainActivity.java and all other activities
+    private void setLocaleFromPreferences() {
+        String languageCode = getSavedLanguage();
+        Locale locale = new Locale(languageCode);
+        Locale.setDefault(locale);
+        Resources resources = getResources();
+        Configuration config = resources.getConfiguration();
+        config.setLocale(locale);
+        resources.updateConfiguration(config, resources.getDisplayMetrics());
+    }
+
+    private String getSavedLanguage() {
+        SharedPreferences preferences = getSharedPreferences("MyAppPrefs", MODE_PRIVATE);
+        return preferences.getString("language", "en");
     }
 }

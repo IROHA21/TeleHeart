@@ -22,4 +22,5 @@ public class account1 extends Fragment {
 
         return view;
     }
+
 }

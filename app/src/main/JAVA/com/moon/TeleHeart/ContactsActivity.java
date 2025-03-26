@@ -2,6 +2,8 @@ package com.moon.TeleHeart;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.Configuration;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.HandlerThread;
@@ -24,6 +26,7 @@ import com.google.android.gms.ads.initialization.OnInitializationCompleteListene
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 public class ContactsActivity extends AppCompatActivity {
     private myadapter adapter;
@@ -42,6 +45,7 @@ public class ContactsActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        setLocaleFromPreferences();
         super.onCreate(savedInstanceState);
         setContentView(R.layout.contact_main);
 
@@ -227,6 +231,21 @@ public class ContactsActivity extends AppCompatActivity {
 
 
 
+    }
+    // Add these to MainActivity.java and all other activities
+    private void setLocaleFromPreferences() {
+        String languageCode = getSavedLanguage();
+        Locale locale = new Locale(languageCode);
+        Locale.setDefault(locale);
+        Resources resources = getResources();
+        Configuration config = resources.getConfiguration();
+        config.setLocale(locale);
+        resources.updateConfiguration(config, resources.getDisplayMetrics());
+    }
+
+    private String getSavedLanguage() {
+        SharedPreferences preferences = getSharedPreferences("MyAppPrefs", MODE_PRIVATE);
+        return preferences.getString("language", "en");
     }
 
 

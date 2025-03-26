@@ -1,6 +1,9 @@
 package com.moon.TeleHeart;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.res.Configuration;
+import android.content.res.Resources;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
@@ -64,6 +67,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class ResultsActivity extends AppCompatActivity {
+    // MUST BE FIRST LINE
 
     // TextViews to display results
     private TextView yourMessagesTextView, herMessagesTextView;
@@ -142,6 +146,7 @@ public class ResultsActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        setLocaleFromPreferences();
         super.onCreate(savedInstanceState);
         setContentView(R.layout.results_screen);
 
@@ -2156,6 +2161,21 @@ public class ResultsActivity extends AppCompatActivity {
         Toast.makeText(ResultsActivity.this, result.toString(), Toast.LENGTH_SHORT).show();
 
 
+    }
+    // Add these to MainActivity.java and all other activities
+    private void setLocaleFromPreferences() {
+        String languageCode = getSavedLanguage();
+        Locale locale = new Locale(languageCode);
+        Locale.setDefault(locale);
+        Resources resources = getResources();
+        Configuration config = resources.getConfiguration();
+        config.setLocale(locale);
+        resources.updateConfiguration(config, resources.getDisplayMetrics());
+    }
+
+    private String getSavedLanguage() {
+        SharedPreferences preferences = getSharedPreferences("MyAppPrefs", MODE_PRIVATE);
+        return preferences.getString("language", "en");
     }
 
 

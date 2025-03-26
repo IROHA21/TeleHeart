@@ -1,6 +1,9 @@
 
 package com.moon.TeleHeart;
 
+import android.content.SharedPreferences;
+import android.content.res.Configuration;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.view.Gravity;
@@ -13,6 +16,7 @@ import androidx.viewpager2.widget.ViewPager2;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 public class rememberaccount extends FragmentActivity implements account2.OnCloseButtonClickListener{
 
@@ -20,6 +24,7 @@ public class rememberaccount extends FragmentActivity implements account2.OnClos
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
+        setLocaleFromPreferences();
         super.onCreate(savedInstanceState);
         setContentView(R.layout.popwinaccount);
 
@@ -69,5 +74,20 @@ public class rememberaccount extends FragmentActivity implements account2.OnClos
         if (viewPager2.getCurrentItem() < 2) { // 2 is the last index
             viewPager2.setCurrentItem(viewPager2.getCurrentItem() + 1);
         }
+    }
+    // Add these to MainActivity.java and all other activities
+    private void setLocaleFromPreferences() {
+        String languageCode = getSavedLanguage();
+        Locale locale = new Locale(languageCode);
+        Locale.setDefault(locale);
+        Resources resources = getResources();
+        Configuration config = resources.getConfiguration();
+        config.setLocale(locale);
+        resources.updateConfiguration(config, resources.getDisplayMetrics());
+    }
+
+    private String getSavedLanguage() {
+        SharedPreferences preferences = getSharedPreferences("MyAppPrefs", MODE_PRIVATE);
+        return preferences.getString("language", "en");
     }
 }

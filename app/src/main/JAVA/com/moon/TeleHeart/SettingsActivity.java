@@ -1,7 +1,10 @@
 package com.moon.TeleHeart;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.content.res.Configuration;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -12,6 +15,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import java.io.File;
 import java.lang.reflect.Method;
+import java.util.Locale;
 
 public class SettingsActivity extends AppCompatActivity {
 
@@ -22,6 +26,7 @@ public class SettingsActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        setLocaleFromPreferences();  // MUST BE FIRST LINE
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
 
@@ -120,4 +125,20 @@ public class SettingsActivity extends AppCompatActivity {
     public void ondisclick(View view) {
         startActivity(new Intent(SettingsActivity.this, rememberaccount.class));
     }
+    // Add these to MainActivity.java and all other activities
+    private void setLocaleFromPreferences() {
+        String languageCode = getSavedLanguage();
+        Locale locale = new Locale(languageCode);
+        Locale.setDefault(locale);
+        Resources resources = getResources();
+        Configuration config = resources.getConfiguration();
+        config.setLocale(locale);
+        resources.updateConfiguration(config, resources.getDisplayMetrics());
+    }
+
+    private String getSavedLanguage() {
+        SharedPreferences preferences = getSharedPreferences("MyAppPrefs", MODE_PRIVATE);
+        return preferences.getString("language", "en");
+    }
+
 }
