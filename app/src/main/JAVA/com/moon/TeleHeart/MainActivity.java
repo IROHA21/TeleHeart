@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Handler;
 import android.os.Looper;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CompoundButton;
@@ -54,6 +55,7 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        setLocaleFromPreferences();
         // Initialize SharedPreferences
         SharedPreferences settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
         SharedPreferences settings2 = getSharedPreferences(PREFS_NAME2, MODE_PRIVATE);
@@ -71,7 +73,7 @@ public class MainActivity extends AppCompatActivity {
             editor.putBoolean(PREF_FIRST_LAUNCH, false);
             editor.apply();
         }
-        setLocaleFromPreferences();
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
@@ -411,6 +413,7 @@ public class MainActivity extends AppCompatActivity {
     // Add these to MainActivity.java and all other activities
     private void setLocaleFromPreferences() {
         String languageCode = getSavedLanguage();
+        Log.d("LANG_DEBUG", "Setting locale to: " + languageCode);
         Locale locale = new Locale(languageCode);
         Locale.setDefault(locale);
         Resources resources = getResources();

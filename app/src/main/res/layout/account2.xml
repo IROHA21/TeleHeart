@@ -19,7 +19,8 @@
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             android:text="@string/addinfo"
-            android:textSize="24sp"/>
+            android:textSize="24sp"
+            android:textAlignment="center"/>
     </RelativeLayout>
 
     <!-- Bottom Button -->

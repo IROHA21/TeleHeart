@@ -127,8 +127,10 @@ public class Firstscreen extends AppCompatActivity {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 String selectedLanguage = parent.getItemAtPosition(position).toString();
                 String newLanguageCode = selectedLanguage.equals("Русский") ? "ru" : "en";
+                Log.d("LANG_DEBUG", "Spinner changed to: " + newLanguageCode);
 
                 if (!newLanguageCode.equals(getSavedLanguage())) {
+                    Log.d("LANG_DEBUG", "Saving new language to preferences");
                     saveLanguage(newLanguageCode);
                     setLocale(newLanguageCode);
                     restartActivity(); // Use modified restart

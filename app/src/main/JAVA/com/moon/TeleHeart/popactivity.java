@@ -5,6 +5,7 @@ import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.WindowManager;
 
@@ -77,6 +78,7 @@ public class popactivity extends FragmentActivity implements FragmentThree.OnClo
     // Add these to MainActivity.java and all other activities
     private void setLocaleFromPreferences() {
         String languageCode = getSavedLanguage();
+        Log.d("LANG_DEBUG", "Setting locale to: " + languageCode);
         Locale locale = new Locale(languageCode);
         Locale.setDefault(locale);
         Resources resources = getResources();
