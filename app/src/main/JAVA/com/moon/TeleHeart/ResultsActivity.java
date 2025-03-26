@@ -135,7 +135,7 @@ public class ResultsActivity extends AppCompatActivity {
     private PieChart interestMeterChart; // Add this line
 
 
-
+    private Button disconnect;
 
 
     private TextView yourAverageMessageLengthTextView,herAverageMessageLengthTextView,yourMedianMessageLengthTextView,herMedianMessageLengthTextView;
@@ -149,6 +149,9 @@ public class ResultsActivity extends AppCompatActivity {
             // SDK initialized, now you can load ads
             loadBannerAd();
         });
+
+        disconnect = findViewById(R.id.disconnect1);
+        disconnect.setOnClickListener(this::ondisconnect);
 
 
 
@@ -458,6 +461,9 @@ public class ResultsActivity extends AppCompatActivity {
             });
         }).start();
     }
+
+
+
     // Helper method to format the phrase list
     private String formatPhrase(Map.Entry<String, Integer> phraseEntry) {
         if (phraseEntry == null) {
@@ -2141,6 +2147,15 @@ public class ResultsActivity extends AppCompatActivity {
         // Load the ad
         AdRequest adRequest = new AdRequest.Builder().build();
         bannerAdView.loadAd(adRequest);
+    }
+    private void ondisconnect(View view) {
+
+        Python py = Python.getInstance();
+        PyObject pyObj = py.getModule("helloworld");
+        PyObject result = pyObj.callAttr("terminate_and_disconnect");
+        Toast.makeText(ResultsActivity.this, result.toString(), Toast.LENGTH_SHORT).show();
+
+
     }
 
 

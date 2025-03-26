@@ -39,7 +39,7 @@ public class MainActivity extends AppCompatActivity {
     private TextView timerTextView; // Declare the TextView
 
 
-    private long currentCooldownDuration = 20000; // Initial cooldown duration (10 seconds)
+    private long currentCooldownDuration = 10000; // Initial cooldown duration (10 seconds)
 
     private static final String PREFS_NAME = "MyPrefsFile";
     private static final String PREF_FIRST_LAUNCH = "isFirstLaunch";
@@ -148,21 +148,7 @@ public class MainActivity extends AppCompatActivity {
 
         int buttonId = view.getId();
 
-        if (buttonId == R.id.button123) {
-            // Specific logic for button123
-            clicks++;
-            if (clicks >= MAX_CLICKS) {
-                button123.setEnabled(false);
-                resendButton.setEnabled(false);
-                startCooldownTimer();
-            }
-        } else if (buttonId == R.id.resend) {
-            clicks++;
-            if (clicks >= MAX_CLICKS) {
-                resendButton.setEnabled(false);
-                startCooldownTimer();
-            }
-        }
+
 
         // Common logic for both buttons
         String phone = editTextPhone2.getText().toString().trim();
@@ -189,6 +175,22 @@ public class MainActivity extends AppCompatActivity {
             progressBar.setVisibility(View.VISIBLE);
             // Continue with your phone number processing
 
+
+            if (buttonId == R.id.button123) {
+                // Specific logic for button123
+                clicks++;
+                if (clicks >= MAX_CLICKS) {
+                    button123.setEnabled(false);
+                    resendButton.setEnabled(false);
+                    startCooldownTimer();
+                }
+            } else if (buttonId == R.id.resend) {
+                clicks++;
+                if (clicks >= MAX_CLICKS) {
+                    resendButton.setEnabled(false);
+                    startCooldownTimer();
+                }
+            }
 
         // Create a new thread to handle the logic
         Handler handler = new Handler(Looper.getMainLooper());

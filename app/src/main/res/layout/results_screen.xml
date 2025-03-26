@@ -36,7 +36,7 @@
             android:layout_height="wrap_content"
             android:columnCount="2"
             android:padding="4dp"
-            android:rowCount="26">
+            android:rowCount="27">
 
 
 
@@ -2053,9 +2053,41 @@
                         android:layout_width="match_parent"
                         android:id="@+id/shareButton"
                         android:layout_height="wrap_content"
-                        android:text="Share as Image"
+                        android:text="@string/shareimage"
                         android:textColor="#FFFFFF"
                         android:backgroundTint="#00d4ff"
+                        android:textSize="14sp"
+                        android:textStyle="bold"
+                        android:layout_gravity="center"
+                        android:padding="12dp"
+                        android:gravity="center"/>
+
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+            <androidx.cardview.widget.CardView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_columnWeight="1"
+                android:layout_margin="8dp"
+                android:layout_columnSpan="2"
+                app:cardCornerRadius="16dp"
+                app:cardElevation="8dp"
+                app:cardBackgroundColor="@android:color/transparent">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="12dp">
+
+                    <!-- Button inside the CardView -->
+                    <Button
+                        android:layout_width="wrap_content"
+                        android:id="@+id/disconnect1"
+                        android:layout_height="wrap_content"
+                        android:text="@string/disconnect"
+                        android:textColor="#FFFFFF"
+                        android:backgroundTint="#6200EE"
                         android:textSize="14sp"
                         android:textStyle="bold"
                         android:layout_gravity="center"
