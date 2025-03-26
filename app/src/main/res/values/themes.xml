@@ -1,11 +1,14 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- ==================== -->
-    <!-- Material3 Main Theme -->
+    <!-- Material3 Main Theme (LIGHT ONLY) -->
     <!-- ==================== -->
-    <style name="Base.Theme.Lasttele" parent="Theme.Material3.DayNight.NoActionBar">
+    <style name="Base.Theme.Lasttele" parent="Theme.Material3.Light.NoActionBar">
         <!-- RadioButton/CheckBox colors for Material3 components -->
         <item name="colorPrimary">@color/blue</item>          <!-- Checked state -->
         <item name="colorOnSurfaceVariant">@color/black</item> <!-- Unchecked state -->
+
+        <!-- Disable force dark mode -->
+        <item name="android:forceDarkAllowed" tools:targetApi="q">false</item>
 
         <!-- Your other Material3 customizations -->
     </style>
@@ -13,21 +16,23 @@
     <style name="Theme.Lasttele" parent="Base.Theme.Lasttele" />
 
     <!-- ======================== -->
-    <!-- Legacy AppCompat Theme -->
+    <!-- Legacy AppCompat Theme (LIGHT ONLY) -->
     <!-- ======================== -->
     <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
         <!-- RadioButton/CheckBox colors for legacy components -->
         <item name="colorControlActivated">@color/blue</item>
         <item name="colorControlNormal">@color/black</item>
 
-        <!-- Your legacy theme customizations -->
+        <!-- Disable force dark mode -->
+        <item name="android:forceDarkAllowed" tools:targetApi="q">false</item>
     </style>
 
     <!-- ================= -->
-    <!-- Dialog Theme -->
+    <!-- Dialog Theme (LIGHT ONLY) -->
     <!-- ================= -->
     <style name="AppTheme.CustomTheme" parent="Theme.AppCompat.Light.Dialog">
         <item name="android:windowCloseOnTouchOutside">true</item>
         <item name="android:windowIsTranslucent">true</item>
+        <item name="android:forceDarkAllowed" tools:targetApi="q">false</item>
     </style>
 </resources>

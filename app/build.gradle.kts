@@ -2,7 +2,7 @@ plugins {
     alias(libs.plugins.android.application)
     id("com.chaquo.python")
     alias(libs.plugins.kotlin.android)
-    alias(libs.plugins.kotlin.compose) // Add Chaquopy plugin
+    alias(libs.plugins.kotlin.compose)
 }
 
 android {
@@ -13,34 +13,50 @@ android {
         applicationId = "com.moon.TeleHeart"
         minSdk = 28
         targetSdk = 35
-        versionCode = 4
-        versionName = "1.0.4"
+        versionCode = 5
+        versionName = "1.0.5"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+
+        // Explicitly keep these languages
+        resourceConfigurations += listOf("en", "ru")
+
         ndk {
-            // Define ABIs for native libraries
-            abiFilters += listOf("arm64-v8a", "x86_64","armeabi-v7a","x86") // Add others if necessary
+            abiFilters += listOf("arm64-v8a", "x86_64", "armeabi-v7a", "x86")
         }
     }
 
     buildTypes {
         release {
             isMinifyEnabled = false
+            isShrinkResources = false  // Disabled to keep all resources
+
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
         }
     }
+
+    // Ensure all languages are included in the base APK
+    bundle {
+        language {
+            enableSplit = false
+        }
+    }
+
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
     }
+
     buildToolsVersion = "34.0.0"
     ndkVersion = "28.0.12674087 rc2"
+
     kotlinOptions {
         jvmTarget = "11"
     }
+
     buildFeatures {
         compose = true
     }
@@ -51,15 +67,12 @@ chaquopy {
         buildPython("C:/Users/USER/AppData/Local/Programs/Python/Python38-32/python.exe")
         pip {
             install("telethon")
-            install("load_dotenv")// Add Telethon dependency
+            install("load_dotenv")
         }
     }
 }
 
-
 dependencies {
-
-
     implementation(libs.appcompat)
     implementation(libs.material)
     implementation(libs.activity)
@@ -80,11 +93,8 @@ dependencies {
     debugImplementation(libs.ui.tooling)
     debugImplementation(libs.ui.test.manifest)
     implementation("androidx.appcompat:appcompat:1.6.1")
-    implementation ("androidx.lifecycle:lifecycle-process:2.6.2")
-    implementation ("com.github.PhilJay:MPAndroidChart:v3.1.0")
+    implementation("androidx.lifecycle:lifecycle-process:2.6.2")
+    implementation("com.github.PhilJay:MPAndroidChart:v3.1.0")
     implementation("com.google.android.gms:play-services-ads:24.1.0")
-    implementation ("com.yandex.android:mobileads:7.11.0")
-
-
-
+    implementation("com.yandex.android:mobileads:7.11.0")
 }

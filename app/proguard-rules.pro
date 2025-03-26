@@ -19,3 +19,15 @@
 # If you keep the line number information, uncomment this to
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
+
+# Keep resources
+-keepclassmembers class **.R$* {
+    public static <fields>;
+}
+
+# Keep locale-related classes
+-keep class android.content.res.Configuration { *; }
+-keep class java.util.Locale { *; }
+
+# Keep your activity
+-keep class com.moon.TeleHeart.Firstscreen { *; }
