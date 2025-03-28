@@ -20,7 +20,7 @@ import java.util.List;
 import java.util.Map;
 
 public class PartialScrollViewHandler {
-    private static final int CARD_SPACING = 16;
+    private static final int CARD_SPACING = 32;
     private final Context context;
     private final Map<Integer, Integer> cardPairs = new HashMap<Integer, Integer>() {{
         put(R.id.yourMessagesTextView, R.id.herMessagesTextView);
@@ -60,7 +60,7 @@ public class PartialScrollViewHandler {
         List<View> viewsToCapture = new ArrayList<>();
         List<Integer> processedIds = new ArrayList<>();
 
-        // Process side-by-side pairs
+        // Process pairs
         for (Map.Entry<Integer, Integer> entry : cardPairs.entrySet()) {
             if (selectedIds.contains(entry.getKey()) && selectedIds.contains(entry.getValue())) {
                 View yourView = container.findViewById(entry.getKey());
@@ -71,22 +71,45 @@ public class PartialScrollViewHandler {
                     View theirCard = findParentCardView(theirView);
 
                     if (yourCard != null && theirCard != null) {
-                        // Create combined view
-                        LinearLayout pairLayout = new LinearLayout(context);
-                        pairLayout.setOrientation(LinearLayout.HORIZONTAL);
-                        pairLayout.addView(copyView(yourCard));
-                        pairLayout.addView(copyView(theirCard));
+                        // Check if this is one of the special pairs that should be stacked vertically
+                        if (entry.getKey() == R.id.yourLinksPieChart ||
+                                entry.getKey() == R.id.yourhourOfDayLineChart ||
+                                entry.getKey() == R.id.yourMessagesPerMonthLineChart) {
 
-                        // Measure and layout
-                        int width = yourCard.getWidth() + theirCard.getWidth() + CARD_SPACING;
-                        int height = Math.max(yourCard.getHeight(), theirCard.getHeight());
-                        pairLayout.measure(
-                                View.MeasureSpec.makeMeasureSpec(width, View.MeasureSpec.EXACTLY),
-                                View.MeasureSpec.makeMeasureSpec(height, View.MeasureSpec.EXACTLY)
-                        );
-                        pairLayout.layout(0, 0, width, height);
+                            // Create vertical stack layout
+                            LinearLayout verticalLayout = new LinearLayout(context);
+                            verticalLayout.setOrientation(LinearLayout.VERTICAL);
+                            verticalLayout.addView(copyView(yourCard));
+                            verticalLayout.addView(copyView(theirCard));
 
-                        viewsToCapture.add(pairLayout);
+                            // Measure and layout
+                            int width = Math.max(yourCard.getWidth(), theirCard.getWidth());
+                            int height = yourCard.getHeight() + theirCard.getHeight() + CARD_SPACING;
+                            verticalLayout.measure(
+                                    View.MeasureSpec.makeMeasureSpec(width, View.MeasureSpec.EXACTLY),
+                                    View.MeasureSpec.makeMeasureSpec(height, View.MeasureSpec.EXACTLY)
+                            );
+                            verticalLayout.layout(0, 0, width, height);
+
+                            viewsToCapture.add(verticalLayout);
+                        } else {
+                            // Original side-by-side layout for other pairs
+                            LinearLayout horizontalLayout = new LinearLayout(context);
+                            horizontalLayout.setOrientation(LinearLayout.HORIZONTAL);
+                            horizontalLayout.addView(copyView(yourCard));
+                            horizontalLayout.addView(copyView(theirCard));
+
+                            // Measure and layout
+                            int width = yourCard.getWidth() + theirCard.getWidth() + CARD_SPACING;
+                            int height = Math.max(yourCard.getHeight(), theirCard.getHeight());
+                            horizontalLayout.measure(
+                                    View.MeasureSpec.makeMeasureSpec(width, View.MeasureSpec.EXACTLY),
+                                    View.MeasureSpec.makeMeasureSpec(height, View.MeasureSpec.EXACTLY)
+                            );
+                            horizontalLayout.layout(0, 0, width, height);
+
+                            viewsToCapture.add(horizontalLayout);
+                        }
                         processedIds.add(entry.getKey());
                         processedIds.add(entry.getValue());
                     }
