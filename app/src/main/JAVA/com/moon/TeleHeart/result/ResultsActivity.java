@@ -4,7 +4,9 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.content.res.Resources;
+import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -21,6 +23,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
+import androidx.core.content.FileProvider;
 
 import com.chaquo.python.PyObject;
 import com.chaquo.python.Python;
@@ -43,8 +46,10 @@ import com.github.mikephil.charting.formatter.IndexAxisValueFormatter;
 import com.github.mikephil.charting.formatter.ValueFormatter;
 import com.google.android.gms.ads.MobileAds;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
+import com.moon.TeleHeart.shareresults.CardSelectionDialog;
+import com.moon.TeleHeart.shareresults.PartialScrollViewHandler;
 import com.moon.TeleHeart.R;
-import com.moon.TeleHeart.ScrollViewHandler;
+import com.moon.TeleHeart.shareresults.ScrollViewHandler;
 import com.moon.TeleHeart.database.DatabaseHelper;
 import com.moon.TeleHeart.firstscreen.Firstscreen;
 import com.yandex.mobile.ads.banner.BannerAdEventListener;
@@ -54,6 +59,9 @@ import com.yandex.mobile.ads.common.AdRequest;
 import com.yandex.mobile.ads.common.AdRequestError;
 import com.yandex.mobile.ads.common.ImpressionData;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.AbstractMap;
@@ -142,9 +150,11 @@ public class ResultsActivity extends AppCompatActivity {
     // Pie chart for the interest meter
     private PieChart interestMeterChart; // Add this line
 
-
+    private Button shareButton;
     private Button disconnect;
 
+    private ScrollViewHandler scrollViewHandler;
+    private PartialScrollViewHandler partialScrollViewHandler;
 
     private TextView yourAverageMessageLengthTextView,herAverageMessageLengthTextView,yourMedianMessageLengthTextView,herMedianMessageLengthTextView;
 
@@ -166,16 +176,16 @@ public class ResultsActivity extends AppCompatActivity {
 
 
         // Initialize the button
-        Button shareButton = findViewById(R.id.shareButton);
+        // Initialize handlers
+        scrollViewHandler = new ScrollViewHandler(this);
+        partialScrollViewHandler = new PartialScrollViewHandler(this);
 
-        // Initialize the ScrollViewHandler
-        ScrollViewHandler scrollViewHandler = new ScrollViewHandler(this);
+        // Get the share button
+        shareButton = findViewById(R.id.shareButton);
 
         // Set the click listener
-        shareButton.setOnClickListener(v -> {
-            ScrollView scrollView = findViewById(R.id.scrollView);
-            scrollViewHandler.handleShareButtonClick(scrollView, shareButton);
-        });
+        shareButton.setOnClickListener(v -> showCardSelectionDialog());
+
 
 
 
@@ -2185,9 +2195,62 @@ public class ResultsActivity extends AppCompatActivity {
         return preferences.getString("language", "en");
     }
 
+    private void showCardSelectionDialog() {
+        CardSelectionDialog dialog = new CardSelectionDialog();
+        dialog.setCardSelectionListener(new CardSelectionDialog.CardSelectionListener() {
+            @Override
+            public void onCardsSelected(List<Integer> selectedCardIds, List<String> sideBySidePairs) {
+                ScrollView scrollView = findViewById(R.id.scrollView);
 
+                // Ensure views are measured before capture
+                scrollView.post(() -> {
+                    Bitmap stitched = partialScrollViewHandler.captureSelectedViews(
+                            scrollView,
+                            selectedCardIds,
+                            sideBySidePairs
+                    );
 
+                    if (stitched != null) {
+                        shareBitmap(stitched);
+                    } else {
+                        Toast.makeText(ResultsActivity.this,
+                                "Failed to create image", Toast.LENGTH_SHORT).show();
+                    }
+                });
+            }
 
+            @Override
+            public void onAllSelected() {
+                ScrollView scrollView = findViewById(R.id.scrollView);
+                scrollViewHandler.handleShareButtonClick(scrollView, shareButton);
+            }
+        });
+        dialog.show(getSupportFragmentManager(), "CardSelectionDialog");
+    }
 
+    private void shareBitmap(Bitmap bitmap) {
+        try {
+            File file = new File(getCacheDir(), "shared_stats.png");
+            FileOutputStream fos = new FileOutputStream(file);
+            bitmap.compress(Bitmap.CompressFormat.PNG, 100, fos);
+            fos.close();
 
+            Uri uri = FileProvider.getUriForFile(this,
+                    getPackageName() + ".provider", file);
+
+            Intent shareIntent = new Intent(Intent.ACTION_SEND)
+                    .setType("image/png")
+                    .putExtra(Intent.EXTRA_STREAM, uri)
+                    .addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+
+            startActivity(Intent.createChooser(shareIntent, "Share Stats"));
+        } catch (IOException e) {
+            Toast.makeText(this, "Sharing failed: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+        }
+    }
 }
+
+
+
+
+

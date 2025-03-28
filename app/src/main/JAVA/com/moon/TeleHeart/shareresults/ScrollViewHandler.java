@@ -1,4 +1,4 @@
-package com.moon.TeleHeart;
+package com.moon.TeleHeart.shareresults;
 
 import android.content.Context;
 import android.content.Intent;
@@ -15,6 +15,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.core.content.FileProvider;
+
+import com.moon.TeleHeart.R;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -279,16 +281,16 @@ public class ScrollViewHandler {
 
     private void shareBitmap(Bitmap bitmap) {
         try {
-            File file = new File(context.getCacheDir(), "share.png");
+            File file = new File(context.getCacheDir(), "share.webp"); // or .jpg
             FileOutputStream fos = new FileOutputStream(file);
-            bitmap.compress(Bitmap.CompressFormat.PNG, 100, fos);
+            bitmap.compress(Bitmap.CompressFormat.WEBP, 100, fos); // High-quality WEBP
             fos.close();
 
             Uri uri = FileProvider.getUriForFile(context,
                     context.getPackageName() + ".provider", file);
 
             Intent intent = new Intent(Intent.ACTION_SEND)
-                    .setType("image/png")
+                    .setType("image/*") // or "application/octet-stream" for file
                     .putExtra(Intent.EXTRA_STREAM, uri)
                     .addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
 
