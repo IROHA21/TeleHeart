@@ -1,0 +1,28 @@
+package com.moon.TeleHeart.login;
+
+
+import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Button;
+
+import androidx.fragment.app.Fragment;
+
+import com.moon.TeleHeart.R;
+
+public class account1 extends Fragment {
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.account1, container, false);
+
+        Button nextButton = view.findViewById(R.id.nextaccount);
+        nextButton.setOnClickListener(v -> {
+            ((rememberaccount) requireActivity()).goToNextPage();
+        });
+
+        return view;
+    }
+
+}

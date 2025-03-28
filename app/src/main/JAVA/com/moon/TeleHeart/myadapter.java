@@ -7,6 +7,8 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.moon.TeleHeart.contacts.contactList;
+
 import java.util.List;
 public class myadapter extends RecyclerView.Adapter<myviewholder> {
     Context context;

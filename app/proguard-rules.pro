@@ -30,4 +30,4 @@
 -keep class java.util.Locale { *; }
 
 # Keep your activity
--keep class com.moon.TeleHeart.Firstscreen { *; }
+-keep class com.moon.TeleHeart.firstscreen.Firstscreen { *; }

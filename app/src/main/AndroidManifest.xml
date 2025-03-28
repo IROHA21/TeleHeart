@@ -30,15 +30,15 @@
 
 
 
-        <activity android:name=".LoadingActivity"
+        <activity android:name=".loading.LoadingActivity"
             android:screenOrientation="portrait"
             />
-        <activity android:name=".ResultsActivity"
+        <activity android:name=".result.ResultsActivity"
             android:screenOrientation="portrait"/>
-        <activity android:name=".rememberaccount"
+        <activity android:name=".login.rememberaccount"
             android:theme="@style/AppTheme.CustomTheme"/>
         <activity
-            android:name=".ContactsActivity"
+            android:name=".contacts.ContactsActivity"
             android:exported="false"
             android:label="ContactsActivity"
             android:theme="@style/Theme.Lasttele"
@@ -47,30 +47,30 @@
 
 
             />
-        <activity android:name=".SettingsActivity"
+        <activity android:name=".settings.SettingsActivity"
             />
         <activity
-            android:name=".MainActivity"
+            android:name=".login.MainActivity"
             android:exported="true"
             android:screenOrientation="portrait">
 
         </activity>
 
         <activity
-            android:name=".popactivity"
+            android:name=".login.popactivity"
             android:theme="@style/AppTheme.CustomTheme"/>
         <activity
-            android:name=".popnum"
+            android:name=".contacts.popnum"
             android:theme="@style/AppTheme.CustomTheme"/>
         <activity
-            android:name=".popag"
+            android:name=".firstscreen.popag"
             android:theme="@style/AppTheme.CustomTheme"/>
         <activity
-            android:name=".popdisconnect"
+            android:name=".result.popdisconnect"
             android:theme="@style/AppTheme.CustomTheme"/>
 
         <activity
-            android:name=".Firstscreen"
+            android:name=".firstscreen.Firstscreen"
             android:exported="true"
             android:screenOrientation="portrait">
             <intent-filter>
