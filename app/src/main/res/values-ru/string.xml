@@ -116,6 +116,17 @@
     <string name="m">ч</string>
     <string name="s">c</string>
 
+    //
+    <string name="Select_All">Выбрать все (Singular Photo)</string>
+    <string name="Paired_Statistics">Парная статистика</string>
+    <string name="Individual_Statistics">Индивидуальная статистика</string>
+    <string name="Share">Поделиться</string>
+    <string name="Cancel">Отмена</string>
+    <string name="Select_cards">Выберите карточки для публикации</string>
+
+    <string name="Select_All_PDF">Выбрать всё как PDF</string>
+    <string name="Share_PDF">Поделиться PDF</string>
+
 
 
 

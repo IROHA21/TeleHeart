@@ -2198,6 +2198,13 @@ public class ResultsActivity extends AppCompatActivity {
     private void showCardSelectionDialog() {
         CardSelectionDialog dialog = new CardSelectionDialog();
         dialog.setCardSelectionListener(new CardSelectionDialog.CardSelectionListener() {
+
+
+            @Override
+            public void onAllSelectedPdf() {
+                ScrollView scrollView = findViewById(R.id.scrollView);
+                scrollViewHandler.generatePdf(scrollView, shareButton);
+            }
             @Override
             public void onCardsSelected(List<Integer> selectedCardIds, List<String> sideBySidePairs) {
                 ScrollView scrollView = findViewById(R.id.scrollView);
@@ -2260,6 +2267,13 @@ public class ResultsActivity extends AppCompatActivity {
             Toast.makeText(this, "Sharing failed: " + e.getMessage(), Toast.LENGTH_SHORT).show();
         }
     }
+
+
+
+
+
+
+
 }
 
 

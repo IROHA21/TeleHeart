@@ -77,7 +77,7 @@ By tapping "Agree &amp; Continue", you confirm that you understand and accept th
     <string name="YOUR_MESSAGES">YOUR MESSAGES</string>
     <string name="THEIR_MESSAGES">THEIR MESSAGES</string>
     <string name="Number_of_messages">Number of messages 💬</string>
-    <string name="Your_Messages_Last_10_Days">Messages (Last 10 Days) 📅</string>
+    <string name="Your_Messages_Last_10_Days">Messages in the Last 10 Days) 📅</string>
     <string name="Your_Days_with_Most_Messages">Days with Most Messages 📈</string>
     <string name="Your_Messages_per_Month">Your Messages per Month 📉</string>
     <string name="Your_Messages_per_Hour_of_the_Day">Messages per Hour of the Day ⏰</string>
@@ -91,8 +91,8 @@ By tapping "Agree &amp; Continue", you confirm that you understand and accept th
     <string name="Most_Used_Emojis">Most Used Emojis 😂</string>
     <string name="Most_Used_Phrase">Most Used Phrase 🗣️</string>
     <string name="Most_Used_Words">Most Used Words 🔠</string>
-    <string name="your_Number_of_Links_per_User">your Number of Links per User 🔗</string>
-    <string name="her_Number_of_Links_per_User">their Number of Links per User 🔗</string>
+    <string name="your_Number_of_Links_per_User">your Links 🔗</string>
+    <string name="her_Number_of_Links_per_User">their Links per User 🔗</string>
     <string name="Number_of_Media_Files">Number of Media Files 📸</string>
     <string name="Longest_Message">Longest Message 📜</string>
     <string name="Response_and_Conversation_Dynamics">⚡💬 Response and Conversation Dynamics 💬⚡</string>
@@ -120,8 +120,15 @@ By tapping "Agree &amp; Continue", you confirm that you understand and accept th
     <string name="s">s</string>
 
 
-
-
+    //stat
+    <string name="Select_All">Select All</string>
+    <string name="Paired_Statistics">Paired Statistics</string>
+<string name="Individual_Statistics">Individual Statistics</string>
+<string name="Share">Share</string>
+<string name="Cancel">Cancel</string>
+    <string name="Select_cards">Select Cards to Share</string>
+    <string name="Select_All_PDF">Select All as PDF</string>
+    <string name="Share_PDF">Share PDF</string>
 
 
 

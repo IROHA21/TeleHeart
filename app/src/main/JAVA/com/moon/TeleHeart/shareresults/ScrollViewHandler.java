@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.graphics.pdf.PdfDocument;
 import android.net.Uri;
 import android.util.Log;
 import android.view.View;
@@ -297,6 +298,44 @@ public class ScrollViewHandler {
             context.startActivity(Intent.createChooser(intent, "Share Stats"));
         } catch (IOException e) {
             Toast.makeText(context, "Sharing failed", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    // Add this new method
+    public void generatePdf(ScrollView scrollView, Button shareButton) {
+        shareButton.setVisibility(View.GONE);
+        try {
+            List<Bitmap> bitmaps = captureCardViews(scrollView);
+            PdfDocument document = new PdfDocument();
+
+            for (Bitmap bitmap : bitmaps) {
+                PdfDocument.PageInfo pageInfo = new PdfDocument.PageInfo.Builder(
+                        bitmap.getWidth(), bitmap.getHeight(), bitmaps.indexOf(bitmap)).create();
+                PdfDocument.Page page = document.startPage(pageInfo);
+                Canvas canvas = page.getCanvas();
+                canvas.drawBitmap(bitmap, 0f, 0f, null);
+                document.finishPage(page);
+            }
+
+            File file = new File(context.getCacheDir(), "stats_" + System.currentTimeMillis() + ".pdf");
+            document.writeTo(new FileOutputStream(file));
+            document.close();
+
+            Uri uri = FileProvider.getUriForFile(context,
+                    context.getPackageName() + ".provider", file);
+
+            Intent shareIntent = new Intent(Intent.ACTION_SEND)
+                    .setType("application/pdf")
+                    .putExtra(Intent.EXTRA_STREAM, uri)
+                    .addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+
+            context.startActivity(Intent.createChooser(shareIntent,
+                    context.getString(R.string.Share_PDF)));
+
+        } catch (Exception e) {
+            Toast.makeText(context, "PDF creation failed", Toast.LENGTH_SHORT).show();
+        } finally {
+            shareButton.setVisibility(View.VISIBLE);
         }
     }
 
