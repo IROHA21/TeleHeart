@@ -3,6 +3,7 @@ package com.moon.TeleHeart.shareresults;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.pdf.PdfDocument;
 import android.net.Uri;
@@ -32,6 +33,8 @@ public class ScrollViewHandler {
     private static final float FULL_WIDTH_THRESHOLD = 0.75f;
 
     private final Context context;
+
+    private Button disconnect1;
 
     public ScrollViewHandler(Context context) {
         this.context = context;
@@ -265,10 +268,15 @@ public class ScrollViewHandler {
 
     public void handleShareButtonClick(ScrollView scrollView, Button shareButton) {
         shareButton.setVisibility(View.GONE);
+        Button disconnectButton = scrollView.findViewById(R.id.disconnect1);
+        disconnectButton.setVisibility(View.GONE);
+
         try {
             Bitmap stitched = stitchIntelligentColumns(captureCardViews(scrollView));
             if (stitched != null) {
-                shareBitmap(stitched);
+                // Add logo here before sharing
+                Bitmap finalBitmap = addLogoToBottom(stitched);
+                shareBitmap(finalBitmap);
             } else {
                 Toast.makeText(context, "Failed to create image", Toast.LENGTH_SHORT).show();
             }
@@ -277,6 +285,7 @@ public class ScrollViewHandler {
             Toast.makeText(context, "Sharing failed", Toast.LENGTH_SHORT).show();
         } finally {
             shareButton.setVisibility(View.VISIBLE);
+            disconnectButton.setVisibility(View.VISIBLE);
         }
     }
 
@@ -304,19 +313,41 @@ public class ScrollViewHandler {
     // Add this new method
     public void generatePdf(ScrollView scrollView, Button shareButton) {
         shareButton.setVisibility(View.GONE);
+        Button disconnectButton = scrollView.findViewById(R.id.disconnect1);
+        disconnectButton.setVisibility(View.GONE);
+
         try {
             List<Bitmap> bitmaps = captureCardViews(scrollView);
             PdfDocument document = new PdfDocument();
 
+            // 1. Add all the content pages first
             for (Bitmap bitmap : bitmaps) {
                 PdfDocument.PageInfo pageInfo = new PdfDocument.PageInfo.Builder(
-                        bitmap.getWidth(), bitmap.getHeight(), bitmaps.indexOf(bitmap)).create();
+                        bitmap.getWidth(),
+                        bitmap.getHeight(),
+                        bitmaps.indexOf(bitmap))
+                        .create();
                 PdfDocument.Page page = document.startPage(pageInfo);
                 Canvas canvas = page.getCanvas();
                 canvas.drawBitmap(bitmap, 0f, 0f, null);
                 document.finishPage(page);
             }
 
+            // 2. Add logo as a final page
+            Bitmap logo = BitmapFactory.decodeResource(context.getResources(), R.drawable.legend_logo);
+            if (logo != null) {
+                PdfDocument.PageInfo logoPageInfo = new PdfDocument.PageInfo.Builder(
+                        logo.getWidth(),
+                        logo.getHeight(),
+                        bitmaps.size()) // Next page number
+                        .create();
+                PdfDocument.Page logoPage = document.startPage(logoPageInfo);
+                Canvas logoCanvas = logoPage.getCanvas();
+                logoCanvas.drawBitmap(logo, 0f, 0f, null);
+                document.finishPage(logoPage);
+            }
+
+            // 3. Save and share the PDF
             File file = new File(context.getCacheDir(), "stats_" + System.currentTimeMillis() + ".pdf");
             document.writeTo(new FileOutputStream(file));
             document.close();
@@ -336,10 +367,38 @@ public class ScrollViewHandler {
             Toast.makeText(context, "PDF creation failed", Toast.LENGTH_SHORT).show();
         } finally {
             shareButton.setVisibility(View.VISIBLE);
+            disconnectButton.setVisibility(View.VISIBLE);
         }
     }
 
     private int getScreenWidth() {
         return context.getResources().getDisplayMetrics().widthPixels;
+    }
+
+    private Bitmap addLogoToBottom(Bitmap originalBitmap) {
+        try {
+            // Load your logo from resources
+            Bitmap logo = BitmapFactory.decodeResource(context.getResources(), R.drawable.legend_logo);
+
+            // Create new bitmap with extra space for logo
+            Bitmap result = Bitmap.createBitmap(
+                    originalBitmap.getWidth(),
+                    originalBitmap.getHeight() + logo.getHeight() + 20, // 20px padding
+                    Bitmap.Config.ARGB_8888
+            );
+
+            // Draw everything on canvas
+            Canvas canvas = new Canvas(result);
+            canvas.drawBitmap(originalBitmap, 0, 0, null);
+            canvas.drawBitmap(logo,
+                    (originalBitmap.getWidth() - logo.getWidth()) / 2f, // Center horizontally
+                    originalBitmap.getHeight() + 20, // Position below main content
+                    null);
+
+            return result;
+        } catch (Exception e) {
+            Log.e("Logo", "Error adding logo", e);
+            return originalBitmap; // Return original if something fails
+        }
     }
 }
