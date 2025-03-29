@@ -46,12 +46,12 @@ import com.github.mikephil.charting.formatter.IndexAxisValueFormatter;
 import com.github.mikephil.charting.formatter.ValueFormatter;
 import com.google.android.gms.ads.MobileAds;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
-import com.moon.TeleHeart.shareresults.CardSelectionDialog;
-import com.moon.TeleHeart.shareresults.PartialScrollViewHandler;
 import com.moon.TeleHeart.R;
-import com.moon.TeleHeart.shareresults.ScrollViewHandler;
 import com.moon.TeleHeart.database.DatabaseHelper;
 import com.moon.TeleHeart.firstscreen.Firstscreen;
+import com.moon.TeleHeart.shareresults.CardSelectionDialog;
+import com.moon.TeleHeart.shareresults.PartialScrollViewHandler;
+import com.moon.TeleHeart.shareresults.ScrollViewHandler;
 import com.yandex.mobile.ads.banner.BannerAdEventListener;
 import com.yandex.mobile.ads.banner.BannerAdSize;
 import com.yandex.mobile.ads.banner.BannerAdView;
@@ -2201,20 +2201,18 @@ public class ResultsActivity extends AppCompatActivity {
             @Override
             public void onCardsSelected(List<Integer> selectedCardIds, List<String> sideBySidePairs) {
                 ScrollView scrollView = findViewById(R.id.scrollView);
-
-                // Ensure views are measured before capture
                 scrollView.post(() -> {
-                    Bitmap stitched = partialScrollViewHandler.captureSelectedViews(
+                    List<Bitmap> bitmaps = partialScrollViewHandler.captureSelectedViewsAsBitmaps(
                             scrollView,
                             selectedCardIds,
                             sideBySidePairs
                     );
 
-                    if (stitched != null) {
-                        shareBitmap(stitched);
+                    if (!bitmaps.isEmpty()) {
+                        shareMultipleBitmaps(bitmaps);
                     } else {
                         Toast.makeText(ResultsActivity.this,
-                                "Failed to create image", Toast.LENGTH_SHORT).show();
+                                "No images to share", Toast.LENGTH_SHORT).show();
                     }
                 });
             }
@@ -2228,19 +2226,33 @@ public class ResultsActivity extends AppCompatActivity {
         dialog.show(getSupportFragmentManager(), "CardSelectionDialog");
     }
 
-    private void shareBitmap(Bitmap bitmap) {
+
+    private void shareMultipleBitmaps(List<Bitmap> bitmaps) {
         try {
-            File file = new File(getCacheDir(), "shared_stats.png");
-            FileOutputStream fos = new FileOutputStream(file);
-            bitmap.compress(Bitmap.CompressFormat.PNG, 100, fos);
-            fos.close();
+            ArrayList<Uri> imageUris = new ArrayList<>();
 
-            Uri uri = FileProvider.getUriForFile(this,
-                    getPackageName() + ".provider", file);
+            // Create a temporary directory
+            File cacheDir = new File(getCacheDir(), "shared_stats");
+            if (!cacheDir.exists()) {
+                cacheDir.mkdirs();
+            }
 
-            Intent shareIntent = new Intent(Intent.ACTION_SEND)
+            // Save each bitmap
+            for (int i = 0; i < bitmaps.size(); i++) {
+                File file = new File(cacheDir, "stats_" + System.currentTimeMillis() + "_" + i + ".png");
+                FileOutputStream fos = new FileOutputStream(file);
+                bitmaps.get(i).compress(Bitmap.CompressFormat.PNG, 100, fos);
+                fos.close();
+
+                Uri uri = FileProvider.getUriForFile(this,
+                        getPackageName() + ".provider", file);
+                imageUris.add(uri);
+            }
+
+            // Create share intent
+            Intent shareIntent = new Intent(Intent.ACTION_SEND_MULTIPLE)
                     .setType("image/png")
-                    .putExtra(Intent.EXTRA_STREAM, uri)
+                    .putParcelableArrayListExtra(Intent.EXTRA_STREAM, imageUris)
                     .addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
 
             startActivity(Intent.createChooser(shareIntent, "Share Stats"));

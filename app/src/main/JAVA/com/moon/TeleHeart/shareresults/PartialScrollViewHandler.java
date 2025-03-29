@@ -6,8 +6,6 @@ import android.graphics.Canvas;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewParent;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.ScrollView;
 
 import androidx.cardview.widget.CardView;
@@ -48,70 +46,31 @@ public class PartialScrollViewHandler {
         this.context = context;
     }
 
-    public Bitmap captureSelectedViews(ScrollView scrollView, List<Integer> selectedIds, List<String> sideBySidePairs) {
-        // Force layout measurement
-        scrollView.measure(
-                View.MeasureSpec.makeMeasureSpec(scrollView.getWidth(), View.MeasureSpec.EXACTLY),
-                View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED)
-        );
-        scrollView.layout(0, 0, scrollView.getMeasuredWidth(), scrollView.getMeasuredHeight());
+    public List<Bitmap> captureSelectedViewsAsBitmaps(ScrollView scrollView,
+                                                      List<Integer> selectedIds, List<String> sideBySidePairs) {
 
+        List<Bitmap> bitmaps = new ArrayList<>();
         ViewGroup container = (ViewGroup) scrollView.getChildAt(0);
-        List<View> viewsToCapture = new ArrayList<>();
-        List<Integer> processedIds = new ArrayList<>();
 
-        // Process pairs
+        // Process pairs first
+        Map<Integer, Boolean> processedIds = new HashMap<>();
         for (Map.Entry<Integer, Integer> entry : cardPairs.entrySet()) {
             if (selectedIds.contains(entry.getKey()) && selectedIds.contains(entry.getValue())) {
-                View yourView = container.findViewById(entry.getKey());
-                View theirView = container.findViewById(entry.getValue());
+                View view1 = container.findViewById(entry.getKey());
+                View view2 = container.findViewById(entry.getValue());
 
-                if (yourView != null && theirView != null) {
-                    View yourCard = findParentCardView(yourView);
-                    View theirCard = findParentCardView(theirView);
+                if (view1 != null && view2 != null) {
+                    View card1 = findParentCardView(view1);
+                    View card2 = findParentCardView(view2);
 
-                    if (yourCard != null && theirCard != null) {
-                        // Check if this is one of the special pairs that should be stacked vertically
-                        if (entry.getKey() == R.id.yourLinksPieChart ||
-                                entry.getKey() == R.id.yourhourOfDayLineChart ||
-                                entry.getKey() == R.id.yourMessagesPerMonthLineChart) {
-
-                            // Create vertical stack layout
-                            LinearLayout verticalLayout = new LinearLayout(context);
-                            verticalLayout.setOrientation(LinearLayout.VERTICAL);
-                            verticalLayout.addView(copyView(yourCard));
-                            verticalLayout.addView(copyView(theirCard));
-
-                            // Measure and layout
-                            int width = Math.max(yourCard.getWidth(), theirCard.getWidth());
-                            int height = yourCard.getHeight() + theirCard.getHeight() + CARD_SPACING;
-                            verticalLayout.measure(
-                                    View.MeasureSpec.makeMeasureSpec(width, View.MeasureSpec.EXACTLY),
-                                    View.MeasureSpec.makeMeasureSpec(height, View.MeasureSpec.EXACTLY)
-                            );
-                            verticalLayout.layout(0, 0, width, height);
-
-                            viewsToCapture.add(verticalLayout);
-                        } else {
-                            // Original side-by-side layout for other pairs
-                            LinearLayout horizontalLayout = new LinearLayout(context);
-                            horizontalLayout.setOrientation(LinearLayout.HORIZONTAL);
-                            horizontalLayout.addView(copyView(yourCard));
-                            horizontalLayout.addView(copyView(theirCard));
-
-                            // Measure and layout
-                            int width = yourCard.getWidth() + theirCard.getWidth() + CARD_SPACING;
-                            int height = Math.max(yourCard.getHeight(), theirCard.getHeight());
-                            horizontalLayout.measure(
-                                    View.MeasureSpec.makeMeasureSpec(width, View.MeasureSpec.EXACTLY),
-                                    View.MeasureSpec.makeMeasureSpec(height, View.MeasureSpec.EXACTLY)
-                            );
-                            horizontalLayout.layout(0, 0, width, height);
-
-                            viewsToCapture.add(horizontalLayout);
-                        }
-                        processedIds.add(entry.getKey());
-                        processedIds.add(entry.getValue());
+                    if (card1 != null && card2 != null) {
+                        bitmaps.add(createPairBitmap(
+                                card1,
+                                card2,
+                                shouldStackVertically(entry.getKey())
+                        ));
+                        processedIds.put(entry.getKey(), true);
+                        processedIds.put(entry.getValue(), true);
                     }
                 }
             }
@@ -119,44 +78,61 @@ public class PartialScrollViewHandler {
 
         // Process individual cards
         for (int id : selectedIds) {
-            if (!processedIds.contains(id)) {
+            if (!processedIds.containsKey(id)) {
                 View view = container.findViewById(id);
                 if (view != null) {
                     View card = findParentCardView(view);
                     if (card != null) {
-                        viewsToCapture.add(copyView(card));
+                        bitmaps.add(createSingleBitmap(card));
                     }
                 }
             }
         }
 
-        // Create final bitmap
-        int totalHeight = 0;
-        for (View view : viewsToCapture) {
-            totalHeight += view.getHeight() + CARD_SPACING;
-        }
-        if (!viewsToCapture.isEmpty()) {
-            totalHeight -= CARD_SPACING;
-        }
+        return bitmaps;
+    }
 
-        Bitmap result = Bitmap.createBitmap(
-                scrollView.getWidth(),
-                totalHeight,
+    private Bitmap createPairBitmap(View view1, View view2, boolean stackVertically) {
+        if (stackVertically) {
+            int width = Math.max(view1.getWidth(), view2.getWidth());
+            int height = view1.getHeight() + view2.getHeight() + CARD_SPACING;
+            Bitmap bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
+            Canvas canvas = new Canvas(bitmap);
+
+            view1.draw(canvas);
+            canvas.translate(0, view1.getHeight() + CARD_SPACING);
+            view2.draw(canvas);
+
+            return bitmap;
+        } else {
+            int width = view1.getWidth() + view2.getWidth() + CARD_SPACING;
+            int height = Math.max(view1.getHeight(), view2.getHeight());
+            Bitmap bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
+            Canvas canvas = new Canvas(bitmap);
+
+            view1.draw(canvas);
+            canvas.translate(view1.getWidth() + CARD_SPACING, 0);
+            view2.draw(canvas);
+
+            return bitmap;
+        }
+    }
+
+    private Bitmap createSingleBitmap(View view) {
+        Bitmap bitmap = Bitmap.createBitmap(
+                view.getWidth(),
+                view.getHeight(),
                 Bitmap.Config.ARGB_8888
         );
-        Canvas canvas = new Canvas(result);
+        Canvas canvas = new Canvas(bitmap);
+        view.draw(canvas);
+        return bitmap;
+    }
 
-        // Draw all views
-        int yPos = 0;
-        for (View view : viewsToCapture) {
-            canvas.save();
-            canvas.translate(0, yPos);
-            view.draw(canvas);
-            canvas.restore();
-            yPos += view.getHeight() + CARD_SPACING;
-        }
-
-        return result;
+    private boolean shouldStackVertically(int viewId) {
+        return viewId == R.id.yourLinksPieChart ||
+                viewId == R.id.yourhourOfDayLineChart ||
+                viewId == R.id.yourMessagesPerMonthLineChart;
     }
 
     private View findParentCardView(View view) {
@@ -168,23 +144,5 @@ public class PartialScrollViewHandler {
             parent = parent.getParent();
         }
         return view;
-    }
-
-    private View copyView(View original) {
-        Bitmap bitmap = Bitmap.createBitmap(
-                original.getWidth(),
-                original.getHeight(),
-                Bitmap.Config.ARGB_8888
-        );
-        Canvas canvas = new Canvas(bitmap);
-        original.draw(canvas);
-
-        ImageView copy = new ImageView(context);
-        copy.setImageBitmap(bitmap);
-        copy.setLayoutParams(new ViewGroup.LayoutParams(
-                original.getWidth(),
-                original.getHeight()
-        ));
-        return copy;
     }
 }
