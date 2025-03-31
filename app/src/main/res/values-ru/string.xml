@@ -116,8 +116,8 @@
     <string name="m">ч</string>
     <string name="s">c</string>
 
-    //
-    <string name="Select_All">Выбрать все (Singular Photo)</string>
+    //stat
+    <string name="Select_All">Выбрать все "один png" (телеграмма сожмет PNG)</string>
     <string name="Paired_Statistics">Парная статистика</string>
     <string name="Individual_Statistics">Индивидуальная статистика</string>
     <string name="Share">Поделиться</string>
@@ -126,6 +126,17 @@
 
     <string name="Select_All_PDF">Выбрать всё как PDF</string>
     <string name="Share_PDF">Поделиться PDF</string>
+    //settings
+    <string name="App_data_cleared">Данные приложения очищены</string>
+
+    //xml settings
+    <string name="Settings">Настройки</string>
+    <string name="Clear_App_data">Очистить данные приложения</string>
+    <string name="Data_size_Unknown">Размер данных: неизвестен</string>
+    <string name="How_to_Disconnect_Manually">Как отключиться вручную</string>
+    <string name="Data_size">Размер данных: </string>
+    <string name="All_app_data_cleared">Все данные приложения очищены</string>
+    <string name="Failed_to_clear_app_data">Не удалось очистить данные приложения</string>
 
 
 

@@ -121,7 +121,7 @@ By tapping "Agree &amp; Continue", you confirm that you understand and accept th
 
 
     //stat
-    <string name="Select_All">Select All</string>
+    <string name="Select_All">Select All "single png" (telegram will compress the PNG)</string>
     <string name="Paired_Statistics">Paired Statistics</string>
 <string name="Individual_Statistics">Individual Statistics</string>
 <string name="Share">Share</string>
@@ -129,7 +129,17 @@ By tapping "Agree &amp; Continue", you confirm that you understand and accept th
     <string name="Select_cards">Select Cards to Share</string>
     <string name="Select_All_PDF">Select All as PDF</string>
     <string name="Share_PDF">Share PDF</string>
+    //settings
+    <string name="App_data_cleared">App data cleared</string>
 
+    //settings xml
+    <string name="Settings">Settings</string>
+    <string name="Clear_App_data">Clear App data</string>
+    <string name="Data_size_Unknown">Data size: Unknown</string>
+    <string name="How_to_Disconnect_Manually">How to Disconnect Manually</string>
+    <string name="Data_size">Data size: </string>
+    <string name="All_app_data_cleared">All app data cleared</string>
+    <string name="Failed_to_clear_app_data">Failed to clear app data</string>
 
 
 

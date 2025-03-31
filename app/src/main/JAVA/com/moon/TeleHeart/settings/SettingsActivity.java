@@ -49,7 +49,7 @@ public class SettingsActivity extends AppCompatActivity {
             public void onClick(View v) {
                 clearAppData();
                 updateDataSize();
-                Toast.makeText(SettingsActivity.this, "All app data cleared", Toast.LENGTH_SHORT).show();
+                Toast.makeText(SettingsActivity.this, getString(R.string.All_app_data_cleared), Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -68,11 +68,11 @@ public class SettingsActivity extends AppCompatActivity {
                 deleteDir(getCacheDir());
                 deleteDir(getFilesDir());
                 deleteDir(getExternalCacheDir());
-                Toast.makeText(this, "App data cleared (fallback)", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this,getString(R.string.App_data_cleared), Toast.LENGTH_SHORT).show();
             }
         } catch (Exception e) {
             e.printStackTrace();
-            Toast.makeText(this, "Failed to clear app data", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, getString(R.string.Failed_to_clear_app_data), Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -97,7 +97,7 @@ public class SettingsActivity extends AppCompatActivity {
     // Method to update the data size TextView
     private void updateDataSize() {
         long dataSize = getDataSize(getDataDir());
-        cacheStatusTextView.setText("Data size: " + formatSize(dataSize));
+        cacheStatusTextView.setText(getString(R.string.Data_size) + formatSize(dataSize));
     }
 
     // Method to calculate data size

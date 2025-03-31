@@ -291,23 +291,43 @@ public class ScrollViewHandler {
 
     private void shareBitmap(Bitmap bitmap) {
         try {
-            File file = new File(context.getCacheDir(), "share.webp"); // or .jpg
+            // 1. Create a higher quality PNG file
+            File file = new File(context.getCacheDir(), "share_" + System.currentTimeMillis() + ".png");
             FileOutputStream fos = new FileOutputStream(file);
-            bitmap.compress(Bitmap.CompressFormat.WEBP, 100, fos); // High-quality WEBP
+
+            // Compress as PNG with maximum quality
+            bitmap.compress(Bitmap.CompressFormat.PNG, 100, fos);
             fos.close();
 
+            // 2. Create a share intent with specific MIME type
             Uri uri = FileProvider.getUriForFile(context,
                     context.getPackageName() + ".provider", file);
 
+            // Use specific MIME type instead of wildcard
             Intent intent = new Intent(Intent.ACTION_SEND)
-                    .setType("image/*") // or "application/octet-stream" for file
+                    .setType("image/png") // Specific type helps apps handle it better
                     .putExtra(Intent.EXTRA_STREAM, uri)
                     .addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
 
-            context.startActivity(Intent.createChooser(intent, "Share Stats"));
+            // 3. Add option to save to device explicitly
+            Intent saveIntent = createSaveIntent(file);
+
+            // 4. Create chooser with both options
+            Intent chooser = Intent.createChooser(intent, "Share Stats");
+            chooser.putExtra(Intent.EXTRA_INITIAL_INTENTS, new Intent[] { saveIntent });
+
+            context.startActivity(chooser);
         } catch (IOException e) {
             Toast.makeText(context, "Sharing failed", Toast.LENGTH_SHORT).show();
+            Log.e("ShareBitmap", "Error sharing bitmap", e);
         }
+    }
+
+    private Intent createSaveIntent(File file) {
+        return new Intent(Intent.ACTION_CREATE_DOCUMENT)
+                .addCategory(Intent.CATEGORY_OPENABLE)
+                .setType("image/png")
+                .putExtra(Intent.EXTRA_TITLE, file.getName());
     }
 
     // Add this new method
