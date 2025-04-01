@@ -141,7 +141,14 @@ By tapping "Agree &amp; Continue", you confirm that you understand and accept th
     <string name="All_app_data_cleared">All app data cleared</string>
     <string name="Failed_to_clear_app_data">Failed to clear app data</string>
 
-
+//days of the week
+    <string name="monday">Monday</string>
+    <string name="tuesday">Tuesday</string>
+    <string name="wednesday">Wednesday</string>
+    <string name="thursday">Thursday</string>
+    <string name="friday">Friday</string>
+    <string name="saturday">Saturday</string>
+    <string name="sunday">Sunday</string>
 
 
 </resources>

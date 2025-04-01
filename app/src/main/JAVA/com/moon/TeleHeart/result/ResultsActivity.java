@@ -295,7 +295,7 @@ public class ResultsActivity extends AppCompatActivity {
             Map<Long, Integer> conversationStarts = analyzer.getConversationStarts();
             Map<Long, Integer> unrepliedChats = analyzer.getUnrepliedChats();
             Map<Long, Long> longestConversations = analyzer.getLongestConversations();
-            Map<Long, Map.Entry<String, Integer>> mostUsedPhrase = analyzer.getMostUsedPhrase(5);
+            Map<Long, Map.Entry<String, Integer>> mostUsedPhrase = analyzer.getMostUsedPhrase(4);
             Map<Long, Double> averageMessageLengths = analyzer.getAverageMessageLength();
             Map<Long, Integer> medianMessageLengths = analyzer.getMedianMessageLength();
 
@@ -1116,79 +1116,74 @@ public class ResultsActivity extends AppCompatActivity {
 
     // Helper method to set up the bar chart
     private void setupBarChart(HorizontalBarChart barChart, Map<String, Integer> data, String label) {
-        // Create a list of BarEntry objects
+        // 1. Define the standard order (Monday to Sunday) - UNCHANGED
+        String[] englishDays = {"Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"};
+
+        // 2. Create mapping between English and localized day names - UNCHANGED
+        Map<String, String> dayNameMap = new HashMap<>();
+        dayNameMap.put("Monday", getString(R.string.monday));
+        dayNameMap.put("Tuesday", getString(R.string.tuesday));
+        dayNameMap.put("Wednesday", getString(R.string.wednesday));
+        dayNameMap.put("Thursday", getString(R.string.thursday));
+        dayNameMap.put("Friday", getString(R.string.friday));
+        dayNameMap.put("Saturday", getString(R.string.saturday));
+        dayNameMap.put("Sunday", getString(R.string.sunday));
+
+        // 3. Prepare chart data - ONLY CHANGE IS HERE (reversed iteration)
         List<BarEntry> barEntries = new ArrayList<>();
         List<String> labels = new ArrayList<>();
 
-        // Sort the data by value (descending order)
-        String[] daysOfWeek = {"Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"};
-        List<Map.Entry<String, Integer>> sortedData = new ArrayList<>();
-        for (String day : daysOfWeek) {
-            if (data.containsKey(day)) {
-                sortedData.add(new AbstractMap.SimpleEntry<>(day, data.get(day)));
-            }
+        // Iterate from last to first to reverse order
+        for (int i = englishDays.length - 1; i >= 0; i--) {
+            String englishDay = englishDays[i];
+            String localizedDay = dayNameMap.get(englishDay);
+            int value = data.getOrDefault(englishDay, 0);
+
+            // Calculate position index (0-6) to maintain proper bar positioning
+            barEntries.add(new BarEntry(englishDays.length - 1 - i, value));
+            labels.add(localizedDay);
         }
 
-        // Add data to barEntries and labels
-        for (int i = 0; i < sortedData.size(); i++) {
-            barEntries.add(new BarEntry(i, sortedData.get(i).getValue()));
-            labels.add(sortedData.get(i).getKey());
-        }
-
-        // Create a BarDataSet with the sorted entries
+        // Rest of your chart setup code remains the same...
         BarDataSet barDataSet = new BarDataSet(barEntries, label);
-        barDataSet.setColor(barChart == yourBarChart ? Color.parseColor("#00d4ff") : Color.parseColor("#FFD700")); // Set bar color based on chart
-        barDataSet.setValueTextColor(Color.WHITE); // Set text color for values (white for better contrast)
-        barDataSet.setValueTextSize(12f); // Set text size for values
+        barDataSet.setColor(barChart == yourBarChart ? Color.parseColor("#00d4ff") : Color.parseColor("#FFD700"));
+        barDataSet.setValueTextColor(Color.WHITE);
+        barDataSet.setValueTextSize(12f);
 
-        // Create a BarData object with the BarDataSet
         BarData barData = new BarData(barDataSet);
-        barData.setBarWidth(0.5f); // Set the width of the bars
+        barData.setBarWidth(0.5f);
         barChart.setData(barData);
 
-        // Customize the chart
-        barChart.getDescription().setEnabled(false); // Disable description
-        barChart.setDrawValueAboveBar(true); // Draw values above bars
-        barChart.setFitBars(true); // Make the bars fit the chart
+        barChart.getDescription().setEnabled(false);
+        barChart.setDrawValueAboveBar(true);
+        barChart.setFitBars(true);
 
-        // Configure X-axis (vertical axis in HorizontalBarChart)
         XAxis xAxis = barChart.getXAxis();
-        xAxis.setPosition(XAxis.XAxisPosition.BOTTOM); // Place X-axis at the bottom
-        xAxis.setDrawGridLines(false); // Disable grid lines for X-axis
-        xAxis.setValueFormatter(new IndexAxisValueFormatter(labels)); // Set sorted day labels
-        xAxis.setLabelCount(labels.size()); // Ensure all labels are shown
-        xAxis.setGranularity(1f); // Set granularity to 1 to avoid skipping labels
-        xAxis.setLabelRotationAngle(-45); // Rotate labels for better visibility
-        xAxis.setDrawLabels(true); // Enable day labels
-        xAxis.setTextColor(Color.WHITE); // Set X-axis label color to white
+        xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
+        xAxis.setDrawGridLines(false);
+        xAxis.setValueFormatter(new IndexAxisValueFormatter(labels));
+        xAxis.setLabelCount(labels.size());
+        xAxis.setGranularity(1f);
+        xAxis.setLabelRotationAngle(-45);
+        xAxis.setDrawLabels(true);
+        xAxis.setTextColor(Color.WHITE);
 
-        // Add padding to the left axis to make space for the labels
         barChart.setExtraLeftOffset(25f);
         barChart.setExtraRightOffset(30f);
 
-        // Configure Y-axis (horizontal axis in HorizontalBarChart)
         YAxis leftAxis = barChart.getAxisLeft();
-        leftAxis.setAxisMinimum(0f); // Start Y-axis from 0
-        leftAxis.setDrawLabels(false); // Disable Y-axis labels (0, 20, 40, ...)
-        leftAxis.setDrawGridLines(false); // Disable grid lines for Y-axis
+        leftAxis.setAxisMinimum(0f);
+        leftAxis.setDrawLabels(false);
+        leftAxis.setDrawGridLines(false);
 
         YAxis rightAxis = barChart.getAxisRight();
-        rightAxis.setEnabled(false); // Disable right Y-axis
+        rightAxis.setEnabled(false);
 
-        // Disable the legend (if any)
         barChart.getLegend().setEnabled(false);
-
-        // Set chart background color to transparent
         barChart.setBackgroundColor(Color.TRANSPARENT);
-
-        // Set grid and axis colors for better visibility
-        barChart.getAxisLeft().setGridColor(Color.parseColor("#50FFFFFF")); // Light grid lines
-        barChart.getXAxis().setGridColor(Color.parseColor("#50FFFFFF")); // Light grid lines
-
-        // Animate the chart
-        barChart.animateY(1000); // Animate the chart vertically
-
-        // Refresh the chart
+        barChart.getAxisLeft().setGridColor(Color.parseColor("#50FFFFFF"));
+        barChart.getXAxis().setGridColor(Color.parseColor("#50FFFFFF"));
+        barChart.animateY(1000);
         barChart.invalidate();
     }
 
@@ -1434,6 +1429,7 @@ public class ResultsActivity extends AppCompatActivity {
         // 6. Messages per day of the week for each user
         public Map<Long, Map<String, Integer>> getMessagesPerDayOfWeek() {
             Map<Long, Map<String, Integer>> dayCounts = new HashMap<>();
+            // Always use English for consistent keys
             SimpleDateFormat dayFormat = new SimpleDateFormat("EEEE", Locale.US);
 
             for (ChatMessage message : messages) {
@@ -1442,7 +1438,6 @@ public class ResultsActivity extends AppCompatActivity {
                 userDayCounts.put(day, userDayCounts.getOrDefault(day, 0) + 1);
                 dayCounts.put(message.chatId, userDayCounts);
             }
-
             return dayCounts;
         }
 
